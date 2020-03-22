@@ -131,7 +131,7 @@
                android:layout_marginTop="10dp"
               android:layout_below="@+id/txtpassword"
 
-                android:text="Recuerdame2"
+                android:text="Recuerdame"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.908"
                 app:layout_constraintStart_toStartOf="parent"
