@@ -126,11 +126,9 @@
                 android:id="@+id/remember"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentRight="true"
-               android:layout_marginTop="10dp"
-              android:layout_below="@+id/txtpassword"
-
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/txtpassword"
                 android:text="Recuerdame"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.908"
