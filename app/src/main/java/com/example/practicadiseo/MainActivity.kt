@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     public fun mensaje(view: View){
 
-        Toast.makeText(this,"chapa la pachala",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"chapa la pachalfgsghftdghythyththyghjdhygjfghja",Toast.LENGTH_SHORT).show();
     }
 
 }
