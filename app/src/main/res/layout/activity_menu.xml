@@ -8,13 +8,22 @@
     android:fitsSystemWindows="true">
 
 
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="59dp">
+
+    </FrameLayout>
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomnavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="#242424"
-        app:itemBackground="#ffffff"
+
         app:itemTextColor="#ffffff"
         app:menu="@menu/menu"
         app:itemIconTint="#ffffff"

@@ -30,15 +30,7 @@
                 android:src="@drawable/ic_launcher" />
 
 
-                <Button
-                    android:id="@+id/registrarse"
-                    android:layout_width="100dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/botonripple"
-                    android:text="Registrarse"
-                    android:textColor="@drawable/botonpressed" />
+
 
 
 
@@ -50,13 +42,14 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="30dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginRight="30dp">
 
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="60dp"
 
                 android:scrollbarThumbVertical="@drawable/colorsroll">
 
@@ -285,6 +278,19 @@
 
                 </RelativeLayout>
             </ScrollView>
+
+
+            <Button
+                android:id="@+id/registrarse"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="5dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/botonripple"
+                android:text="Registrarse"
+                android:textColor="@drawable/botonpressed" />
         </RelativeLayout>
 
 
