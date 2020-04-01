@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.practicadiseo.fragments.HomeFragment;
-import com.example.practicadiseo.fragments.perfilFragment;
 import com.example.practicadiseo.fragments.settingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class menuActivity extends AppCompatActivity {
     BottomNavigationView mbottomNavigationView;
+    SweetAlertDialog dp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public class menuActivity extends AppCompatActivity {
         //con este metodo selecciono el fragment de inicio por defecto
         showSelectedFragment(new HomeFragment());
 
+
         mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
         mbottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -32,21 +35,29 @@ public class menuActivity extends AppCompatActivity {
                 if(menuItem.getItemId()== R.id.menu_profile){
                     showSelectedFragment(new perfilFragment());
 
-
-
-
                 }
+
                 if(menuItem.getItemId()== R.id.menu_home){
                     showSelectedFragment(new HomeFragment());
 
                 }
+
+                if(menuItem.getItemId()==R.id.menu_solicitud){
+                    showSelectedFragment(new solicitudeFragment());
+
+                }
+
                 if(menuItem.getItemId()== R.id.menu_settings){
                     showSelectedFragment(new settingsFragment());
                 }
                 return true;
             }
         });
+
+
+
     }
+
 
 
     //metodo que permite elejir un fragment

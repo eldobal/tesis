@@ -1,4 +1,4 @@
-package com.example.practicadiseo.fragments;
+package com.example.practicadiseo;
 
 import android.content.Intent;
 import android.icu.text.RelativeDateTimeFormatter;
@@ -85,8 +85,22 @@ public class perfilFragment extends Fragment {
 
                                         dp= new SweetAlertDialog(v.getContext(), SweetAlertDialog.SUCCESS_TYPE);
                                         dp.setTitleText("Has Actualizado tu perfil !");
-                                        dp.setContentText("Apreta para continuar!");
-                                        dp.show();
+                                        dp.setContentText("para volver a editar recargue el perfil!");
+
+
+                                        dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                    @Override
+                                                    public void onClick(SweetAlertDialog sDialog) {
+                                                        sDialog.dismissWithAnimation();
+
+                                                        updateDetail();
+
+                                                    }
+                                                })
+
+
+
+                                                .show();
 
 
                                         rut.setEnabled(false);
@@ -114,9 +128,13 @@ public class perfilFragment extends Fragment {
 
 
 
-
         return v;
 
+    }
+    //ir desde un fragment hacia una actividad
+    public void updateDetail() {
+        Intent intent = new Intent(getActivity(), menuActivity.class);
+        startActivity(intent);
     }
 
 
