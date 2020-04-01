@@ -3,14 +3,188 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.settingsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".settingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="fragment settings" />
+
+
+
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+
+
+
+
+
+           <RelativeLayout
+
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:layout_marginLeft="30dp"
+               android:layout_marginTop="30dp"
+               android:layout_marginRight="30dp"
+               android:layout_marginBottom="30dp">
+
+               <androidx.appcompat.widget.AppCompatImageView
+
+                   android:id="@+id/usericon"
+                   android:layout_width="75dp"
+                   android:layout_height="75dp"
+                   android:layout_marginTop="20dp"
+                   android:layout_alignParentTop="true"
+                   android:layout_centerHorizontal="true"
+                   android:src="@drawable/user"></androidx.appcompat.widget.AppCompatImageView>
+
+
+               <RelativeLayout
+                   android:layout_below="@id/usericon"
+                   android:background="#BDBDBD"
+
+
+                   android:layout_marginTop="20dp"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+                   <LinearLayout
+                       android:id="@+id/contacto"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:text="contacto">
+                       </TextView>
+
+                   </LinearLayout>
+                   <LinearLayout
+                   android:id="@+id/txtemailcontato"
+                   android:layout_below="@id/contacto"
+                   android:layout_marginTop="20dp"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content">
+
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:text="Email Contacto">
+
+                   </TextView>
+
+
+               </LinearLayout>
+
+                   <LinearLayout
+                       android:id="@+id/txtemailcontato2"
+                       android:layout_below="@id/txtemailcontato"
+                       android:layout_marginTop="5dp"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:textColor="#f40000"
+                           android:text="Empresa_Empresa@Empresa.cl">
+                       </TextView>
+
+
+
+                   </LinearLayout>
+
+
+                   <LinearLayout
+                       android:id="@+id/txttelefonocontacto"
+                       android:layout_below="@id/txtemailcontato2"
+                       android:layout_marginTop="15dp"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:text="Telefono Contacto">
+
+                       </TextView>
+
+
+                   </LinearLayout>
+
+                   <LinearLayout
+                       android:id="@+id/telefonocontacto2"
+                       android:layout_below="@id/txttelefonocontacto"
+                       android:layout_marginTop="5dp"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content">
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:textColor="#f40000"
+                           android:text="9 8436 3287">
+                       </TextView>
+
+
+
+                   </LinearLayout>
+
+                   <RelativeLayout
+                       android:layout_below="@id/telefonocontacto2"
+                       android:layout_width="match_parent"
+
+                       android:layout_height="wrap_content"
+                       android:layout_centerHorizontal="true"
+                       >
+
+                       <Button
+
+                           android:id="@+id/preguntas"
+                           android:layout_marginTop="20dp"
+                           android:layout_width="220dp"
+                           android:layout_height="50dp"
+                           android:layout_centerInParent="true"
+
+
+
+
+                           android:layout_marginBottom="10dp"
+                           android:background="@drawable/botonripple"
+                           android:text="Preguntas Frecuentes" />
+
+
+                   </RelativeLayout>
+
+               </RelativeLayout>
+
+
+
+               <Button
+                   android:layout_alignParentBottom="true"
+                   android:layout_centerHorizontal="true"
+                   android:id="@+id/salirsesion"
+                   android:layout_width="170dp"
+                   android:layout_height="45dp"
+                   android:layout_marginBottom="50dp"
+
+                   android:background="@drawable/botonripple"
+                   android:text="Salir De La Sesion
+"
+                   android:textColor="@drawable/botonpressed" />
+
+
+
+
+
+           </RelativeLayout>
+
+
+
+
+
+
+       </RelativeLayout>
+
+
+
+
 
 </FrameLayout>

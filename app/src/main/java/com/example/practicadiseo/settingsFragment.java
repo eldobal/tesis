@@ -1,4 +1,4 @@
-package com.example.practicadiseo.fragments;
+package com.example.practicadiseo;
 
 import android.os.Bundle;
 

@@ -8,8 +8,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.practicadiseo.fragments.HomeFragment;
-import com.example.practicadiseo.fragments.settingsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
