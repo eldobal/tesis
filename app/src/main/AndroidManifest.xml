@@ -15,7 +15,9 @@
         <activity android:name=".menuActivity"></activity>
         <activity android:name=".menuareasActivity" />
         <activity android:name=".register2Activity" />
-        <activity android:name=".login2Activity">
+        <activity android:name=".login2Activity"
+            android:noHistory="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

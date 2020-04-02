@@ -86,22 +86,16 @@ public class perfilFragment extends Fragment {
                                         dp= new SweetAlertDialog(v.getContext(), SweetAlertDialog.SUCCESS_TYPE);
                                         dp.setTitleText("Has Actualizado tu perfil !");
                                         dp.setContentText("para volver a editar recargue el perfil!");
-
-
                                         dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                                     @Override
                                                     public void onClick(SweetAlertDialog sDialog) {
                                                         sDialog.dismissWithAnimation();
-
+                                                        //metodo para cambiar de activity
                                                         updateDetail();
 
                                                     }
                                                 })
-
-
-
                                                 .show();
-
 
                                         rut.setEnabled(false);
                                         rut.setFocusable(false);
@@ -116,17 +110,9 @@ public class perfilFragment extends Fragment {
 
                             }
                         })
-
-
                         .show();
-
             }
         });
-
-
-
-
-
 
         return v;
 

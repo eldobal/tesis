@@ -50,7 +50,7 @@ public class login2Activity extends AppCompatActivity {
                 String contrasena = txtpass.getText().toString();
                 if (!usuario.equals("") && !contrasena.equals("") && !usuario.isEmpty() && !contrasena.isEmpty()) {
                    // enviarRequest(usuario, contrasena);
-                    Toast.makeText(getApplicationContext(), "exito", Toast.LENGTH_LONG).show();
+
                     Intent intent = new Intent(login2Activity.this, menuActivity.class);
 
                     startActivity(intent);

@@ -137,15 +137,11 @@
 
                        <Button
 
-                           android:id="@+id/preguntas"
+                           android:id="@+id/btnpreguntas"
                            android:layout_marginTop="20dp"
                            android:layout_width="220dp"
                            android:layout_height="50dp"
                            android:layout_centerInParent="true"
-
-
-
-
                            android:layout_marginBottom="10dp"
                            android:background="@drawable/botonripple"
                            android:text="Preguntas Frecuentes" />
@@ -160,7 +156,7 @@
                <Button
                    android:layout_alignParentBottom="true"
                    android:layout_centerHorizontal="true"
-                   android:id="@+id/salirsesion"
+                   android:id="@+id/btnsalir"
                    android:layout_width="170dp"
                    android:layout_height="45dp"
                    android:layout_marginBottom="50dp"
