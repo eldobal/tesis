@@ -71,6 +71,7 @@ public class perfilFragment extends Fragment {
                         dp.setTitleText("Estas Segur@ De Querer Cambiar Los Datos?");
                         dp.setContentText("Podras Cambiar Tus Datos Personales!");
                         dp.setConfirmText("Si,Deseo Actualizar!");
+
                         dp.setCancelText("No,No Quiero");
                         //si preciona el boton si se podran editar los edittext
                         dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {

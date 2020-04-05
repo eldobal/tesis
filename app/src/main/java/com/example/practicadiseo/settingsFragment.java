@@ -53,7 +53,6 @@ public class settingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 showSelectedFragment(new preguntasFragment());
-                Toast.makeText(v.getContext(), "exito", Toast.LENGTH_LONG).show();
             }
         });
 

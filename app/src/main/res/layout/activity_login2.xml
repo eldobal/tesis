@@ -13,36 +13,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="-16dp">
+        >
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="80pt"
+            android:layout_marginTop="100pt"
             android:layout_marginRight="30dp"
             android:layout_marginBottom="30dp">
 
 
-            <ImageButton
-                android:id="@+id/imgperfil"
-                android:layout_width="62dp"
-                android:layout_height="62dp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="50dp"
-                android:clickable="true"
 
-                android:src="@drawable/ic_launcher" />
 
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/imgperfil"
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="20dp"
                 android:text="Correo Electronico" />
@@ -51,7 +40,6 @@
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/imgperfil"
                 android:layout_marginTop="10dp"
                 app:srcCompat="@android:drawable/sym_action_email" />
 
@@ -96,24 +84,24 @@
 
             <Button
                 android:id="@+id/btnlogin"
-                android:layout_width="wrap_content"
+                android:layout_width="178dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtpassword"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="20pt"
+                android:layout_marginTop="40pt"
                 android:background="@drawable/botonripple"
-                android:text="LOGIN"
+                android:text="Iniciar Sesion "
                 android:textColor="@drawable/botonpressed" />
 
 
             <Button
                 android:id="@+id/btnregistrarse"
                 android:layout_width="130dp"
-                android:layout_height="60dp"
+                android:layout_height="40dp"
                 android:layout_below="@+id/btnlogin"
                 android:layout_centerInParent="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="11pt"
+                android:layout_marginTop="15pt"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/botonripple"
                 android:text="Registrarse"

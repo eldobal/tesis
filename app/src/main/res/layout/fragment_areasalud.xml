@@ -23,7 +23,7 @@
             <TextView
                 android:layout_centerHorizontal="true"
                 android:id="@+id/mydashboard"
-                android:text="Belleza "
+                android:text="Salud "
                 android:fontFamily="sans-serif-condensed-medium"
                 android:textSize="40sp"
                 android:layout_marginLeft="62dp"
@@ -35,7 +35,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/mydashboard"
                 android:padding="8dp"
-                android:text="6 Rubros"
+                android:text="3 items"
                 android:textSize="14sp"
                 android:layout_marginLeft="62dp"
                 android:layout_width="wrap_content"
@@ -287,11 +287,6 @@
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-
-
-
-
         </GridLayout>
-
     </LinearLayout>
 </ScrollView>
