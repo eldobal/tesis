@@ -34,6 +34,7 @@ public class menuActivity extends AppCompatActivity {
         showSelectedFragment(new HomeFragment());
 
 
+
         mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
 
         mbottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

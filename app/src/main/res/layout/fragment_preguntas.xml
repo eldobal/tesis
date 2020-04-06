@@ -75,20 +75,21 @@
 
 
                         <LinearLayout
-                            android:id="@+id/contacto"
+                        android:id="@+id/contacto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:fontFamily="sans-serif-condensed-medium"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="Solicitudes "
+                            android:textAlignment="center"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="20dp"></TextView>
 
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Contacto"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="20dp"></TextView>
-
-                        </LinearLayout>
+                    </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/txtemailcontato"
@@ -102,9 +103,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Email Contacto"
+                                android:text="Como Realizar una Solicitud?"
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
+                                android:textColor="@color/colorPrimary"
                                 android:textSize="16dp">
 
                             </TextView>
@@ -120,12 +121,14 @@
                             android:layout_marginTop="5dp">
 
                             <TextView
+                                android:inputType="textMultiLine"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Empresa_Empresa@Empresa.cl"
+                                android:text="Lo primero que tiene que hacer es dirijirse hacia la barra de navegacion que se encuantra en el parte inferior de la aplicacion y seleccionar el icono con forma
+                                de casa debe seleccionar un area de interes y luego selecionar el rubro especifico que quiera, despues de hacerlo se le desplegara una lista con los trabajadores a lo cual debera seleccionar el que usted quiera para poder empezar la solicitud"
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
+                                android:textColor="@color/colordark"
                                 android:textSize="18dp"></TextView>
 
 

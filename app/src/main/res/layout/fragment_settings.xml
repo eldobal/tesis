@@ -34,7 +34,7 @@
                    android:layout_alignParentTop="true"
                    android:layout_centerHorizontal="true"
                    android:layout_marginTop="20dp"
-                   android:src="@drawable/user"></androidx.appcompat.widget.AppCompatImageView>
+                   android:src="@drawable/icono_contacto"></androidx.appcompat.widget.AppCompatImageView>
 
 
                <RelativeLayout

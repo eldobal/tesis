@@ -43,7 +43,7 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="75dp"
 
                 android:scrollbarThumbVertical="@drawable/colorsroll">
@@ -262,7 +262,7 @@
                 android:id="@+id/actualizarperfil"
                 android:layout_width="120dp"
                 android:layout_height="45dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="23dp"
                 android:layout_marginLeft="30dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
@@ -277,10 +277,11 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="30dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="23dp"
+
                 android:background="@drawable/botonripple"
                 android:text="Actualizar Contraseña"
-                android:textColor="@drawable/botonpressed" />
+                android:textColor="@color/colorPrimary" />
 
 
         </RelativeLayout>

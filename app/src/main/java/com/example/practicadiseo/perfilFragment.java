@@ -55,6 +55,7 @@ public class perfilFragment extends Fragment {
         //donde se setearan los datos a los edittext
 
         final Button editardatos = (Button) v.findViewById(R.id.actualizarperfil);
+        final Button editarpass = (Button) v.findViewById(R.id.actualizarcontraseña);
         rut.setText("20097685-1");
 
 
@@ -115,6 +116,15 @@ public class perfilFragment extends Fragment {
             }
         });
 
+
+        editarpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSelectedFragment(new passperfilFragment());
+            }
+        });
+
+
         return v;
 
     }
@@ -122,6 +132,14 @@ public class perfilFragment extends Fragment {
     public void updateDetail() {
         Intent intent = new Intent(getActivity(), menuActivity.class);
         startActivity(intent);
+    }
+
+
+    private void showSelectedFragment(Fragment fragment){
+        getFragmentManager().beginTransaction().replace(R.id.container,fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+
     }
 
 

@@ -13,9 +13,16 @@
         android:supportsRtl="true"
         android:screenOrientation="sensorPortrait"
         android:theme="@style/AppTheme">
-        <activity android:name=".menuActivity"></activity>
+        <activity android:name=".menuActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            ></activity>
         <activity android:name=".menuareasActivity" />
-        <activity android:name=".register2Activity" />
+        <activity android:name=".register2Activity"
+            android:noHistory="false"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            />
         <activity android:name=".login2Activity"
             android:noHistory="true"
             android:configChanges="orientation"
@@ -27,7 +34,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main2Activity" />
+        <activity android:name=".Main2Activity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            />
         <activity android:name=".MainActivity" />
     </application>
 

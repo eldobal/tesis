@@ -3,6 +3,7 @@ package com.example.practicadiseo;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -92,4 +93,12 @@ public class register2Activity extends AppCompatActivity {
         return prefs.getString("usuario","");
     }
 
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(register2Activity.this, login2Activity.class);
+        startActivity(intent);
+
+        super.onBackPressed();
+    }
 }
