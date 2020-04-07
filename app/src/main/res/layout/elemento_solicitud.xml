@@ -1,22 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:padding="16dp"
         android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp">
+
+        </androidx.appcompat.widget.AppCompatImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="N solicitud ">
+
+        </androidx.appcompat.widget.AppCompatTextView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="left"
         android:layout_height="match_parent">
 
+        <Button
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="75dp"
-        android:layout_height="75dp">
+            android:layout_width="110dp"
+            android:layout_height="45dp"
+            android:background="@drawable/bg_ripple"
+            android:text="Detalle">
 
-    </androidx.appcompat.widget.AppCompatImageView>
-
-
-
-
-
+        </Button>
+    </LinearLayout>
 
 </LinearLayout>
+
+</RelativeLayout>

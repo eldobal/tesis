@@ -17,17 +17,18 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="66dp"
+            android:layout_height="72dp"
             android:layout_marginTop="15dp"
             android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp">
 
             <ImageButton
                 android:id="@+id/imgperfil"
-                android:layout_width="65dp"
-                android:layout_height="66dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_launcher" />
+                android:background="@color/float_transparent"
+                android:src="@drawable/userprofile" />
 
 
 
@@ -41,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:layout_marginRight="30dp">
 
