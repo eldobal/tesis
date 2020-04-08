@@ -2,6 +2,7 @@ package com.example.practicadiseo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-//import com.example.practicadiseo.DetalleSolicitud;
+import com.example.practicadiseo.DetalleSolicitudFragment;
 
 public class Adaptador extends BaseAdapter {
 
@@ -52,24 +53,28 @@ public class Adaptador extends BaseAdapter {
 
         final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
 
-        TextView nombreUsuario = (TextView) vista.findViewById(R.id.txtnombretrabajador);
+      //  TextView cliente = (TextView) vista.findViewById(R.id.txtclientesolicituddetalle);
+        TextView trabajador = (TextView) vista.findViewById(R.id.txtclientesolicituddetalle);
         TextView fecha = (TextView) vista.findViewById(R.id.txtfechasolicitud);
         TextView nsolicitud = (TextView) vista.findViewById(R.id.txtnumerosolicitud);
+       // TextView descripcion = (TextView) vista.findViewById(R.id.txtdescripciondetallesolicitud);
+
         ImageView icono = (ImageView) vista.findViewById(R.id.imgperfilfilasolicitud);
+
+
         final Button detalle = (Button) vista.findViewById(R.id.btndetallesolicitud);
 
-        nombreUsuario.setText(solicitudes.get(i).getSolicitadopor_Usuario());
+        trabajador.setText(solicitudes.get(i).getRut_Trabajador());
         fecha.setText(solicitudes.get(i).getFecha());
-     //   nsolicitud.setText("Pendiente");
+        nsolicitud.setText(solicitudes.get(1).getIdSolicitud());
         icono.setImageResource(imagenes[0]);
 
 
         soli.setIdSolicitud(solicitudes.get(i).getIdSolicitud());
         soli.setFecha(solicitudes.get(i).getFecha());
         soli.setDescripcion(solicitudes.get(i).getDescripcion());
-        soli.setEstado_idEstado(solicitudes.get(i).getEstado_idEstado());
-        soli.setSolicitadopor_Usuario(solicitudes.get(i).getSolicitadopor_Usuario());
-        soli.setAtendidopor_Usuario(solicitudes.get(i).getAtendidopor_Usuario());
+        soli.setRut_Trabajador(solicitudes.get(i).getRut_Trabajador());
+
 
         final int posicion = i;
         detalle.setTag(i);
@@ -78,9 +83,13 @@ public class Adaptador extends BaseAdapter {
             public void onClick(View v) {
                 Solicitud s;
                 s=solicitudes.get(posicion);
-               // Intent vistaDetalle = new Intent(contexto, DetalleSolicitud.class);
-               // vistaDetalle.putExtra("soli", s);
-               // contexto.startActivity(vistaDetalle);
+                Intent vistaDetalle = new Intent(contexto, DetalleSolicitudFragment.class);
+                vistaDetalle.putExtra("soli", s);
+                contexto.startActivity(vistaDetalle);
+
+
+
+
             }
         });
 

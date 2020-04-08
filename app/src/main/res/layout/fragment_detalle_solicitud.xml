@@ -57,12 +57,12 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <ImageView
                         android:id="@+id/imgperfilfilasolicitud"
-                        android:src="@drawable/userprofile"
                         android:layout_width="150dp"
-                        android:layout_height="150dp">
-                    </ImageView>
+                        android:layout_height="150dp"
+                        android:src="@drawable/userprofile"></ImageView>
                 </LinearLayout>
 
             </RelativeLayout>
@@ -243,6 +243,7 @@
                             android:layout_marginTop="5dp">
 
                             <TextView
+                                android:id="@+id/txtdescripciondetallesolicitud"
                                 android:inputType="textMultiLine"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -294,6 +295,7 @@
                             android:layout_height="wrap_content">
 
                             <TextView
+                                android:id="@+id/txtdiagnosticodetallesolicitud"
                                 android:fontFamily="sans-serif-condensed-medium"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -385,6 +387,7 @@
                             android:layout_marginTop="5dp">
 
                             <TextView
+                                android:id="@+id/txtsoluciondetallesolicitud"
                                 android:inputType="textMultiLine"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -495,7 +498,7 @@
 
             <Button
 
-                android:id="@+id/btnpreguntas"
+                android:id="@+id/btnvolver"
                 android:layout_width="220dp"
                 android:layout_height="50dp"
                 android:layout_centerInParent="true"

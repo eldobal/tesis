@@ -15,6 +15,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -59,10 +70,7 @@ public class login2Activity extends AppCompatActivity {
                 Intent intent = new Intent(login2Activity.this, menuActivity.class);
                 startActivity(intent);
                 if (!usuario.equals("") && !contrasena.equals("") && !usuario.isEmpty() && !contrasena.isEmpty()) {
-                   // enviarRequest(usuario, contrasena);
-
-
-
+                    enviarRequest(usuario, contrasena);
 
                 } else {
                     Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
@@ -90,7 +98,7 @@ public class login2Activity extends AppCompatActivity {
     }
 
 
-    /*
+
     String url = "http://www.sebastianbaldovinos.com/app/test.php?funcion=logintecnico";
 
     //metodo para enviar los datos y realizar la accion o acciones necesarias
@@ -109,7 +117,7 @@ public class login2Activity extends AppCompatActivity {
                                 //conversion de datos a String
                                 String usu = txtemail.getText().toString();
                                 String contra = txtpass.getText().toString();
-                                Intent intent = new Intent(login2Activity.this, MainActivity.class);
+                                Intent intent = new Intent(login2Activity.this, menuActivity.class);
                                 //guardar los datos de la session en el sp
                                 saveOnPreferences(usu, contra);
                                 startActivity(intent);
@@ -131,7 +139,7 @@ public class login2Activity extends AppCompatActivity {
             }
         }) {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError{
+            protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
                 params.put("Usuario", Usuario);
                 params.put("Contrasena", Contrasena);
@@ -155,7 +163,7 @@ public class login2Activity extends AppCompatActivity {
 
 
     }
-*/
+
     private void setcredentiasexist() {
         String usuario = getuserusuairoprefs();
         String contraseña = getusercontraseñaprefs();

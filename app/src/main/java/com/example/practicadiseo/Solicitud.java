@@ -2,7 +2,7 @@ package com.example.practicadiseo;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Solicitud implements Parcelable {
@@ -10,9 +10,10 @@ public class Solicitud implements Parcelable {
     private int idSolicitud;
     private String Fecha;
     private String Descripcion;
-    private int Estado_idEstado;
-    private String Solicitadopor_Usuario;
-    private String Atendidopor_Usuario;
+    private int IdFoto;
+    private int idEstadoSolicitud;
+    private String Rut_Cliente;
+    private String Rut_Trabajador;
 
     private ArrayList<Solicitud> lista = new ArrayList<Solicitud>();
 
@@ -33,18 +34,20 @@ public class Solicitud implements Parcelable {
         idSolicitud=in.readInt();
         Fecha=in.readString();
         Descripcion=in.readString();
-        Estado_idEstado=in.readInt();
-        Solicitadopor_Usuario= in.readString();
-        Atendidopor_Usuario= in.readString();
+        idEstadoSolicitud=in.readInt();
+        IdFoto=in.readInt();
+        Rut_Cliente= in.readString();
+        Rut_Trabajador= in.readString();
         in.readTypedList(lista,CREATOR);
     }
     public void writeToParcel(Parcel dest, int flags){
         dest.writeInt(idSolicitud);
         dest.writeString(Fecha);
         dest.writeString(Descripcion);
-        dest.writeInt(Estado_idEstado);
-        dest.writeString(Solicitadopor_Usuario);
-        dest.writeString(Atendidopor_Usuario);
+        dest.writeInt(idEstadoSolicitud);
+        dest.writeInt(IdFoto);
+        dest.writeString(Rut_Cliente);
+        dest.writeString(Rut_Trabajador);
         dest.writeTypedList(lista);
     }
 
@@ -62,22 +65,24 @@ public class Solicitud implements Parcelable {
         }
     };
 
-    public Solicitud(int idSolicitud, String fecha, String descripcion, int estado_idEstado, String solicitadopor_Usuario, String atendidopor_Usuario) {
+    public Solicitud(int idSolicitud, String fecha, String descripcion, int idFoto,int idEstadoSolicitud, String rut_Cliente, String rut_Trabajador) {
         this.idSolicitud = idSolicitud;
         this.Fecha = fecha;
         this.Descripcion = descripcion;
-        this.Estado_idEstado = estado_idEstado;
-        this.Solicitadopor_Usuario = solicitadopor_Usuario;
-        this.Atendidopor_Usuario = atendidopor_Usuario;
+        this.IdFoto = idFoto;
+        this.idEstadoSolicitud = idEstadoSolicitud;
+        this.Rut_Cliente = rut_Cliente;
+        this.Rut_Trabajador = rut_Trabajador;
     }
 
     public Solicitud(Solicitud solicitud) {
         this.idSolicitud = solicitud.idSolicitud;
         this.Fecha = solicitud.Fecha;
         this.Descripcion = solicitud.Descripcion;
-        this.Estado_idEstado = solicitud.Estado_idEstado;
-        this.Solicitadopor_Usuario = solicitud.Solicitadopor_Usuario;
-        this.Atendidopor_Usuario = solicitud.Atendidopor_Usuario;
+        this.idEstadoSolicitud = solicitud.idEstadoSolicitud;
+        this.IdFoto = solicitud.IdFoto;
+        this.Rut_Trabajador = solicitud.Rut_Trabajador;
+        this.Rut_Cliente = solicitud.Rut_Cliente;
     }
 
     public int getIdSolicitud() {
@@ -104,31 +109,48 @@ public class Solicitud implements Parcelable {
         Descripcion = descripcion;
     }
 
-    public int getEstado_idEstado() {
-        return Estado_idEstado;
+    public int getIdFoto() {
+        return IdFoto;
     }
 
-    public void setEstado_idEstado(int estado_idEstado) {
-        Estado_idEstado = estado_idEstado;
+    public void setIdFoto(int idFoto) {
+        IdFoto = idFoto;
     }
 
-    public String getSolicitadopor_Usuario() {
-        return Solicitadopor_Usuario;
+    public int getIdEstadoSolicitud() {
+        return idEstadoSolicitud;
     }
 
-    public void setSolicitadopor_Usuario(String solicitadopor_Usuario) {
-        Solicitadopor_Usuario = solicitadopor_Usuario;
+    public void setIdEstadoSolicitud(int idEstadoSolicitud) {
+        this.idEstadoSolicitud = idEstadoSolicitud;
     }
 
-    public String getAtendidopor_Usuario() {
-        return Atendidopor_Usuario;
+    public String getRut_Cliente() {
+        return Rut_Cliente;
     }
 
-    public void setAtendidopor_Usuario(String atendidopor_Usuario) {
-        Atendidopor_Usuario = atendidopor_Usuario;
+    public void setRut_Cliente(String rut_Cliente) {
+        Rut_Cliente = rut_Cliente;
     }
 
+    public String getRut_Trabajador() {
+        return Rut_Trabajador;
+    }
 
+    public void setRut_Trabajador(String rut_Trabajador) {
+        Rut_Trabajador = rut_Trabajador;
+    }
 
+    public ArrayList<Solicitud> getLista() {
+        return lista;
+    }
+
+    public void setLista(ArrayList<Solicitud> lista) {
+        this.lista = lista;
+    }
+
+    public static Creator<Solicitud> getCREATOR() {
+        return CREATOR;
+    }
 }
 
