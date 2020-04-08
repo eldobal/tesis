@@ -52,7 +52,7 @@ public class menuActivity extends AppCompatActivity {
                 }
 
                 if(menuItem.getItemId()==R.id.menu_solicitud){
-                    showSelectedFragment(new solicitudeFragment());
+                    showSelectedFragment(new DetalleSolicitudFragment());
 
                 }
 

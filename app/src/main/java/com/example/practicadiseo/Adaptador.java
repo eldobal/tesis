@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import com.example.practicadiseo.DetalleSolicitud;
+//import com.example.practicadiseo.DetalleSolicitud;
 
 public class Adaptador extends BaseAdapter {
 
@@ -52,15 +52,15 @@ public class Adaptador extends BaseAdapter {
 
         final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
 
-        TextView nombreUsuario = (TextView) vista.findViewById(R.id.tvUsuario);
-        TextView fecha = (TextView) vista.findViewById(R.id.tvFecha);
-        TextView estado = (TextView) vista.findViewById(R.id.tvEstado);
-        ImageView icono = (ImageView) vista.findViewById(R.id.ivIcono);
-        final Button detalle = (Button) vista.findViewById(R.id.btnDetalle);
+        TextView nombreUsuario = (TextView) vista.findViewById(R.id.txtnombretrabajador);
+        TextView fecha = (TextView) vista.findViewById(R.id.txtfechasolicitud);
+        TextView nsolicitud = (TextView) vista.findViewById(R.id.txtnumerosolicitud);
+        ImageView icono = (ImageView) vista.findViewById(R.id.imgperfilfilasolicitud);
+        final Button detalle = (Button) vista.findViewById(R.id.btndetallesolicitud);
 
         nombreUsuario.setText(solicitudes.get(i).getSolicitadopor_Usuario());
         fecha.setText(solicitudes.get(i).getFecha());
-        estado.setText("Pendiente");
+     //   nsolicitud.setText("Pendiente");
         icono.setImageResource(imagenes[0]);
 
 
@@ -78,9 +78,9 @@ public class Adaptador extends BaseAdapter {
             public void onClick(View v) {
                 Solicitud s;
                 s=solicitudes.get(posicion);
-                Intent vistaDetalle = new Intent(contexto, DetalleSolicitud.class);
-                vistaDetalle.putExtra("soli", s);
-                contexto.startActivity(vistaDetalle);
+               // Intent vistaDetalle = new Intent(contexto, DetalleSolicitud.class);
+               // vistaDetalle.putExtra("soli", s);
+               // contexto.startActivity(vistaDetalle);
             }
         });
 

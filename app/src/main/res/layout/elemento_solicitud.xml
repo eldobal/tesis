@@ -9,47 +9,113 @@
 
 <LinearLayout
     android:layout_width="match_parent"
+    android:layout_alignParentRight="true"
     android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="75dp"
+
+    <RelativeLayout
+        android:layout_width="75dp"
             android:layout_height="75dp">
 
-        </androidx.appcompat.widget.AppCompatImageView>
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/imgperfilfilasolicitud"
+                android:src="@drawable/userprofile"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </ImageView>
+        </LinearLayout>
 
-    <LinearLayout
+    </RelativeLayout>
+
+
+
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="N solicitud ">
-
-        </androidx.appcompat.widget.AppCompatTextView>
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:gravity="left"
         android:layout_height="match_parent">
 
-        <Button
 
-            android:layout_width="110dp"
-            android:layout_height="45dp"
-            android:background="@drawable/bg_ripple"
-            android:text="Detalle">
+            <RelativeLayout
+                android:layout_centerHorizontal="true"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/txtnumerosolicitud"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="N° Solicitud:0">
 
-        </Button>
-    </LinearLayout>
+                </TextView>
 
+                <TextView
+                    android:id="@+id/txtfechasolicitud"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtnumerosolicitud"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="Fecha: 07/04/2020">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/txt0001"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txtfechasolicitud"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="Trabajador:">
+
+                </TextView>
+
+
+                <TextView
+                    android:id="@+id/txtnombretrabajador"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/txt0001"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:text="Sebastian Baldovinos">
+
+                </TextView>
+
+            </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true">
+
+            <Button
+                android:id="@+id/btndetallesolicitud"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+
+                android:background="@drawable/bg_ripple"
+                android:text="Detalle"
+                android:textColor="@color/colorAccentllight"
+                android:textSize="12dp">
+
+            </Button>
+        </LinearLayout>
+
+    </RelativeLayout>
 </LinearLayout>
 
 </RelativeLayout>
