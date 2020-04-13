@@ -11,11 +11,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.example.practicadiseo.DetalleSolicitudFragment;
 
-public class Adaptador extends BaseAdapter {
+public class Adaptador extends BaseAdapter implements Serializable {
 
     private static LayoutInflater inflater = null;
 
@@ -25,10 +30,11 @@ public class Adaptador extends BaseAdapter {
     int[] imagenes;
     Solicitud soli = new Solicitud();
 
-    public Adaptador(Context contexto, ArrayList<Solicitud> solicitudes, int[] imagenes) {
+
+    public Adaptador(Context contexto, ArrayList<Solicitud> solicitudes) {
         this.contexto = contexto;
         this.solicitudes = solicitudes;
-        this.imagenes = imagenes;
+
 
         inflater = (LayoutInflater) contexto.getSystemService(contexto.LAYOUT_INFLATER_SERVICE);
     }
@@ -53,10 +59,14 @@ public class Adaptador extends BaseAdapter {
 
         final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
 
+        final
+
+
+
       //  TextView cliente = (TextView) vista.findViewById(R.id.txtclientesolicituddetalle);
         TextView trabajador = (TextView) vista.findViewById(R.id.txtclientesolicituddetalle);
         TextView fecha = (TextView) vista.findViewById(R.id.txtfechasolicitud);
-        TextView nsolicitud = (TextView) vista.findViewById(R.id.txtnumerosolicitud);
+        final TextView nsolicitud = (TextView) vista.findViewById(R.id.txtnumerosolicitud);
        // TextView descripcion = (TextView) vista.findViewById(R.id.txtdescripciondetallesolicitud);
 
         ImageView icono = (ImageView) vista.findViewById(R.id.imgperfilfilasolicitud);
@@ -78,16 +88,29 @@ public class Adaptador extends BaseAdapter {
 
         final int posicion = i;
         detalle.setTag(i);
+
+
+
+
+
+        //boton sobre el detalle de una solicitud individual
         detalle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Solicitud s;
                 s=solicitudes.get(posicion);
-                Intent vistaDetalle = new Intent(contexto, DetalleSolicitudFragment.class);
-                vistaDetalle.putExtra("soli", s);
-                contexto.startActivity(vistaDetalle);
+                DetalleSolicitudFragment detalleSolicitudFragment = new DetalleSolicitudFragment();
+
+                Bundle bundle = new Bundle();
+
+                Intent intent = new Intent(contexto, DetalleSolicitudFragment.class);
+
+                bundle.putInt("nsolicitud", Integer.parseInt(nsolicitud.getText().toString()));
+                detalleSolicitudFragment.setArguments(bundle);
 
 
+
+                contexto.startActivity(intent);
 
 
             }
@@ -95,4 +118,6 @@ public class Adaptador extends BaseAdapter {
 
         return vista;
     }
+
+
 }

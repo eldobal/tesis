@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -25,9 +24,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class login2Activity extends AppCompatActivity {
 
@@ -35,7 +40,7 @@ public class login2Activity extends AppCompatActivity {
 
     SweetAlertDialog dp;
     private SharedPreferences prefs;
-    private EditText txtemail;
+    private EditText txtrut;
     private EditText txtpass;
     private Button btnlogin;
     private Button btnregister;
@@ -52,7 +57,7 @@ public class login2Activity extends AppCompatActivity {
 
 
 
-        txtemail = (EditText) findViewById(R.id.txtemail);
+        txtrut = (EditText) findViewById(R.id.txtemail);
         txtpass = (EditText) findViewById(R.id.txtpassword);
         btnlogin = (Button) findViewById(R.id.btnlogin);
         btnregister = (Button) findViewById(R.id.btnregistrarse);
@@ -65,16 +70,50 @@ public class login2Activity extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
 
-                String usuario = txtemail.getText().toString();
+                String rut = txtrut.getText().toString();
                 String contrasena = txtpass.getText().toString();
-                Intent intent = new Intent(login2Activity.this, menuActivity.class);
-                startActivity(intent);
-                if (!usuario.equals("") && !contrasena.equals("") && !usuario.isEmpty() && !contrasena.isEmpty()) {
-                    enviarRequest(usuario, contrasena);
 
-                } else {
-                    Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
-                }
+                Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+
+                Call<List<Usuario>> call = tesisAPI.getUsuario(rut,contrasena);
+                call.enqueue(new Callback<List<Usuario>>() {
+                    @Override
+                    public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
+
+                        if(!response.isSuccessful()){
+                            Toast.makeText(getApplicationContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                        }
+
+                        List<Usuario> usuarios = response.body();
+
+                        for (Usuario usuario:usuarios){
+
+                            String usuarioconectado = usuario.getRut().toString();
+                            String usuarioconectadopass = usuario.getContrasena().toString();
+
+                            if(usuarioconectado == txtrut.getText().toString() && usuarioconectadopass == txtpass.getText().toString()){
+
+                                Intent intent = new Intent(login2Activity.this, menuActivity.class);
+                                startActivity(intent);
+
+                            }
+
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Usuario>> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
 
 
 
@@ -99,10 +138,10 @@ public class login2Activity extends AppCompatActivity {
 
 
 
-    String url = "http://www.sebastianbaldovinos.com/app/test.php?funcion=logintecnico";
+   // String url = "http://proyectotesis.ddns.net/api/UsuarioAPI?id="+txtrut+"&pass="+txtpass+"";
 
     //metodo para enviar los datos y realizar la accion o acciones necesarias
-    private void enviarRequest(final String Usuario, final String Contrasena) {
+  /*  private void enviarRequest() {
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -111,11 +150,11 @@ public class login2Activity extends AppCompatActivity {
                             //rescatas el json desde la web api
                             JSONObject jsonObject = new JSONObject(response);
                             // rescatas el valor del objeto
-                            String valor = jsonObject.getString("response");
+                            Usuario usuario = jsonObject.getJSONObject();
                             //comparas el string rescatado del objetojson y lo comparas con un ok
                             if (valor.equals("OK")) {
                                 //conversion de datos a String
-                                String usu = txtemail.getText().toString();
+                                String usu = txtrut.getText().toString();
                                 String contra = txtpass.getText().toString();
                                 Intent intent = new Intent(login2Activity.this, menuActivity.class);
                                 //guardar los datos de la session en el sp
@@ -124,7 +163,7 @@ public class login2Activity extends AppCompatActivity {
                             } else {
                                 dp = new SweetAlertDialog(login2Activity.this, SweetAlertDialog.ERROR_TYPE);
                                 dp.setTitleText("Oops...");
-                                dp.setContentText("No se ha podido crear la solicitud!");
+                                dp.setContentText("El Rut / Contraseña son incorrectos!");
                                 dp.show();
                             }
 
@@ -141,7 +180,7 @@ public class login2Activity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("Usuario", Usuario);
+                params.put("Rut", rut);
                 params.put("Contrasena", Contrasena);
                 return params;
             }
@@ -149,13 +188,13 @@ public class login2Activity extends AppCompatActivity {
         AppSingleton.getInstance(login2Activity.this).addToRequestQue(stringRequest);
     }
 
+*/
 
-
-    private void saveOnPreferences(String usuario, String contrasena) {
+    private void saveOnPreferences(String rut, String contrasena) {
 
 
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("Usuario", usuario);
+        editor.putString("Rut", rut);
         editor.putString("ContraseNa", contrasena);
         //linea la cual guarda todos los valores en la pref antes de continuar
         editor.commit();
@@ -165,17 +204,17 @@ public class login2Activity extends AppCompatActivity {
     }
 
     private void setcredentiasexist() {
-        String usuario = getuserusuairoprefs();
+        String rut = getuserrutprefs();
         String contraseña = getusercontraseñaprefs();
-        if (!TextUtils.isEmpty(usuario) && !TextUtils.isEmpty(contraseña)) {
-            txtemail.setText(usuario);
+        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
+            txtrut.setText(rut);
             txtpass.setText(contraseña);
         }
     }
 
-    private String getuserusuairoprefs() {
+    private String getuserrutprefs() {
 
-        return prefs.getString("Usuario", "");
+        return prefs.getString("rut", "");
     }
 
     private String getusercontraseñaprefs() {

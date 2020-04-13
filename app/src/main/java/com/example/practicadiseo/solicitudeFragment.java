@@ -4,9 +4,19 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.method.DateTimeKeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 /**
@@ -14,6 +24,13 @@ import android.view.ViewGroup;
  */
 public class solicitudeFragment extends Fragment {
 
+    SweetAlertDialog dp;
+    private static LayoutInflater inflater = null;
+    private TextView tvNoRegistros;
+    private ListView lista;
+    private ImageButton btnVolver;
+
+    ArrayList<Solicitud> solicitudes = new ArrayList<Solicitud>();
     public solicitudeFragment() {
         // Required empty public constructor
     }
@@ -23,6 +40,11 @@ public class solicitudeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_solicitudes, container, false);
+        View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
+
+
+
+
+        return v;
     }
 }

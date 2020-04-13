@@ -29,6 +29,8 @@ import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
+import static android.content.Intent.getIntent;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -87,14 +89,22 @@ public class DetalleSolicitudFragment extends Fragment {
         btnvolver = (Button)v.findViewById(R.id.btnvolver);
 
 
-
-        Intent intent =;
-        Bundle b = intent.getExtras();
-
-        final Solicitud soli = (Solicitud) b.getParcelable("soli");
+        //posible error al enviar datos desde el adaptador hacia el fragment detalle
 
 
-        numerosolicitud.setText(String.valueOf(soli.getIdSolicitud()));
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            int myInt = bundle.getInt("nsolicitud");
+        }
+
+
+
+
+        final Solicitud soli = (Solicitud) bundle.getParcelable("soli");
+
+
+
         fechasolicitud.setText(soli.getFecha());
         descripciondetallesolicitud.setText(soli.getDescripcion());
         cliente.setText(String.valueOf(soli.getRut_Cliente()));
@@ -110,7 +120,7 @@ public class DetalleSolicitudFragment extends Fragment {
     String url = "http://www.sebastianbaldovinos.com/app/test.php?funcion=atendersolicitud";
 
     //metodo para enviar los datos y realizar la accion o acciones necesarias
-    private void enviarRequest(final String idSolicitud, final String Tecnico, final String Usuario) {
+   /* private void enviarRequest(final String nsolicitud) {
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
@@ -144,8 +154,8 @@ public class DetalleSolicitudFragment extends Fragment {
                 return params;
             }
         };
-        AppSingleton.getInstance(.DetalleSolicitudFragment.this).addToRequestQue(stringRequest);
-    }
+        AppSingleton.getInstance(getContext()).addToRequestQue(stringRequest);
+    }*/
 
 
 }
