@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.airbnb.lottie.L;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -64,8 +68,18 @@ public class register2Activity extends AppCompatActivity {
 
         cargarspiner();
 
+        spinnerciudades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Ciudad ciudad = (Ciudad) parent.getSelectedItem();
+                    displayciudaddata(ciudad);
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
 
 
 
@@ -121,10 +135,11 @@ public class register2Activity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-
+    //request para traer los datos desde la pag u cargarlos en un spinner
     private void cargarspiner(){
         try {
-
+            ArrayList<Ciudad> listaciudades = new ArrayList<Ciudad>();
+            ArrayList<String> listanombres = new ArrayList<String>();
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://proyectotesis.ddns.net/")
                     .addConverterFactory(GsonConverterFactory.create())
@@ -147,16 +162,26 @@ public class register2Activity extends AppCompatActivity {
                         List<Ciudad> ciudades = response.body();
 
                         //declaracion de variables del response
-                        for(Ciudad ciudad : ciudades){
+                        for(Ciudad ciudad: ciudades){
                             //falta poder cargar la lista del response hacia un spinner
+                            Ciudad ciudadl = new Ciudad();
+                            ciudadl.setNombre(ciudad.getNombre()) ;
+                            ciudadl.setIdCiudad(ciudad.getIdCiudad());
+                            ciudadl.setId_idComuna(ciudad.getId_idComuna());
 
-                            //agregar los objetos ciudad de la lista del response a una lista
-                            listaciudades.add(ciudad);
+
+
+                            //problema con cargar los datos a la lista
+                            listaciudades.add(ciudadl);
+
+
                         }
+
                         //cargar la lista de ciudades rescatadas en el spinner
-                        ArrayAdapter<Ciudad> a = new ArrayAdapter<Ciudad>(register2Activity.this,android.R.layout.simple_spinner_dropdown_item,listaciudades);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        ArrayAdapter<Ciudad> a = new ArrayAdapter<Ciudad>(register2Activity.this,android.R.layout.simple_spinner_item,listaciudades);
+                        a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         spinnerciudades.setAdapter(a);
+
 
                     }
                 }
@@ -171,6 +196,22 @@ public class register2Activity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+    }
+
+    public void getSelectedCiudad(View v){
+        Ciudad ciudad = (Ciudad) spinnerciudades.getSelectedItem();
+        displayciudaddata(ciudad);
+    }
+
+    private void displayciudaddata(Ciudad ciudad){
+        int idCiudad = ciudad.getIdCiudad();
+        String Nombre = ciudad.getNombre();
+        int id_idComuna= ciudad.getId_idComuna();
+
+        String ciudaddata ="ID ciudad :"+ idCiudad + " nombre ciudad"+Nombre + " id comuna: "+id_idComuna;
+
+        Toast.makeText(getApplicationContext(), ciudaddata, Toast.LENGTH_LONG).show();
 
     }
 

@@ -1,10 +1,16 @@
 package com.example.practicadiseo;
 
+import androidx.annotation.NonNull;
+
 public class Ciudad {
 
     private int idCiudad;
     private String Nombre;
     private int id_idComuna;
+
+    public Ciudad() {
+
+    }
 
     public int getIdCiudad() {
         return idCiudad;
@@ -28,5 +34,11 @@ public class Ciudad {
 
     public void setId_idComuna(int id_idComuna) {
         this.id_idComuna = id_idComuna;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return Nombre;
     }
 }
