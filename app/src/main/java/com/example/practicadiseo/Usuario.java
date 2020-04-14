@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class Usuario {
 
-    private String Rut;
+
+    private String RUT;
     private String Nombre;
     private String Apellido;
     private String Correo;
@@ -19,7 +20,7 @@ public class Usuario {
     private int idTipo;
 
     public String getRut() {
-        return Rut;
+        return RUT;
     }
 
     public String getNombre() {

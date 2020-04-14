@@ -117,45 +117,7 @@ public class DetalleSolicitudFragment extends Fragment {
 
     }
 
-    String url = "http://www.sebastianbaldovinos.com/app/test.php?funcion=atendersolicitud";
 
-    //metodo para enviar los datos y realizar la accion o acciones necesarias
-   /* private void enviarRequest(final String nsolicitud) {
-        final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String valor = jsonObject.getString("response");
-                            if (valor.equals("OK")) {
-
-                            } else {
-
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.getMessage();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("idSolicitud", idSolicitud);
-                params.put("Atendidopor_Usuario", Tecnico);
-                params.put("Solicitadopor_Usuario", Usuario);
-                return params;
-            }
-        };
-        AppSingleton.getInstance(getContext()).addToRequestQue(stringRequest);
-    }*/
 
 
 }

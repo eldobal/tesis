@@ -69,53 +69,52 @@ public class login2Activity extends AppCompatActivity {
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                try {
+                    String rut = txtrut.getText().toString();
+                    String contrasena = txtpass.getText().toString();
 
-                String rut = txtrut.getText().toString();
-                String contrasena = txtpass.getText().toString();
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl("http://proyectotesis.ddns.net/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
 
-                Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
+                    //metodo para llamar a la funcion que queramos
+                    Call<Usuario> call = tesisAPI.getUsuario(rut,contrasena);
+                    call.enqueue(new Callback<Usuario>() {
+                        @Override
+                        public void onResponse(Call<Usuario> call, Response<Usuario> response) {
 
-                tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
-
-                Call<List<Usuario>> call = tesisAPI.getUsuario(rut,contrasena);
-                call.enqueue(new Callback<List<Usuario>>() {
-                    @Override
-                    public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
-
-                        if(!response.isSuccessful()){
-                            Toast.makeText(getApplicationContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
-                        }
-
-                        List<Usuario> usuarios = response.body();
-
-                        for (Usuario usuario:usuarios){
-
-                            String usuarioconectado = usuario.getRut().toString();
-                            String usuarioconectadopass = usuario.getContrasena().toString();
-
-                            if(usuarioconectado == txtrut.getText().toString() && usuarioconectadopass == txtpass.getText().toString()){
-
-                                Intent intent = new Intent(login2Activity.this, menuActivity.class);
-                                startActivity(intent);
-
+                            //si esta malo se ejecuta este trozo
+                            if(!response.isSuccessful()){
+                                Toast.makeText(getApplicationContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                             }
+                            //de lo contrario se ejecuta esta parte
+                            else {
+                                //respuesta del request
+                                Usuario usuarios = response.body();
 
+                                //declaracion de variables del response
+                                String usuarioconectadopass = usuarios.getContrasena().toString();
+                                String usuarioconectado = usuarios.getRut().toString();
 
+                                //if que compara los datos rescatados del response con los datos ingresados
+                                if (usuarioconectado.equals(rut) && usuarioconectadopass.equals(contrasena)) {
+                                    Intent intent = new Intent(login2Activity.this, menuActivity.class);
+                                    startActivity(intent);
+                                }
+                            }
                         }
 
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<Usuario>> call, Throwable t) {
-                        Toast.makeText(getApplicationContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-
-
-
+                        //si falla el request a la pagina mostrara este error
+                        @Override
+                        public void onFailure(Call<Usuario> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
             }
 
