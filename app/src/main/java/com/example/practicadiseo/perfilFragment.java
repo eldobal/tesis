@@ -2,6 +2,7 @@ package com.example.practicadiseo;
 
 import android.content.Intent;
 import android.icu.text.RelativeDateTimeFormatter;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,8 +16,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.practicadiseo.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -26,7 +32,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class perfilFragment extends Fragment {
 
     SweetAlertDialog dp;
-
+    private GoogleSignInClient googleSignInClient;
     public perfilFragment() {
         // Required empty public constructor
 
@@ -48,15 +54,41 @@ public class perfilFragment extends Fragment {
         // Inflate        the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_perfil, container, false);
 
-
         final TextView rut = (EditText) v.findViewById(R.id.rut);
+        final TextView nombre = (EditText) v.findViewById(R.id.nombre);
+        final TextView apellido = (EditText) v.findViewById(R.id.apellido);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
+
+
+
+        //trozo de codigo para rescatar parametros de la cuenta de usuario
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getContext());
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+
+            nombre.setText(personGivenName);
+            apellido.setText(personFamilyName);
+            Toast.makeText(getContext(), "Nombre"+personFamilyName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
+        }
+
+
+
+
 
         //seccion de codigo en el cual se debera traer el json con los datos del usuario
         //donde se setearan los datos a los edittext
 
         final Button editardatos = (Button) v.findViewById(R.id.actualizarperfil);
         final Button editarpass = (Button) v.findViewById(R.id.actualizarcontraseña);
-        rut.setText("20097685-1");
 
 
 
@@ -109,6 +141,11 @@ public class perfilFragment extends Fragment {
                                 rut.setFocusable(true);
                                 rut.setFocusableInTouchMode(true);
                                 rut.setText("10960494-1");
+
+                                apellido.setEnabled(true);
+                                apellido.setFocusable(true);
+                                apellido.setFocusableInTouchMode(true);
+                                apellido.setText(apellido.getText());
 
                             }
                         })

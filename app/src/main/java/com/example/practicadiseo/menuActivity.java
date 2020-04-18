@@ -7,20 +7,30 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class menuActivity extends AppCompatActivity {
-
-
+    private GoogleSignInClient googleSignInClient;
+    TextView nombre,email,id;
+    ImageView fotoperfil;
     BottomNavigationView mbottomNavigationView;
     SweetAlertDialog dp;
     int contador=0;
@@ -32,6 +42,34 @@ public class menuActivity extends AppCompatActivity {
 
         //con este metodo selecciono el fragment de inicio por defecto
         showSelectedFragment(new HomeFragment());
+
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+
+
+        //trozo de codigo para rescatar parametros de la cuenta de usuario
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+
+
+            Toast.makeText(menuActivity.this, "Nombre"+personName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
+        }
+
+
+
+
+
 
 
 
@@ -66,7 +104,6 @@ public class menuActivity extends AppCompatActivity {
 
 
     }
-
 
 
     //metodo para que cuando el usuario este en la actividad principal y quiera retrocer tenga que apretar dos veces el back

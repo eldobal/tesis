@@ -1,5 +1,7 @@
 package com.example.practicadiseo;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +10,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +23,18 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiActivity;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,16 +50,16 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class login2Activity extends AppCompatActivity {
+public class login2Activity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-
-
+    //codigo para utilizar la api de google
+    public static final int  Signincode = 777;
+    private GoogleSignInClient googleSignInClient;
     SweetAlertDialog dp;
     private SharedPreferences prefs;
-    private EditText txtrut;
-    private EditText txtpass;
-    private Button btnlogin;
-    private Button btnregister;
+    private EditText txtrut,txtpass;
+    private Button btnlogin,btnregister;
+    private SignInButton signInButton;
 
     public login2Activity() {
     }
@@ -53,18 +69,42 @@ public class login2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
 
+        //google gso
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        //google api
 
 
 
 
+
+
+
+        signInButton =(SignInButton) findViewById(R.id.Signbutton);
         txtrut = (EditText) findViewById(R.id.txtemail);
         txtpass = (EditText) findViewById(R.id.txtpassword);
         btnlogin = (Button) findViewById(R.id.btnlogin);
         btnregister = (Button) findViewById(R.id.btnregistrarse);
-
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-
         setcredentiasexist();
+
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.Signbutton:
+                    singIn();
+                    break;
+                }
+
+            }
+        });
+
 
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,58 +176,10 @@ public class login2Activity extends AppCompatActivity {
     }
 
 
-
-   // String url = "http://proyectotesis.ddns.net/api/UsuarioAPI?id="+txtrut+"&pass="+txtpass+"";
-
-    //metodo para enviar los datos y realizar la accion o acciones necesarias
-  /*  private void enviarRequest() {
-        final StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            //rescatas el json desde la web api
-                            JSONObject jsonObject = new JSONObject(response);
-                            // rescatas el valor del objeto
-                            Usuario usuario = jsonObject.getJSONObject();
-                            //comparas el string rescatado del objetojson y lo comparas con un ok
-                            if (valor.equals("OK")) {
-                                //conversion de datos a String
-                                String usu = txtrut.getText().toString();
-                                String contra = txtpass.getText().toString();
-                                Intent intent = new Intent(login2Activity.this, menuActivity.class);
-                                //guardar los datos de la session en el sp
-                                saveOnPreferences(usu, contra);
-                                startActivity(intent);
-                            } else {
-                                dp = new SweetAlertDialog(login2Activity.this, SweetAlertDialog.ERROR_TYPE);
-                                dp.setTitleText("Oops...");
-                                dp.setContentText("El Rut / Contraseña son incorrectos!");
-                                dp.show();
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.getMessage();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("Rut", rut);
-                params.put("Contrasena", Contrasena);
-                return params;
-            }
-        };
-        AppSingleton.getInstance(login2Activity.this).addToRequestQue(stringRequest);
+    private void singIn(){
+        Intent signIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signIntent,Signincode);
     }
-
-*/
 
     private void saveOnPreferences(String rut, String contrasena) {
 
@@ -222,6 +214,60 @@ public class login2Activity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onStart() {
 
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+        if (account!=null){
+            goMainScreen();
+        }
+        super.onStart();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == Signincode) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            if(account!=null){
+            // Signed in successfully, show authenticated UI.
+            goMainScreen();}
+
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("Error", "signInResult:failed code=" + e.getStatusCode());
+        }
+    }
+
+
+
+    //metodo para diririr al usuario hacia una activity que queramos
+    private void goMainScreen() {
+        Intent intent = new Intent(this,menuActivity.class);
+       intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 
 }

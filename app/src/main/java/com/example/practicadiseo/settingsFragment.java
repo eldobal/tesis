@@ -3,8 +3,10 @@ package com.example.practicadiseo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,6 +21,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.practicadiseo.R;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -26,7 +34,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  * A simple {@link Fragment} subclass.
  */
 public class settingsFragment extends Fragment {
-
+    private GoogleSignInClient googleSignInClient;
     SweetAlertDialog dp;
     private SharedPreferences prefs;
     public settingsFragment() {
@@ -48,6 +56,40 @@ public class settingsFragment extends Fragment {
         final Button btnpreguntas = (Button) v.findViewById(R.id.btnpreguntas);
 
 
+
+
+
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
+
+
+
+        //trozo de codigo para rescatar parametros de la cuenta de usuario
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getContext());
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+
+            Toast.makeText(getContext(), "Nombre"+personFamilyName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
+        }
+
+
+
+
+
+
+
+
+
+
         //boton que te redirije al fragment de preguntas
         btnpreguntas.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,31 +99,11 @@ public class settingsFragment extends Fragment {
         });
 
         //borra las prefs y sale de la sesion
-        btnsalir.setOnClickListener(new View.OnClickListener() {
+      btnsalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dp=  new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE);
-                dp.setTitleText("Esta Seguro?");
-                dp.setContentText("Se cerrará la sesion y se eliminaran los datos de inicio!");
-                dp.setCancelText("No");
-                dp.setConfirmText("Si");
-                dp.showCancelButton(true);
-                dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.dismissWithAnimation();
-                        //codigo para cuando se preciona si
-                        removesharedpreferenced();
-                        logout();
-                    }
-                });
-                dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.cancel();
-                    }
-                })
-                        .show();
+
+
             }
         });
 

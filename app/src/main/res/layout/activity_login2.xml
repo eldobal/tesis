@@ -17,12 +17,23 @@
 
 
         <RelativeLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="30dp"
-            android:layout_marginTop="100pt"
+
+            android:layout_marginTop="100dp"
             android:layout_marginRight="30dp"
             android:layout_marginBottom="30dp">
+
+            <com.google.android.gms.common.SignInButton
+
+                android:id="@+id/Signbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btnregistrarse"
+                android:layout_centerHorizontal="true" />
+
 
 
 
@@ -88,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtpassword"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="40pt"
+                android:layout_marginTop="25pt"
                 android:background="@drawable/botonripple"
                 android:text="Iniciar Sesion "
                 android:textColor="@drawable/botonpressed" />
@@ -101,7 +112,7 @@
                 android:layout_below="@+id/btnlogin"
                 android:layout_centerInParent="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="15pt"
+                android:layout_marginTop="10pt"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/botonripple"
                 android:text="Registrarse"

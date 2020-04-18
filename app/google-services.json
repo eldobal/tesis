@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "523526219783",
+    "firebase_url": "https://proyectotesis-14168.firebaseio.com",
+    "project_id": "proyectotesis-14168",
+    "storage_bucket": "proyectotesis-14168.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523526219783:android:709828205fb332d3d022a2",
+        "android_client_info": {
+          "package_name": "com.example.practicadiseo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "523526219783-leaau70qfbfhvjsv211ojn5hvb71nkbl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.practicadiseo",
+            "certificate_hash": "9ca5a15cca04d25d53d0f1edcf78c4c851b63c39"
+          }
+        },
+        {
+          "client_id": "523526219783-8fcgk6vidvhncikp9j54ep5c6kf54pcb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAy0elVCa9KIqvibHmI43dKn2v8KR5i9oM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "523526219783-8fcgk6vidvhncikp9j54ep5c6kf54pcb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

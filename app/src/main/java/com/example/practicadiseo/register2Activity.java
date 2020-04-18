@@ -169,12 +169,8 @@ public class register2Activity extends AppCompatActivity {
                             ciudadl.setIdCiudad(ciudad.getIdCiudad());
                             ciudadl.setId_idComuna(ciudad.getId_idComuna());
 
-
-
                             //problema con cargar los datos a la lista
                             listaciudades.add(ciudadl);
-
-
                         }
 
                         //cargar la lista de ciudades rescatadas en el spinner
