@@ -15,9 +15,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.practicadiseo.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -31,6 +34,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
  */
 public class perfilFragment extends Fragment {
 
+    private ImageView fotoperfil;
     SweetAlertDialog dp;
     private GoogleSignInClient googleSignInClient;
     public perfilFragment() {
@@ -54,16 +58,22 @@ public class perfilFragment extends Fragment {
         // Inflate        the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_perfil, container, false);
 
+        //declaracion de variables
         final TextView rut = (EditText) v.findViewById(R.id.rut);
         final TextView nombre = (EditText) v.findViewById(R.id.nombre);
         final TextView apellido = (EditText) v.findViewById(R.id.apellido);
+        final TextView correo = (EditText) v.findViewById(R.id.email);
+        final TextView telefono = (EditText) v.findViewById(R.id.telefono);
+        final Spinner ciudad = (Spinner) v.findViewById(R.id.spinner);
+
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
 
-
+        fotoperfil = (ImageView) v.findViewById(R.id.usericon);
 
         //trozo de codigo para rescatar parametros de la cuenta de usuario
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getContext());
@@ -77,6 +87,8 @@ public class perfilFragment extends Fragment {
 
             nombre.setText(personGivenName);
             apellido.setText(personFamilyName);
+            correo.setText(personEmail);
+            Glide.with(this).load(String.valueOf(personPhoto)).into(fotoperfil);
             Toast.makeText(getContext(), "Nombre"+personFamilyName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
         }
 
@@ -131,21 +143,65 @@ public class perfilFragment extends Fragment {
                                                 })
                                                 .show();
 
-                                        rut.setEnabled(false);
-                                        rut.setFocusable(false);
-                                        rut.setFocusableInTouchMode(false);
+                                        //parametros false
+                                        { rut.setEnabled(false);
+                                            rut.setFocusable(false);
+                                            rut.setFocusableInTouchMode(false);
+
+                                            correo.setEnabled(false);
+                                            correo.setFocusable(false);
+                                            correo.setFocusableInTouchMode(false);
+
+                                            nombre.setEnabled(false);
+                                            nombre.setFocusable(false);
+                                            nombre.setFocusableInTouchMode(false);
+
+                                            apellido.setEnabled(false);
+                                            apellido.setFocusable(false);
+                                            apellido.setFocusableInTouchMode(false);
+
+                                            telefono.setEnabled(false);
+                                            telefono.setFocusable(false);
+                                            telefono.setFocusableInTouchMode(false);
+
+                                            ciudad.setEnabled(false);
+                                            ciudad.setFocusable(false);
+                                            ciudad.setFocusableInTouchMode(false); }
+
+
                                     }
                                 });
                                 sDialog.dismissWithAnimation();
+
                                 rut.setEnabled(true);
                                 rut.setFocusable(true);
                                 rut.setFocusableInTouchMode(true);
-                                rut.setText("10960494-1");
+                                rut.setText(rut.getText());
+
+                                correo.setEnabled(true);
+                                correo.setFocusable(true);
+                                correo.setFocusableInTouchMode(true);
+                                correo.setText(correo.getText());
+
+                                nombre.setEnabled(true);
+                                nombre.setFocusable(true);
+                                nombre.setFocusableInTouchMode(true);
+                                nombre.setText(nombre.getText());
 
                                 apellido.setEnabled(true);
                                 apellido.setFocusable(true);
                                 apellido.setFocusableInTouchMode(true);
                                 apellido.setText(apellido.getText());
+
+                                telefono.setEnabled(true);
+                                telefono.setFocusable(true);
+                                telefono.setFocusableInTouchMode(true);
+                                telefono.setText(telefono.getText());
+
+                                ciudad.setEnabled(true);
+                                ciudad.setFocusable(true);
+                                ciudad.setFocusableInTouchMode(true);
+
 
                             }
                         })
@@ -161,7 +217,6 @@ public class perfilFragment extends Fragment {
             }
         });
 
-
         return v;
 
     }
@@ -176,9 +231,7 @@ public class perfilFragment extends Fragment {
         getFragmentManager().beginTransaction().replace(R.id.container,fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-
     }
-
 
 
 }

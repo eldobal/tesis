@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -23,6 +24,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -77,11 +79,6 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
         //google api
-
-
-
-
-
 
 
         signInButton =(SignInButton) findViewById(R.id.Signbutton);
@@ -141,6 +138,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                                 //if que compara los datos rescatados del response con los datos ingresados
                                 if (usuarioconectado.equals(rut) && usuarioconectadopass.equals(contrasena)) {
                                     Intent intent = new Intent(login2Activity.this, menuActivity.class);
+                                    saveOnPreferences(rut,contrasena);
                                     startActivity(intent);
                                 }
                             }
@@ -169,16 +167,13 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
 
         });
 
-
-
-
-
     }
 
 
     private void singIn(){
         Intent signIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signIntent,Signincode);
+
     }
 
     private void saveOnPreferences(String rut, String contrasena) {
@@ -214,23 +209,25 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     }
 
 
+    //metodo el cual verifica al abrir la app si esque existe una cuenta de google
     @Override
     protected void onStart() {
-
+        //busca la ultima cuenta logeada
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-
+        //si encuentra una cuenta acciona el metodo gomainscreen
         if (account!=null){
             goMainScreen();
         }
         super.onStart();
     }
 
-
+    //metodo en el cual se verifica que los codigos coincidan
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        //si coinciden se ejecuta el metodo handlesigninresult
         if (requestCode == Signincode) {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
@@ -240,14 +237,14 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     }
 
 
-
+    //metodo el cual busca la cuenta que intenta iniciar si es correcto redirije menu
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             if(account!=null){
             // Signed in successfully, show authenticated UI.
             goMainScreen();}
-
+        //sino muestra el error
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.

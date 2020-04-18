@@ -1,5 +1,6 @@
 package com.example.practicadiseo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,9 +18,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.practicadiseo.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -27,6 +30,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -56,13 +60,10 @@ public class settingsFragment extends Fragment {
         final Button btnpreguntas = (Button) v.findViewById(R.id.btnpreguntas);
 
 
-
-
-
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
+
 
         googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
 
@@ -85,8 +86,19 @@ public class settingsFragment extends Fragment {
 
 
 
-
-
+        //botton salir de la app
+            btnsalir.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        // ...
+                        case R.id.btnsalir:
+                            signOut();
+                            break;
+                        // ...
+                    }
+                }
+            });
 
 
 
@@ -98,20 +110,24 @@ public class settingsFragment extends Fragment {
             }
         });
 
-        //borra las prefs y sale de la sesion
-      btnsalir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
 
 
 
         return v;
 
     }
+
+
+
+    //metodo el cual se llama cuando se apreta cerrar sesion
+    private void signOut() {
+        googleSignInClient.signOut()
+                .addOnCompleteListener(getActivity(), task -> {
+                    Toast.makeText(getContext(), "Salido", Toast.LENGTH_LONG).show();
+                    revokeAccess();
+                });
+    }
+
 
 
     //metodo que te dirije al login /no te deja volver con el boton
@@ -131,10 +147,24 @@ public class settingsFragment extends Fragment {
     }
 
 
+    private void revokeAccess() {
+        googleSignInClient.revokeAccess()
+                .addOnCompleteListener(getActivity(), task -> {
+                    //envio hacia el login
+                    Intent intent = new Intent(getView().getContext(), login2Activity.class);
+                    //flags para que no pueda volver hacia atras
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    //borra al usuario cargado en prefs
+                   // removesharedpreferenced();
+                    startActivity(intent);
+                });
+
+    }
+
 
     //metodo para borrar las credenciales guardadas
     public  void removesharedpreferenced(){
-        prefs.edit().clear().apply();
+       // prefs.edit().clear().apply();
     }
 
 
