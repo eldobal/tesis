@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
@@ -58,9 +59,10 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     public static final int  Signincode = 777;
     private GoogleSignInClient googleSignInClient;
     SweetAlertDialog dp;
-    private SharedPreferences prefs;
+    SharedPreferences prefs;
     private EditText txtrut,txtpass;
     private Button btnlogin,btnregister;
+    private String usuarioconectado="",contraseñausuarioconectado="";
     private SignInButton signInButton;
 
     public login2Activity() {
@@ -81,6 +83,11 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         //google api
 
 
+
+
+
+
+
         signInButton =(SignInButton) findViewById(R.id.Signbutton);
         txtrut = (EditText) findViewById(R.id.txtemail);
         txtpass = (EditText) findViewById(R.id.txtpassword);
@@ -88,6 +95,12 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         btnregister = (Button) findViewById(R.id.btnregistrarse);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
+
+        if(!usuarioconectado.isEmpty()&&(!contraseñausuarioconectado.isEmpty())){
+            Intent intent = new Intent(login2Activity.this, menuActivity.class);
+            saveOnPreferences(usuarioconectado,contraseñausuarioconectado);
+            startActivity(intent);
+        }
 
 
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +119,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                try {
+
                     String rut = txtrut.getText().toString();
                     String contrasena = txtpass.getText().toString();
 
@@ -147,12 +160,10 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                         //si falla el request a la pagina mostrara este error
                         @Override
                         public void onFailure(Call<Usuario> call, Throwable t) {
-                            Toast.makeText(getApplicationContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), " Error al Iniciar Sesion", Toast.LENGTH_LONG).show();
                         }
                     });
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+
 
             }
 
@@ -179,6 +190,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     private void saveOnPreferences(String rut, String contrasena) {
 
 
+
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("Rut", rut);
         editor.putString("ContraseNa", contrasena);
@@ -192,6 +204,9 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     private void setcredentiasexist() {
         String rut = getuserrutprefs();
         String contraseña = getusercontraseñaprefs();
+        //string para asignar los valores del usuario si es que existe
+        usuarioconectado=rut.toString();
+        contraseñausuarioconectado=contraseña.toString();
         if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
             txtrut.setText(rut);
             txtpass.setText(contraseña);
@@ -200,12 +215,12 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
 
     private String getuserrutprefs() {
 
-        return prefs.getString("rut", "");
+        return prefs.getString("Rut", "");
     }
 
     private String getusercontraseñaprefs() {
 
-        return prefs.getString("Contraseña", "");
+        return prefs.getString("ContraseNa", "");
     }
 
 

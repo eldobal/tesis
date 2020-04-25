@@ -19,6 +19,19 @@ public class Usuario {
     @SerializedName("id_TipoUsuario")
     private int idTipo;
 
+
+    public Usuario() {
+        this.RUT = RUT;
+        this.Nombre = Nombre;
+        this.Apellido = Apellido;
+        this. Correo = Correo;
+        this.Contrasena = Contrasena;
+        this.Fono = Fono;
+        this.idCiudad = idCiudad;
+        this.idEstado = idEstado;
+        this.idTipo = idTipo;
+    }
+
     public String getRut() {
         return RUT;
     }

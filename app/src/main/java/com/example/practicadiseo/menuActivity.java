@@ -6,6 +6,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -44,6 +45,7 @@ public class menuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         //con este metodo selecciono el fragment de inicio por defecto
         showSelectedFragment(new HomeFragment());
 
@@ -152,12 +154,16 @@ public class menuActivity extends AppCompatActivity {
         }
     }
 
+
     private String getuserrutprefs() {
-        return prefs.getString("rut", "");
+
+        return prefs.getString("Rut", "");
     }
 
     private String getusercontraseñaprefs() {
-        return prefs.getString("Contraseña", "");
+
+        return prefs.getString("ContraseNa", "");
     }
+
 
 }

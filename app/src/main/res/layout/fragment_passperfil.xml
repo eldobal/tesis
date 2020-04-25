@@ -92,6 +92,8 @@
                         android:layout_marginTop="5dp">
 
                         <EditText
+                            android:inputType="textPassword"
+                            android:id="@+id/passactual"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
@@ -136,6 +138,8 @@
                         android:gravity="center_horizontal">
 
                         <EditText
+                            android:inputType="textPassword"
+                            android:id="@+id/cambiocontraseña"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
@@ -170,7 +174,7 @@
 
                     <LinearLayout
 
-                        android:id="@+id/telefonocontacto2"
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/txttelefonocontacto"
@@ -178,6 +182,8 @@
                         android:gravity="center_horizontal">
 
                         <EditText
+                            android:inputType="textPassword"
+                            android:id="@+id/cambiocontraseña2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"

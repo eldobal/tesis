@@ -1,6 +1,8 @@
 package com.example.practicadiseo;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.text.RelativeDateTimeFormatter;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,11 +10,14 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.TextUtils;
 import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,7 +32,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
+import java.text.BreakIterator;
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,8 +49,15 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class perfilFragment extends Fragment {
 
     private ImageView fotoperfil;
+    SharedPreferences prefs;
     SweetAlertDialog dp;
     private GoogleSignInClient googleSignInClient;
+    private String rutperfil ="",contrasenaperfil="";
+    private EditText rut,nombre,apellido,correo,telefono;
+    private Spinner ciudad;
+    private int idCiudad =0;
+    private ArrayList<Ciudad> listaciudades = new ArrayList<Ciudad>();
+
     public perfilFragment() {
         // Required empty public constructor
 
@@ -59,22 +80,24 @@ public class perfilFragment extends Fragment {
         View v= inflater.inflate(R.layout.fragment_perfil, container, false);
 
         //declaracion de variables
-        final TextView rut = (EditText) v.findViewById(R.id.rut);
-        final TextView nombre = (EditText) v.findViewById(R.id.nombre);
-        final TextView apellido = (EditText) v.findViewById(R.id.apellido);
-        final TextView correo = (EditText) v.findViewById(R.id.email);
-        final TextView telefono = (EditText) v.findViewById(R.id.telefono);
-        final Spinner ciudad = (Spinner) v.findViewById(R.id.spinner);
+       rut= (EditText) v.findViewById(R.id.rut);
+       nombre = (EditText) v.findViewById(R.id.nombre);
+       apellido = (EditText) v.findViewById(R.id.apellido);
+       correo = (EditText) v.findViewById(R.id.email);
+       telefono = (EditText) v.findViewById(R.id.telefono);
+       ciudad = (Spinner) v.findViewById(R.id.spinner);
+
+
+       prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
 
+
         googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
-
         fotoperfil = (ImageView) v.findViewById(R.id.usericon);
-
         //trozo de codigo para rescatar parametros de la cuenta de usuario
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getContext());
         if (acct != null) {
@@ -95,6 +118,25 @@ public class perfilFragment extends Fragment {
 
 
 
+        ciudad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Ciudad ciudad = (Ciudad) parent.getSelectedItem();
+                displayciudaddata(ciudad);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        setcredentiasexist();
+
+        cargarspiner();
+
+        cargardatosperfil();
 
         //seccion de codigo en el cual se debera traer el json con los datos del usuario
         //donde se setearan los datos a los edittext
@@ -103,6 +145,8 @@ public class perfilFragment extends Fragment {
         final Button editarpass = (Button) v.findViewById(R.id.actualizarcontraseña);
 
 
+        ciudad.setEnabled(false);
+        ciudad.setClickable(false);
 
 
 
@@ -129,6 +173,9 @@ public class perfilFragment extends Fragment {
                                     @Override
                                     public void onClick(View v) {
 
+                                        //metodo para hacer request de cambio de datos por parte del usuario
+                                        actualizarperfil();
+
                                         dp= new SweetAlertDialog(v.getContext(), SweetAlertDialog.SUCCESS_TYPE);
                                         dp.setTitleText("Has Actualizado tu perfil !");
                                         dp.setContentText("para volver a editar recargue el perfil!");
@@ -138,11 +185,9 @@ public class perfilFragment extends Fragment {
                                                         sDialog.dismissWithAnimation();
                                                         //metodo para cambiar de activity
                                                         updateDetail();
-
                                                     }
                                                 })
                                                 .show();
-
                                         //parametros false
                                         { rut.setEnabled(false);
                                             rut.setFocusable(false);
@@ -167,41 +212,37 @@ public class perfilFragment extends Fragment {
                                             ciudad.setEnabled(false);
                                             ciudad.setFocusable(false);
                                             ciudad.setFocusableInTouchMode(false); }
-
-
                                     }
                                 });
                                 sDialog.dismissWithAnimation();
+                                {
+                                    rut.setText(rut.getText());
 
-                                rut.setEnabled(true);
-                                rut.setFocusable(true);
-                                rut.setFocusableInTouchMode(true);
-                                rut.setText(rut.getText());
+                                    correo.setEnabled(true);
+                                    correo.setFocusable(true);
+                                    correo.setFocusableInTouchMode(true);
+                                    correo.setText(correo.getText());
 
-                                correo.setEnabled(true);
-                                correo.setFocusable(true);
-                                correo.setFocusableInTouchMode(true);
-                                correo.setText(correo.getText());
+                                    nombre.setEnabled(true);
+                                    nombre.setFocusable(true);
+                                    nombre.setFocusableInTouchMode(true);
+                                    nombre.setText(nombre.getText());
 
-                                nombre.setEnabled(true);
-                                nombre.setFocusable(true);
-                                nombre.setFocusableInTouchMode(true);
-                                nombre.setText(nombre.getText());
+                                    apellido.setEnabled(true);
+                                    apellido.setFocusable(true);
+                                    apellido.setFocusableInTouchMode(true);
+                                    apellido.setText(apellido.getText());
 
-                                apellido.setEnabled(true);
-                                apellido.setFocusable(true);
-                                apellido.setFocusableInTouchMode(true);
-                                apellido.setText(apellido.getText());
+                                    telefono.setEnabled(true);
+                                    telefono.setFocusable(true);
+                                    telefono.setFocusableInTouchMode(true);
+                                    telefono.setText(telefono.getText());
 
-                                telefono.setEnabled(true);
-                                telefono.setFocusable(true);
-                                telefono.setFocusableInTouchMode(true);
-                                telefono.setText(telefono.getText());
+                                    ciudad.setEnabled(true);
+                                    ciudad.setFocusable(true);
+                                    ciudad.setFocusableInTouchMode(true);
 
-                                ciudad.setEnabled(true);
-                                ciudad.setFocusable(true);
-                                ciudad.setFocusableInTouchMode(true);
-
+                                }
 
                             }
                         })
@@ -210,10 +251,28 @@ public class perfilFragment extends Fragment {
         });
 
 
+        //boton el cual redirije hacia la pantalla de cambio de contraseña del perfil del usuario
         editarpass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showSelectedFragment(new passperfilFragment());
+
+
+               SweetAlertDialog dp2 =new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE);
+                dp2.setTitleText("Estas Segur@ De Querer Cambiar Tu Contraseña?");
+                dp2.setContentText("Ten Cuidado!");
+                dp2.setConfirmText("Si,Deseo Actualizar!");
+
+                dp2.setCancelText("No,No Quiero");
+                //si preciona el boton si se podran editar los edittext
+                dp2.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        showSelectedFragment(new passperfilFragment());
+                        sDialog.dismissWithAnimation();
+                    }
+                })
+                        .show();
+
             }
         });
 
@@ -226,6 +285,192 @@ public class perfilFragment extends Fragment {
         startActivity(intent);
     }
 
+    private void cargardatosperfil() {
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+
+
+
+            //metodo para llamar a la funcion que queramos
+            //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
+            Call<Usuario> call = tesisAPI.getUsuario(rutperfil,contrasenaperfil);
+            call.enqueue(new Callback<Usuario>() {
+                @Override
+                public void onResponse( Call<Usuario>call, Response<Usuario> response) {
+
+                    //si esta malo se ejecuta este trozo
+                    if(!response.isSuccessful()){
+                        Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                    }
+                    //de lo contrario se ejecuta esta parte
+                    else {
+                        //respuesta del request
+                        Usuario usuarios = response.body();
+
+                       rut.setText(usuarios.getRut().toString());
+                       nombre.setText(usuarios.getNombre().toString());
+                       apellido.setText(usuarios.getApellido().toString());
+                       correo.setText(usuarios.getCorreo().toString());
+                       telefono.setText(usuarios.getFono().toString());
+                       idCiudad = usuarios.getIdCiudad();
+                      boolean encontrado = false;
+                      for(int i=1; i<listaciudades.size()&&encontrado==false;i++){
+                          if(listaciudades.get(i).getIdCiudad() ==idCiudad){
+                              ciudad.setSelection(i);
+                              encontrado= true;
+                          }
+                      }
+
+
+                    }
+                }
+
+                //si falla el request a la pagina mostrara este error
+                @Override
+                public void onFailure(Call<Usuario> call, Throwable t) {
+                    Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private void cargarspiner(){
+        try {
+
+            ArrayList<String> listanombres = new ArrayList<String>();
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+
+            //metodo para llamar a la funcion que queramos
+            Call<List<Ciudad>> call = tesisAPI.getCiudades();
+            call.enqueue(new Callback<List<Ciudad>>() {
+                @Override
+                public void onResponse( Call<List<Ciudad>>call, Response<List<Ciudad>>response) {
+                    //si esta malo se ejecuta este trozo
+                    if(!response.isSuccessful()){
+                        Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                    }
+                    //de lo contrario se ejecuta esta parte
+                    else {
+                        //respuesta del request
+                        List<Ciudad> ciudades = response.body();
+                        //declaracion de variables del response
+                        for(Ciudad ciudad: ciudades){
+                            //falta poder cargar la lista del response hacia un spinner
+                            Ciudad ciudadl = new Ciudad();
+                            ciudadl.setNombre(ciudad.getNombre()) ;
+                            ciudadl.setIdCiudad(ciudad.getIdCiudad());
+                            ciudadl.setId_idComuna(ciudad.getId_idComuna());
+                            listaciudades.add(ciudadl);
+                        }
+                        //cargar la lista de ciudades rescatadas en el spinner
+                        ArrayAdapter<Ciudad> a = new ArrayAdapter<Ciudad>(getContext(),android.R.layout.simple_spinner_item,listaciudades);
+                        a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        ciudad.setAdapter(a);
+
+
+                    }
+                }
+
+                //si falla el request a la pagina mostrara este error
+                @Override
+                public void onFailure(Call<List<Ciudad>> call, Throwable t) {
+                    Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void actualizarperfil() {
+        try {
+            String RUT = rut.getText().toString();
+            String Correo = correo.getText().toString();
+            String Nombre = nombre.getText().toString();
+            String Apellido = apellido.getText().toString();
+            String Fono = telefono.getText().toString();
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+
+
+
+            //metodo para llamar a la funcion que queramos
+            //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
+            Call<Usuario> call = tesisAPI.ActualizarUsuario(RUT,Nombre,Apellido,Correo,Fono,idCiudad);
+            call.enqueue(new Callback<Usuario>() {
+                @Override
+                public void onResponse( Call<Usuario>call, Response<Usuario> response) {
+
+                    //si esta malo se ejecuta este trozo
+                    if(!response.isSuccessful()){
+                        Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                    }
+                    //de lo contrario se ejecuta esta parte
+                    else {
+                        //respuesta del request
+                        Usuario usuarios = response.body();
+
+                    }
+                }
+
+                //si falla el request a la pagina mostrara este error
+                @Override
+                public void onFailure(Call<Usuario> call, Throwable t) {
+                    Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void getSelectedCiudad(View v){
+        Ciudad ciudad1 = (Ciudad) ciudad.getSelectedItem();
+        displayciudaddata(ciudad1);
+    }
+
+    //muestra los datos de la ciudad especifica selelcionada
+    private void displayciudaddata(Ciudad ciudad){
+        idCiudad = ciudad.getIdCiudad();
+        String Nombre = ciudad.getNombre();
+        int id_idComuna= ciudad.getId_idComuna();
+    }
+
+    private void setcredentiasexist() {
+        String rutq = getuserrutprefs();
+        String contrasena = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rutq)&& (!TextUtils.isEmpty(contrasena)) ) {
+            rutperfil=rutq.toString();
+            contrasenaperfil=contrasena.toString();
+        }
+    }
+
+    private String getuserrutprefs() {
+        return prefs.getString("Rut", "");
+    }
+
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
+    }
 
     private void showSelectedFragment(Fragment fragment){
         getFragmentManager().beginTransaction().replace(R.id.container,fragment)

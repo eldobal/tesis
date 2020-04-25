@@ -1,23 +1,29 @@
 package com.example.practicadiseo;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.airbnb.lottie.L;
-
+import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -25,20 +31,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 public class register2Activity extends AppCompatActivity {
     SweetAlertDialog dp;
     private SharedPreferences prefs;
     private ArrayAdapter<Ciudad> adapter;
-    private EditText txtrut;
-    private EditText txtemail;
-    private EditText txtcontraseña;
-    private EditText txtcontraseña2;
-    private EditText txtnombre;
-    private EditText txtapellidos;
-    private EditText txttelefono;
-    private EditText txtcorreo;
-    private EditText txtdireccion;
+
+    private EditText txtrut,txtemail,txtcontraseña,txtcontraseña2,txtnombre,txtapellidos,txttelefono,txtdireccion;
     private Spinner spinnerciudades;
     private Button btnregistrar;
     private int posicion = 0;
@@ -46,12 +46,15 @@ public class register2Activity extends AppCompatActivity {
     //private Usuario usuario;
     //private int tipousuario;
     //private int estadousuario;
-
+    private int idCiudad =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register2);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
+
+        AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
         //listausuarios = new ArrayList<Usuario>();
         txtrut = (EditText) findViewById(R.id.rut) ;
         txtemail = (EditText) findViewById(R.id.email);
@@ -60,13 +63,12 @@ public class register2Activity extends AppCompatActivity {
         txtnombre = (EditText) findViewById(R.id.nombre);
         txtapellidos = (EditText) findViewById(R.id.apellido);
         txttelefono = (EditText) findViewById(R.id.telefono);
-        //txtcorreo = (EditText) findViewById(R.id.txtcorreo);
-
         spinnerciudades = (Spinner) findViewById(R.id.spinner);
         btnregistrar=(Button)findViewById(R.id.registrarse);
 
-
+        //carga las ciudades en el spinner
         cargarspiner();
+
 
         spinnerciudades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -74,7 +76,6 @@ public class register2Activity extends AppCompatActivity {
                     Ciudad ciudad = (Ciudad) parent.getSelectedItem();
                     displayciudaddata(ciudad);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -83,34 +84,86 @@ public class register2Activity extends AppCompatActivity {
 
 
 
+
+        //validaciones hechas con awesome validation
+     // mAwesomeValidation.addValidation(this, R.id.rut, , R.string.err_rut);
+        //se valida como +569 y el numero de 8 digitos del usuario
+        mAwesomeValidation.addValidation(this, R.id.telefono, "^[+]?[0-9]{10,13}$", R.string.err_fono);
+
+        mAwesomeValidation.addValidation(this, R.id.email, android.util.Patterns.EMAIL_ADDRESS, R.string.err_correo);
+        mAwesomeValidation.addValidation(this, R.id.nombre, "[a-zA-Z\\s]+", R.string.err_name);
+        mAwesomeValidation.addValidation(this, R.id.apellido, "[a-zA-Z\\s]+", R.string.err_apellido);
+        //validacion contraseñas con alto nivel de dificultad
+        String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
+        mAwesomeValidation.addValidation(this, R.id.password, regexPassword, R.string.err_contraseña);
+        mAwesomeValidation.addValidation(this, R.id.password2, regexPassword, R.string.err_contraseña);
+
+
+
         btnregistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String temail = txtemail.getText().toString();
-                String tcontrasena = txtcontraseña.getText().toString();
-                String tcontrasena2 =txtcontraseña2.getText().toString();
-                String tnombre = txtnombre.getText().toString();
-                String tapellidos = txtapellidos.getText().toString();
-                String  tfono = txttelefono.getText().toString();
-                String tcorreo =txtcorreo.getText().toString();
+                if (mAwesomeValidation.validate()) {
+                    if(validaRut(txtrut.getText().toString())) {
+                        if ((txtcontraseña.getText().toString().equals(txtcontraseña2.getText().toString()))
+                        ) {
+                            String RUT = txtrut.getText().toString();
+                            String Correo = txtemail.getText().toString();
+                            String Nombre = txtnombre.getText().toString();
+                            String Apellido = txtapellidos.getText().toString();
+                            String Fono = txttelefono.getText().toString();
+                            String Contrasena = txtcontraseña2.getText().toString();
+                            Integer id_idCiudad = idCiudad;
 
-                String tdireccion = txtdireccion.getText().toString();
-
-
-                if(tcontrasena.equals(tcontrasena2)){
-                    //se envian parametros al metodo para que puedan realizar las validaciones
-                    if (  validaciones(temail,tcontrasena,tnombre,tapellidos,tfono,tcorreo,tdireccion) == true){
-                       // enviarRequest(tusuario,tcontrasena,tnombre,tapellidos,tfono,tcorreo,tdireccion);
+                            Integer id_EstadoUsuario = 2;
+                            Integer id_TipoUsuario = 2;
+                            Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl("http://proyectotesis.ddns.net/")
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+                            //metodo para llamar a la funcion que queramos
+                            Call<Usuario> call = tesisAPI.PostUsuario(RUT, Nombre, Apellido, Correo, Contrasena, Fono, id_idCiudad, id_EstadoUsuario, id_TipoUsuario);
+                            try {
+                                call.enqueue(new Callback<Usuario>() {
+                                    @Override
+                                    public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                                        if (!response.isSuccessful()) {
+                                            Toast.makeText(getApplicationContext(), "error code " + response.code(), Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Usuario usuarioresponce = response.body();
+                                            //usar sweetalert dialog para genera aviso
+                                            Intent intent = new Intent(register2Activity.this, login2Activity.class);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                    @Override
+                                    public void onFailure(Call<Usuario> call, Throwable t) {
+                                        Toast.makeText(getApplicationContext(), "error code " + t.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Complete los campos Correctamente", Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        Toast.makeText(getApplicationContext(), "El Rut No es valido ", Toast.LENGTH_LONG).show();
                     }
-                }else{
-                    Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
-                }
+
+           }else {
+                  Toast.makeText(getApplicationContext(), "error validate", Toast.LENGTH_LONG).show();
+               }
+
+
+
             }
         });
     }
 
-    private boolean validaciones(String temail,String tcontrasena,String tnombre,String tapellidos,String tfono,String tcorreo,String tdireccion){
-        if (!temail.isEmpty() && !tcontrasena.isEmpty() && !tnombre.isEmpty() && !tapellidos.isEmpty() && !tcorreo.isEmpty() && !tdireccion.isEmpty() && !tfono.isEmpty()) {
+    /*private boolean validaciones(String temail,String tcontrasena,String tnombre,String tapellidos,String tfono,String tcorreo,int tdireccion){
+        if (!temail.isEmpty() && !tcontrasena.isEmpty() && !tnombre.isEmpty() && !tapellidos.isEmpty() && !tcorreo.isEmpty() && tdireccion && !tfono.isEmpty()) {
             if (tfono.length() == 9) {
                 return true;
             } else {
@@ -120,11 +173,20 @@ public class register2Activity extends AppCompatActivity {
         }
         return false;
     }
-
+*/
     private String getuserusuairoprefs(){
 
         return prefs.getString("usuario","");
     }
+
+
+    private boolean validaciontelefono(String telefono){
+        if(telefono.length()==9){
+
+        }
+        return true;
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -134,6 +196,8 @@ public class register2Activity extends AppCompatActivity {
 
         super.onBackPressed();
     }
+
+
 
     //request para traer los datos desde la pag u cargarlos en un spinner
     private void cargarspiner(){
@@ -195,20 +259,37 @@ public class register2Activity extends AppCompatActivity {
 
     }
 
+
+
     public void getSelectedCiudad(View v){
         Ciudad ciudad = (Ciudad) spinnerciudades.getSelectedItem();
         displayciudaddata(ciudad);
     }
 
+
+
+    //metodo para validar el rut de la persona
+    public static Boolean validaRut ( String rut ) {
+        Pattern pattern = Pattern.compile("^[0-9]+-[0-9kK]{1}$");
+        Matcher matcher = pattern.matcher(rut);
+        if ( matcher.matches() == false ) return false;
+        String[] stringRut = rut.split("-");
+        return stringRut[1].toLowerCase().equals(register2Activity.dv(stringRut[0]));
+    }
+
+    public static String dv ( String rut ) {
+        Integer M=0,S=1,T=Integer.parseInt(rut);
+        for (;T!=0;T=(int) Math.floor(T/=10))
+            S=(S+T%10*(9-M++%6))%11;
+        return ( S > 0 ) ? String.valueOf(S-1) : "k";
+    }
+
+    //muestra los datos de la ciudad especifica selelcionada
     private void displayciudaddata(Ciudad ciudad){
-        int idCiudad = ciudad.getIdCiudad();
+        idCiudad = ciudad.getIdCiudad();
         String Nombre = ciudad.getNombre();
         int id_idComuna= ciudad.getId_idComuna();
-
         String ciudaddata ="ID ciudad :"+ idCiudad + " nombre ciudad"+Nombre + " id comuna: "+id_idComuna;
-
-        Toast.makeText(getApplicationContext(), ciudaddata, Toast.LENGTH_LONG).show();
-
     }
 
 

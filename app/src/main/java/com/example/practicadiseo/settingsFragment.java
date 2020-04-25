@@ -67,7 +67,7 @@ public class settingsFragment extends Fragment {
 
         googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
 
-
+        prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
 
         //trozo de codigo para rescatar parametros de la cuenta de usuario
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getContext());
@@ -83,19 +83,26 @@ public class settingsFragment extends Fragment {
         }
 
 
-
-
-
         //botton salir de la app
             btnsalir.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     switch (v.getId()) {
-                        // ...
                         case R.id.btnsalir:
-                            signOut();
+                          SweetAlertDialog dp3 =  new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
+                            dp3.setTitleText("Estas seguro de Querer Cerrar Tu Sesion?");
+                            dp3.setContentText("Tendras que iniciar sesion para volver a ingrar!");
+                            dp3.setConfirmText("Si!");
+                            dp3.setCancelText("No!");
+                            dp3.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        @Override
+                                        public void onClick(SweetAlertDialog sDialog) {
+                                            signOut();
+                                            sDialog.dismissWithAnimation();
+                                        }
+                                    })
+                                    .show();
                             break;
-                        // ...
                     }
                 }
             });
@@ -109,12 +116,7 @@ public class settingsFragment extends Fragment {
                 showSelectedFragment(new preguntasFragment());
             }
         });
-
-
-
-
         return v;
-
     }
 
 
@@ -155,7 +157,7 @@ public class settingsFragment extends Fragment {
                     //flags para que no pueda volver hacia atras
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     //borra al usuario cargado en prefs
-                   // removesharedpreferenced();
+                    removesharedpreferenced();
                     startActivity(intent);
                 });
 
@@ -164,7 +166,7 @@ public class settingsFragment extends Fragment {
 
     //metodo para borrar las credenciales guardadas
     public  void removesharedpreferenced(){
-       // prefs.edit().clear().apply();
+        prefs.edit().clear().apply();
     }
 
 
