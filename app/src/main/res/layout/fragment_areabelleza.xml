@@ -61,10 +61,11 @@
                 android:layout_height="wrap_content"
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
-                android:backgroundTint="@color/colorAccent"
                 android:layout_margin="12dp"
-                app:cardCornerRadius="30dp"
+                android:backgroundTint="@color/colorAccent"
                 android:clickable="true"
+                android:onClick="setpeluqueria"
+                app:cardCornerRadius="30dp"
                 app:cardElevation="6dp">
 
                 <LinearLayout

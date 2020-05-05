@@ -67,4 +67,8 @@ public class Usuario {
     public int getIdTipo() {
         return idTipo;
     }
+
+
+
+
 }

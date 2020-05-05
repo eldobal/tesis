@@ -19,6 +19,30 @@ public interface tesisAPI {
     );
 
 
+      @GET("api/RubroTrabajadorAPI")
+    Call<List<UsuarioTrabajador>> getRubroTrabajador(@Query("idRubro") int id_Rubro,
+                                                     @Query("idciudad") int idCiudad
+    );
+
+
+    @GET("api/UsuarioAPI")
+    Call<UsuarioTrabajador> getUsuarioTrabajador(@Query("RUT") String rut
+    );
+
+
+
+
+
+    @POST("api/SolicitudAPI")
+    Call<Solicitud> PostSolicitud(@Query("Fecha") String Fecha,
+                                  @Query("Descripcion") String Descripcion,
+                                  @Query("RUT_Cliente") String RUT_Cliente,
+                                  @Query("RUT_Trabajador") String RUT_Trabajador,
+                                  @Query("Rubro") int Rubro
+    );
+
+
+
 
     @POST("api/UsuarioAPI")
     Call<Usuario> PostUsuario(@Query("RUT") String RUT,
@@ -31,6 +55,7 @@ public interface tesisAPI {
                               @Query("id_EstadoUsuario") int id_EstadoUsuario,
                               @Query("id_TipoUsuario") int id_TipoUsuario
     );
+
 
     @POST("api/UsuarioAPI")
     Call<Usuario> ActualizarUsuario(@Query("RUT") String RUT,
@@ -52,8 +77,9 @@ public interface tesisAPI {
     Call<List<Ciudad>> getCiudades();
 
 
-    @GET("api/SolicitudAPI/")
-    Call<List<Solicitud>> getSolicitudes(@Query("rut") String rut
+    @GET("api/SolicitudAPI")
+    Call<List<Solicitud>> getSolicitudes(@Query("RUT") String rut);
 
-    );
+    @GET("api/SolicitudAPI")
+    Call<Solicitud> getSolicitudCliente(@Query("id") int id);
 }

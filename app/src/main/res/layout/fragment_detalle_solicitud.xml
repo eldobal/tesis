@@ -107,16 +107,6 @@
                         android:text="Fecha Solicitud: 07/04/2020">
 
                     </TextView>
-                    <TextView
-                        android:id="@+id/txtclientesolicituddetalle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/txtfechadetallesolicitud"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Cliente:">
-
-                    </TextView>
-
 
 
 
@@ -136,7 +126,7 @@
                         android:id="@+id/txttrabajadorsolicituddetalle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/txtclientesolicituddetalle"
+                        android:layout_below="@id/txtfechadetallesolicitud"
                         android:fontFamily="sans-serif-condensed-medium"
                         android:text="Trabajador:">
 
@@ -316,6 +306,7 @@
                             android:layout_marginTop="5dp">
 
                             <TextView
+                                android:id="@+id/txtdiagnosticodetallesolicitud1"
                                 android:inputType="textMultiLine"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

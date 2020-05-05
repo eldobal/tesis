@@ -139,7 +139,7 @@
 
                         <EditText
                             android:inputType="textPassword"
-                            android:id="@+id/cambiocontraseña"
+                            android:id="@+id/cambiocontraseñaperfil"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
@@ -183,7 +183,7 @@
 
                         <EditText
                             android:inputType="textPassword"
-                            android:id="@+id/cambiocontraseña2"
+                            android:id="@+id/cambiocontraseña2perfil"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
@@ -201,7 +201,7 @@
             </androidx.cardview.widget.CardView>
 
             <RelativeLayout
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="30dp"
               android:layout_below="@id/cardcambiodepass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -209,10 +209,11 @@
                 <Button
                     android:id="@+id/btncambiocontrasena"
                     android:layout_width="220dp"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="40dp"
                     android:textColor="@color/colorAccent"
                     android:background="@drawable/bg_ripplepass"
                     android:text="Cambiar Mi Contraseña" />

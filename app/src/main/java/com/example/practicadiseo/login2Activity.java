@@ -63,6 +63,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     private EditText txtrut,txtpass;
     private Button btnlogin,btnregister;
     private String usuarioconectado="",contraseñausuarioconectado="";
+    int idciudad=0;
     private SignInButton signInButton;
 
     public login2Activity() {
@@ -93,12 +94,14 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         txtpass = (EditText) findViewById(R.id.txtpassword);
         btnlogin = (Button) findViewById(R.id.btnlogin);
         btnregister = (Button) findViewById(R.id.btnregistrarse);
+
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
         setcredentiasexist();
 
         if(!usuarioconectado.isEmpty()&&(!contraseñausuarioconectado.isEmpty())){
             Intent intent = new Intent(login2Activity.this, menuActivity.class);
-            saveOnPreferences(usuarioconectado,contraseñausuarioconectado);
+            saveOnPreferences(usuarioconectado,contraseñausuarioconectado,idciudad);
             startActivity(intent);
         }
 
@@ -147,11 +150,12 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                                 //declaracion de variables del response
                                 String usuarioconectadopass = usuarios.getContrasena().toString();
                                 String usuarioconectado = usuarios.getRut().toString();
+                                 idciudad = usuarios.getIdCiudad();
 
                                 //if que compara los datos rescatados del response con los datos ingresados
                                 if (usuarioconectado.equals(rut) && usuarioconectadopass.equals(contrasena)) {
                                     Intent intent = new Intent(login2Activity.this, menuActivity.class);
-                                    saveOnPreferences(rut,contrasena);
+                                    saveOnPreferences(rut,contrasena,idciudad);
                                     startActivity(intent);
                                 }
                             }
@@ -187,13 +191,14 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
 
     }
 
-    private void saveOnPreferences(String rut, String contrasena) {
+    private void saveOnPreferences(String rut, String contrasena,int idciudad) {
 
 
 
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("Rut", rut);
         editor.putString("ContraseNa", contrasena);
+        editor.putInt("idCiudad", idciudad);
         //linea la cual guarda todos los valores en la pref antes de continuar
         editor.commit();
         editor.apply();
@@ -204,18 +209,26 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     private void setcredentiasexist() {
         String rut = getuserrutprefs();
         String contraseña = getusercontraseñaprefs();
+        int ciudadid =getuseridciudadprefs();
         //string para asignar los valores del usuario si es que existe
         usuarioconectado=rut.toString();
         contraseñausuarioconectado=contraseña.toString();
-        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
+        idciudad=ciudadid;
+        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)&& ciudadid !=0) {
             txtrut.setText(rut);
             txtpass.setText(contraseña);
+
         }
     }
 
     private String getuserrutprefs() {
 
         return prefs.getString("Rut", "");
+    }
+
+    private int getuseridciudadprefs() {
+
+        return prefs.getInt("idCiudad", 0);
     }
 
     private String getusercontraseñaprefs() {

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -25,15 +26,15 @@ public class Adaptador extends BaseAdapter implements Serializable {
     private static LayoutInflater inflater = null;
 
     Context contexto;
-    ArrayList<Solicitud> solicitudes;
+    ArrayList<Solicitud> listasolicitudes;
     ArrayList<Solicitud> lista;
-    int[] imagenes;
+
     Solicitud soli = new Solicitud();
 
 
-    public Adaptador(Context contexto, ArrayList<Solicitud> solicitudes) {
+    public Adaptador(Context contexto, ArrayList<Solicitud> listasolicitudes) {
         this.contexto = contexto;
-        this.solicitudes = solicitudes;
+        this.listasolicitudes = listasolicitudes;
 
 
         inflater = (LayoutInflater) contexto.getSystemService(contexto.LAYOUT_INFLATER_SERVICE);
@@ -41,7 +42,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
     @Override
     public int getCount() {
-        return solicitudes.size();
+        return listasolicitudes.size();
     }
 
     @Override
@@ -57,62 +58,56 @@ public class Adaptador extends BaseAdapter implements Serializable {
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
 
+        //declaracion de la vista de cada item de la solicitud
         final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
 
-        final
 
+         TextView numerosolicitud = (TextView) vista.findViewById(R.id.txtfilanumerosolicitud);
+        TextView fechasolicitud = (TextView) vista.findViewById(R.id.txtfilafechasolicitud);
+        TextView estadosolicitud = (TextView) vista.findViewById(R.id.txtfilaestadosolicitudelemento);
+        TextView nombretrabajador = (TextView) vista.findViewById(R.id.txtfilanombretrabajador);
 
-
-      //  TextView cliente = (TextView) vista.findViewById(R.id.txtclientesolicituddetalle);
-        TextView trabajador = (TextView) vista.findViewById(R.id.txtclientesolicituddetalle);
-        TextView fecha = (TextView) vista.findViewById(R.id.txtfechasolicitud);
-        final TextView nsolicitud = (TextView) vista.findViewById(R.id.txtnumerosolicitud);
        // TextView descripcion = (TextView) vista.findViewById(R.id.txtdescripciondetallesolicitud);
-
+        //solucionar el tema de las imagenes de los trabajadores
         ImageView icono = (ImageView) vista.findViewById(R.id.imgperfilfilasolicitud);
 
 
         final Button detalle = (Button) vista.findViewById(R.id.btndetallesolicitud);
 
-        trabajador.setText(solicitudes.get(i).getRut_Trabajador());
-        fecha.setText(solicitudes.get(i).getFecha());
-        nsolicitud.setText(solicitudes.get(1).getIdSolicitud());
-        icono.setImageResource(imagenes[0]);
+        int idsolicitud = listasolicitudes.get(i).getIdSolicitud();
 
+        numerosolicitud.setText("N Solicitud: "+String.valueOf(listasolicitudes.get(i).getIdSolicitud()));
+        fechasolicitud.setText(listasolicitudes.get(i).getFechaS());
+        estadosolicitud.setText(listasolicitudes.get(i).getEstado());
+        nombretrabajador.setText(listasolicitudes.get(i).getNombre()+" "+listasolicitudes.get(i).getApellido());
+        //icono.setImageResource(imagenes[0]);
 
-        soli.setIdSolicitud(solicitudes.get(i).getIdSolicitud());
-        soli.setFecha(solicitudes.get(i).getFecha());
-        soli.setDescripcion(solicitudes.get(i).getDescripcion());
-        soli.setRut_Trabajador(solicitudes.get(i).getRut_Trabajador());
+        soli.setIdSolicitud(listasolicitudes.get(i).getIdSolicitud());
+        soli.setFechaS(listasolicitudes.get(i).getFechaS());
+        soli.setEstado(listasolicitudes.get(i).getEstado());
+        soli.setNombre(listasolicitudes.get(i).getNombre()+" "+listasolicitudes.get(i).getApellido());
 
 
         final int posicion = i;
         detalle.setTag(i);
 
 
-
-
-
         //boton sobre el detalle de una solicitud individual
         detalle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Solicitud s;
-                s=solicitudes.get(posicion);
-                DetalleSolicitudFragment detalleSolicitudFragment = new DetalleSolicitudFragment();
+                Solicitud ut;
 
+                ut=listasolicitudes.get(posicion);
                 Bundle bundle = new Bundle();
-
-                Intent intent = new Intent(contexto, DetalleSolicitudFragment.class);
-
-                bundle.putInt("nsolicitud", Integer.parseInt(nsolicitud.getText().toString()));
+                //id de la solicitud para que se pueda buscar en el detalle
+                bundle.putInt("idsolicitud",idsolicitud);
+                DetalleSolicitudFragment detalleSolicitudFragment = new DetalleSolicitudFragment();
                 detalleSolicitudFragment.setArguments(bundle);
-
-
-
-                contexto.startActivity(intent);
-
-
+                FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.container, detalleSolicitudFragment);
+                ft.commit();
             }
         });
 

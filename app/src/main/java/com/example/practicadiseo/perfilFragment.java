@@ -1,5 +1,6 @@
 package com.example.practicadiseo;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.icu.text.RelativeDateTimeFormatter;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -25,6 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.bumptech.glide.Glide;
 import com.example.practicadiseo.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -43,6 +46,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -56,45 +61,37 @@ public class perfilFragment extends Fragment {
     private EditText rut,nombre,apellido,correo,telefono;
     private Spinner ciudad;
     private int idCiudad =0;
+    private boolean validado=false,validacion1=false;
     private ArrayList<Ciudad> listaciudades = new ArrayList<Ciudad>();
-
+    private Button editardatos,editarpass;
+    AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
     public perfilFragment() {
         // Required empty public constructor
-
-
     }
 
-    public void onCreate (Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-
-
-
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mAwesomeValidation.addValidation(getActivity(), R.id.telefonoperfil, "^[+]?[0-9]{10,13}$", R.string.err_fono);
+        mAwesomeValidation.addValidation(getActivity(), R.id.email, android.util.Patterns.EMAIL_ADDRESS, R.string.err_correo);
+        mAwesomeValidation.addValidation(getActivity(), R.id.nombre, "[a-zA-Z\\s]+", R.string.err_name);
+        mAwesomeValidation.addValidation(getActivity(), R.id.apellido, "[a-zA-Z\\s]+", R.string.err_apellido);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              final Bundle savedInstanceState) {
-        // Inflate        the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_perfil, container, false);
-
-        //declaracion de variables
        rut= (EditText) v.findViewById(R.id.rut);
        nombre = (EditText) v.findViewById(R.id.nombre);
        apellido = (EditText) v.findViewById(R.id.apellido);
        correo = (EditText) v.findViewById(R.id.email);
-       telefono = (EditText) v.findViewById(R.id.telefono);
+       telefono = (EditText) v.findViewById(R.id.telefonoperfil);
        ciudad = (Spinner) v.findViewById(R.id.spinner);
-
-
        prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
-
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-
 
         googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
         fotoperfil = (ImageView) v.findViewById(R.id.usericon);
@@ -107,16 +104,13 @@ public class perfilFragment extends Fragment {
             String personEmail = acct.getEmail();
             String personId = acct.getId();
             Uri personPhoto = acct.getPhotoUrl();
-
             nombre.setText(personGivenName);
             apellido.setText(personFamilyName);
             correo.setText(personEmail);
+            //glide es una libreria con la cual se pueden cargar y descargar imagenespara pode utilizar en androidstudio
             Glide.with(this).load(String.valueOf(personPhoto)).into(fotoperfil);
             Toast.makeText(getContext(), "Nombre"+personFamilyName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
         }
-
-
-
 
         ciudad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -124,31 +118,22 @@ public class perfilFragment extends Fragment {
                 Ciudad ciudad = (Ciudad) parent.getSelectedItem();
                 displayciudaddata(ciudad);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
-
-
+        //se comprueban que exista el rut y la contraseña
         setcredentiasexist();
-
+        //se carga el spiner con las ciudades que hay en la base de datos
         cargarspiner();
-
+        //se carga los datos del perfil para setearlos en los campos
         cargardatosperfil();
-
         //seccion de codigo en el cual se debera traer el json con los datos del usuario
         //donde se setearan los datos a los edittext
-
-        final Button editardatos = (Button) v.findViewById(R.id.actualizarperfil);
-        final Button editarpass = (Button) v.findViewById(R.id.actualizarcontraseña);
-
-
+        editardatos = (Button) v.findViewById(R.id.actualizarperfil);
+        editarpass = (Button) v.findViewById(R.id.actualizarcontraseña);
         ciudad.setEnabled(false);
         ciudad.setClickable(false);
-
-
 
         //cuando se apriete el boton se preguntara si desea editar
         //lo cual hara los edittext editables otra vez
@@ -156,40 +141,37 @@ public class perfilFragment extends Fragment {
         editardatos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dp =new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE);
-                        dp.setTitleText("Estas Segur@ De Querer Cambiar Los Datos?");
-                        dp.setContentText("Podras Cambiar Tus Datos Personales!");
-                        dp.setConfirmText("Si,Deseo Actualizar!");
-
-                        dp.setCancelText("No,No Quiero");
-                        //si preciona el boton si se podran editar los edittext
-                        dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-
-
-                            @Override
-                            public void onClick(final SweetAlertDialog sDialog) {
-                                //si vuelve a precionar el boton no podra editar los edittext y saldra un mensaje
-                                editardatos.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-
-                                        //metodo para hacer request de cambio de datos por parte del usuario
+                    dp = new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE);
+                    dp.setTitleText("Estas Segur@ De Querer Cambiar Los Datos?");
+                    dp.setContentText("Podras Cambiar Tus Datos Personales!");
+                    dp.setConfirmText("Si,Deseo Actualizar!");
+                    dp.setCancelText("No,No Quiero");
+                    //si preciona el boton si se podran editar los edittext
+                    dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(final SweetAlertDialog sDialog) {
+                            //si vuelve a precionar el boton no podra editar los edittext y saldra un mensaje
+                            editardatos.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //metodo para hacer request de cambio de datos por parte del usuario
+                                    if (mAwesomeValidation.validate()) {
                                         actualizarperfil();
-
-                                        dp= new SweetAlertDialog(v.getContext(), SweetAlertDialog.SUCCESS_TYPE);
+                                        dp = new SweetAlertDialog(v.getContext(), SweetAlertDialog.SUCCESS_TYPE);
                                         dp.setTitleText("Has Actualizado tu perfil !");
                                         dp.setContentText("para volver a editar recargue el perfil!");
                                         dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                                    @Override
-                                                    public void onClick(SweetAlertDialog sDialog) {
-                                                        sDialog.dismissWithAnimation();
-                                                        //metodo para cambiar de activity
-                                                        updateDetail();
-                                                    }
-                                                })
+                                            @Override
+                                            public void onClick(SweetAlertDialog sDialog) {
+                                                sDialog.dismissWithAnimation();
+                                                //metodo para cambiar de activity
+                                                updateDetail();
+                                            }
+                                        })
                                                 .show();
                                         //parametros false
-                                        { rut.setEnabled(false);
+                                        {
+                                            rut.setEnabled(false);
                                             rut.setFocusable(false);
                                             rut.setFocusableInTouchMode(false);
 
@@ -211,57 +193,54 @@ public class perfilFragment extends Fragment {
 
                                             ciudad.setEnabled(false);
                                             ciudad.setFocusable(false);
-                                            ciudad.setFocusableInTouchMode(false); }
+                                            ciudad.setFocusableInTouchMode(false);
+                                        }
                                     }
-                                });
-                                sDialog.dismissWithAnimation();
-                                {
-                                    rut.setText(rut.getText());
-
-                                    correo.setEnabled(true);
-                                    correo.setFocusable(true);
-                                    correo.setFocusableInTouchMode(true);
-                                    correo.setText(correo.getText());
-
-                                    nombre.setEnabled(true);
-                                    nombre.setFocusable(true);
-                                    nombre.setFocusableInTouchMode(true);
-                                    nombre.setText(nombre.getText());
-
-                                    apellido.setEnabled(true);
-                                    apellido.setFocusable(true);
-                                    apellido.setFocusableInTouchMode(true);
-                                    apellido.setText(apellido.getText());
-
-                                    telefono.setEnabled(true);
-                                    telefono.setFocusable(true);
-                                    telefono.setFocusableInTouchMode(true);
-                                    telefono.setText(telefono.getText());
-
-                                    ciudad.setEnabled(true);
-                                    ciudad.setFocusable(true);
-                                    ciudad.setFocusableInTouchMode(true);
-
                                 }
+                            });
+                            sDialog.dismissWithAnimation();
+                            {
+                                rut.setText(rut.getText());
 
+                                correo.setEnabled(true);
+                                correo.setFocusable(true);
+                                correo.setFocusableInTouchMode(true);
+                                correo.setText(correo.getText());
+
+                                nombre.setEnabled(true);
+                                nombre.setFocusable(true);
+                                nombre.setFocusableInTouchMode(true);
+                                nombre.setText(nombre.getText());
+
+                                apellido.setEnabled(true);
+                                apellido.setFocusable(true);
+                                apellido.setFocusableInTouchMode(true);
+                                apellido.setText(apellido.getText());
+
+                                telefono.setEnabled(true);
+                                telefono.setFocusable(true);
+                                telefono.setFocusableInTouchMode(true);
+                                telefono.setText(telefono.getText());
+
+                                ciudad.setEnabled(true);
+                                ciudad.setFocusable(true);
+                                ciudad.setFocusableInTouchMode(true);
                             }
-                        })
-                        .show();
+                        }
+                    })
+                            .show();
+
             }
         });
-
 
         //boton el cual redirije hacia la pantalla de cambio de contraseña del perfil del usuario
         editarpass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                SweetAlertDialog dp2 =new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE);
                 dp2.setTitleText("Estas Segur@ De Querer Cambiar Tu Contraseña?");
                 dp2.setContentText("Ten Cuidado!");
                 dp2.setConfirmText("Si,Deseo Actualizar!");
-
                 dp2.setCancelText("No,No Quiero");
                 //si preciona el boton si se podran editar los edittext
                 dp2.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -272,13 +251,11 @@ public class perfilFragment extends Fragment {
                     }
                 })
                         .show();
-
             }
         });
-
         return v;
-
     }
+
     //ir desde un fragment hacia una actividad
     public void updateDetail() {
         Intent intent = new Intent(getActivity(), menuActivity.class);
@@ -286,22 +263,17 @@ public class perfilFragment extends Fragment {
     }
 
     private void cargardatosperfil() {
-        try {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://proyectotesis.ddns.net/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
-
-
-
             //metodo para llamar a la funcion que queramos
             //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
             Call<Usuario> call = tesisAPI.getUsuario(rutperfil,contrasenaperfil);
             call.enqueue(new Callback<Usuario>() {
                 @Override
                 public void onResponse( Call<Usuario>call, Response<Usuario> response) {
-
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
                         Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
@@ -310,7 +282,6 @@ public class perfilFragment extends Fragment {
                     else {
                         //respuesta del request
                         Usuario usuarios = response.body();
-
                        rut.setText(usuarios.getRut().toString());
                        nombre.setText(usuarios.getNombre().toString());
                        apellido.setText(usuarios.getApellido().toString());
@@ -324,8 +295,6 @@ public class perfilFragment extends Fragment {
                               encontrado= true;
                           }
                       }
-
-
                     }
                 }
 
@@ -335,10 +304,6 @@ public class perfilFragment extends Fragment {
                     Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
     }
 
     private void cargarspiner(){
@@ -402,22 +367,17 @@ public class perfilFragment extends Fragment {
             String Nombre = nombre.getText().toString();
             String Apellido = apellido.getText().toString();
             String Fono = telefono.getText().toString();
-
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://proyectotesis.ddns.net/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
-
-
-
             //metodo para llamar a la funcion que queramos
             //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
             Call<Usuario> call = tesisAPI.ActualizarUsuario(RUT,Nombre,Apellido,Correo,Fono,idCiudad);
             call.enqueue(new Callback<Usuario>() {
                 @Override
                 public void onResponse( Call<Usuario>call, Response<Usuario> response) {
-
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
                         Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
@@ -426,10 +386,8 @@ public class perfilFragment extends Fragment {
                     else {
                         //respuesta del request
                         Usuario usuarios = response.body();
-
                     }
                 }
-
                 //si falla el request a la pagina mostrara este error
                 @Override
                 public void onFailure(Call<Usuario> call, Throwable t) {
@@ -439,7 +397,6 @@ public class perfilFragment extends Fragment {
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
 
@@ -477,6 +434,5 @@ public class perfilFragment extends Fragment {
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
-
 
 }

@@ -106,7 +106,7 @@ public class menuActivity extends AppCompatActivity {
 
 
     //metodo para que cuando el usuario este en la actividad principal y quiera retrocer tenga que apretar dos veces el back
-    @Override
+   /* @Override
     public void onBackPressed() {
 
         if (contador==0){
@@ -126,12 +126,15 @@ public class menuActivity extends AppCompatActivity {
         }.start();
     }
 
+
+    */
+
     //metodo que permite elejir un fragment
     private void showSelectedFragment(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 //permite regresar hacia atras entre los fragments
-                //.addToBackStack(null)
+                .addToBackStack(null)
                 .commit();
 
     }

@@ -12,11 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 
@@ -25,9 +26,15 @@ import org.json.JSONObject;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Intent.getIntent;
 
@@ -53,34 +60,35 @@ public class DetalleSolicitudFragment extends Fragment {
     private TextView soluciondetallesolicitud;
 
     private ImageView imgperfil;
-
+    SharedPreferences prefs;
     private Button btnvolver;
+    private int idsolicitud=0;
 
     public DetalleSolicitudFragment() {
         // Required empty public constructor
     }
 
-    String tecnico = "";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View v= inflater.inflate(R.layout.fragment_detalle_solicitud, container, false);
-        SharedPreferences prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-        int img[] = {R.drawable.user};
+        View v = inflater.inflate(R.layout.fragment_detalle_solicitud, container, false);
+         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
 
         numerosolicitud = (TextView) v.findViewById(R.id.txtnumerosolicitud);
         fechasolicitud = (TextView)v.findViewById(R.id.txtfechasolicitud);
         fechadetallesolicitud = (TextView)v.findViewById(R.id.txtfechadetallesolicitud);
-        cliente = (TextView)v.findViewById(R.id.txtclientesolicituddetalle);
+
         trabajador = (TextView)v.findViewById(R.id.txttrabajadorsolicituddetalle);
         rubro = (TextView)v.findViewById(R.id.txtrubrosolicituddetalle);
         precio = (TextView)v.findViewById(R.id.txtpreciosolicitud);
         estadosolicitud =(TextView)v.findViewById(R.id.txtestadosolicitud);
 
         descripciondetallesolicitud =(TextView)v.findViewById(R.id.txtdescripciondetallesolicitud);
-        diagnosticodetallesolicitud =(TextView)v.findViewById(R.id.txtdiagnosticodetallesolicitud);
+        diagnosticodetallesolicitud =(TextView)v.findViewById(R.id.txtdiagnosticodetallesolicitud1);
         soluciondetallesolicitud =(TextView)v.findViewById(R.id.txtsoluciondetallesolicitud);
 
 
@@ -89,32 +97,59 @@ public class DetalleSolicitudFragment extends Fragment {
         btnvolver = (Button)v.findViewById(R.id.btnvolver);
 
 
-        //posible error al enviar datos desde el adaptador hacia el fragment detalle
 
 
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            int myInt = bundle.getInt("nsolicitud");
+        Bundle datosRecuperados = getArguments();
+        if (datosRecuperados != null) {
+            idsolicitud = datosRecuperados.getInt("idsolicitud");
         }
 
 
 
 
-        final Solicitud soli = (Solicitud) bundle.getParcelable("soli");
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
 
+        Call<Solicitud> call = tesisAPI.getSolicitudCliente(idsolicitud);
 
-        fechasolicitud.setText(soli.getFecha());
-        descripciondetallesolicitud.setText(soli.getDescripcion());
-        cliente.setText(String.valueOf(soli.getRut_Cliente()));
-        trabajador.setText(soli.getRut_Trabajador());
-        imgperfil.setImageResource(img[0]);
+        call.enqueue(new Callback<Solicitud>() {
+            @Override
+            public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
+
+                if(!response.isSuccessful()){
+                    Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Solicitud solicituds = response.body();
+
+                    numerosolicitud.setText("N Solicitud: "+solicituds.getIdSolicitud());
+                    fechasolicitud.setText("Creada: "+solicituds.getFechaS());
+                    fechadetallesolicitud.setText("Atendida: "+solicituds.getFechaA());
+                    trabajador.setText("Rut trabajador: "+solicituds.getRUT());
+                    rubro.setText("Rubro: "+solicituds.getRubro());
+                    precio.setText("Precio aprox: "+solicituds.getPrecio());
+                    estadosolicitud.setText("Estado : "+solicituds.getEstado());
+
+                    descripciondetallesolicitud.setText(solicituds.getDescripcionP());
+                    diagnosticodetallesolicitud.setText(solicituds.getDiagnostico());
+                    soluciondetallesolicitud.setText(solicituds.getSolucion());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Solicitud> call, Throwable t) {
+                Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
 
 
 
         return v;
-
     }
 
 

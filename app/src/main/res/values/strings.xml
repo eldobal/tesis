@@ -14,5 +14,6 @@
     <string name="err_contraseña2">Ingrese una contraseña valida</string>
 
 
+    <string name="err_fonoperfil">Ingrese un fono valido</string>
 
 </resources>
