@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,21 +75,16 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
+        if (networkInfo != null && networkInfo.isConnected()) {
+            // Si hay conexión a Internet en este momento
         //google gso
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
-
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        //google api
-
-
-
-
-
-
 
         signInButton =(SignInButton) findViewById(R.id.Signbutton);
         txtrut = (EditText) findViewById(R.id.txtemail);
@@ -105,8 +102,10 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
             startActivity(intent);
         }
 
+        if (networkInfo != null && networkInfo.isConnected()) {
+            // Si hay conexión a Internet en este momento
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
+            signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()){
@@ -114,11 +113,15 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                     singIn();
                     break;
                 }
-
             }
-        });
+            });
+        } else {
+                // No hay conexión a Internet en este momento
+                Toast.makeText(this, "Revise su coneecion antes de iniciar session ", Toast.LENGTH_LONG).show();
+            }
 
-
+        if (networkInfo != null && networkInfo.isConnected()) {
+            // Si hay conexión a Internet en este momento
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -157,6 +160,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                                     Intent intent = new Intent(login2Activity.this, menuActivity.class);
                                     saveOnPreferences(rut,contrasena,idciudad);
                                     startActivity(intent);
+                                    finish();
                                 }
                             }
                         }
@@ -172,6 +176,10 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
             }
 
         });
+        } else {
+            // No hay conexión a Internet en este momento
+            Toast.makeText(this, "Revise su coneecion antes de iniciar session ", Toast.LENGTH_LONG).show();
+        }
 
         btnregister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,6 +189,11 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
             }
 
         });
+
+        } else {
+            // No hay conexión a Internet en este momento
+            Toast.makeText(this, "Revise su coneecion ", Toast.LENGTH_LONG).show();
+        }
 
     }
 

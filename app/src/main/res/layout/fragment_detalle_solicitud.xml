@@ -84,8 +84,10 @@
                         android:id="@+id/txtnumerosolicitud"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
-                        android:text="N° Solicitud:0">
+                        android:text="pruebatecto">
 
                     </TextView>
 
@@ -94,8 +96,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/txtnumerosolicitud"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Fecha Solicitud: 07/04/2020">
+                        android:text="">
 
                     </TextView>
                     <TextView
@@ -103,8 +107,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/txtfechasolicitud"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Fecha Solicitud: 07/04/2020">
+                        android:text="">
 
                     </TextView>
 
@@ -115,8 +121,10 @@
                         android:id="@+id/txtrubrosolicituddetalle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Rubro: ">
+                        android:text="">
 
                     </TextView>
 
@@ -127,8 +135,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/txtfechadetallesolicitud"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Trabajador:">
+                        android:text="">
 
                     </TextView>
 
@@ -138,8 +148,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/txtrubrosolicituddetalle"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Precio:">
+                        android:text="">
 
                     </TextView>
 
@@ -149,8 +161,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/txtpreciosolicitud"
+                        android:textColor="@color/colordark"
+                        android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Estado Solicitud:">
+                        android:text="">
 
                     </TextView>
 
@@ -238,8 +252,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Lo primero que tiene que hacer es dirijirse hacia la barra de navegacion que se encuantra en el parte inferior de la aplicacion y seleccionar el icono con forma
-                                de casa debe seleccionar un area de interes y luego selecionar el rubro especifico que quiera, despues de hacerlo se le desplegara una lista con los trabajadores a lo cual debera seleccionar el que usted quiera para poder empezar la solicitud"
+                                android:text=""
                                 android:textAlignment="center"
                                 android:textColor="@color/colordark"
                                 android:textSize="18dp"></TextView>
@@ -311,8 +324,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Lo primero que tiene que hacer es dirijirse hacia la barra de navegacion que se encuantra en el parte inferior de la aplicacion y seleccionar el icono con forma
-                                de casa debe seleccionar un area de interes y luego selecionar el rubro especifico que quiera, despues de hacerlo se le desplegara una lista con los trabajadores a lo cual debera seleccionar el que usted quiera para poder empezar la solicitud"
+                                android:text=""
                                 android:textAlignment="center"
                                 android:textColor="@color/colordark"
                                 android:textSize="18dp"></TextView>
@@ -383,8 +395,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Lo primero que tiene que hacer es dirijirse hacia la barra de navegacion que se encuantra en el parte inferior de la aplicacion y seleccionar el icono con forma
-                                de casa debe seleccionar un area de interes y luego selecionar el rubro especifico que quiera, despues de hacerlo se le desplegara una lista con los trabajadores a lo cual debera seleccionar el que usted quiera para poder empezar la solicitud"
+                                android:text=""
                                 android:textAlignment="center"
                                 android:textColor="@color/colordark"
                                 android:textSize="18dp"></TextView>

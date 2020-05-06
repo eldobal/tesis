@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.icu.text.RelativeDateTimeFormatter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -75,6 +77,9 @@ public class perfilFragment extends Fragment {
         mAwesomeValidation.addValidation(getActivity(), R.id.email, android.util.Patterns.EMAIL_ADDRESS, R.string.err_correo);
         mAwesomeValidation.addValidation(getActivity(), R.id.nombre, "[a-zA-Z\\s]+", R.string.err_name);
         mAwesomeValidation.addValidation(getActivity(), R.id.apellido, "[a-zA-Z\\s]+", R.string.err_apellido);
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
     }
 
     @Override
@@ -87,6 +92,10 @@ public class perfilFragment extends Fragment {
        correo = (EditText) v.findViewById(R.id.email);
        telefono = (EditText) v.findViewById(R.id.telefonoperfil);
        ciudad = (Spinner) v.findViewById(R.id.spinner);
+       fotoperfil = (ImageView) v.findViewById(R.id.usericon);
+        editardatos = (Button) v.findViewById(R.id.actualizarperfil);
+        editarpass = (Button) v.findViewById(R.id.actualizarcontraseña);
+        
        prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -94,7 +103,6 @@ public class perfilFragment extends Fragment {
                 .build();
 
         googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
-        fotoperfil = (ImageView) v.findViewById(R.id.usericon);
         //trozo de codigo para rescatar parametros de la cuenta de usuario
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getContext());
         if (acct != null) {
@@ -130,8 +138,7 @@ public class perfilFragment extends Fragment {
         cargardatosperfil();
         //seccion de codigo en el cual se debera traer el json con los datos del usuario
         //donde se setearan los datos a los edittext
-        editardatos = (Button) v.findViewById(R.id.actualizarperfil);
-        editarpass = (Button) v.findViewById(R.id.actualizarcontraseña);
+
         ciudad.setEnabled(false);
         ciudad.setClickable(false);
 

@@ -81,6 +81,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="30dp"
+                        android:textColor="@color/colorPrimaryDark"
                         android:clickable="false"
                         android:ems="10"
                         android:enabled="false"
@@ -112,7 +113,7 @@
                     <EditText
                         android:id="@+id/email"
                         android:layout_width="match_parent"
-
+                        android:textColor="@color/colorPrimaryDark"
 
                         android:clickable="false"
                         android:enabled="false"
@@ -143,7 +144,7 @@
 
                     <EditText
                         android:id="@+id/nombre"
-
+                        android:textColor="@color/colorPrimaryDark"
                         android:clickable="false"
                         android:enabled="false"
                         android:focusable="false"
@@ -178,6 +179,7 @@
                         android:clickable="false"
                         android:enabled="false"
                         android:focusable="false"
+                        android:textColor="@color/colorPrimaryDark"
                         android:focusableInTouchMode="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -212,7 +214,7 @@
                         android:text="Telefono" />
 
                     <EditText
-
+                        android:textColor="@color/colorPrimaryDark"
                         android:id="@+id/telefonoperfil"
                         android:clickable="false"
                         android:enabled="false"
@@ -235,7 +237,7 @@
 
                     <Spinner
                         android:id="@+id/spinner"
-
+                        android:textColor="@color/colorPrimaryDark"
                         android:enabled="false"
                         android:focusable="false"
                         android:focusableInTouchMode="false"

@@ -40,14 +40,16 @@ public class menuActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     int contador=0;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
+        showSelectedFragment2(new HomeFragment());
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-        //con este metodo selecciono el fragment de inicio por defecto
-        showSelectedFragment(new HomeFragment());
 
         //se instancia el gso
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -56,8 +58,6 @@ public class menuActivity extends AppCompatActivity {
 
         // trae el cliende de google
         googleSignInClient = GoogleSignIn.getClient(this, gso);
-
-
 
         //trozo de codigo para rescatar parametros de la cuenta de usuario
         GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
@@ -68,34 +68,25 @@ public class menuActivity extends AppCompatActivity {
             String personEmail = acct.getEmail();
             String personId = acct.getId();
             Uri personPhoto = acct.getPhotoUrl();
-
-            //guardar las prefs
-          //  saveOnPreferences(personId,personEmail);
-
-
             Toast.makeText(menuActivity.this, "Nombre"+personName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
         }
-
-
         mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
-
         mbottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
+                //se muestra el fragment de peril
                 if(menuItem.getItemId()== R.id.menu_profile){
                     showSelectedFragment(new perfilFragment());
                 }
-
+                //se muestra el fragment de rubros
                 if(menuItem.getItemId()== R.id.menu_home){
                     showSelectedFragment(new HomeFragment());
-
                 }
-
+                //se muestra el fragment de la lista de solicitudes
                 if(menuItem.getItemId()==R.id.menu_solicitud){
                     showSelectedFragment(new solicitudeFragment());
                 }
-
+                //se muestra el fragment de configuracion y setting
                 if(menuItem.getItemId()== R.id.menu_settings){
                     showSelectedFragment(new settingsFragment());
                 }
@@ -136,7 +127,16 @@ public class menuActivity extends AppCompatActivity {
                 //permite regresar hacia atras entre los fragments
                 .addToBackStack(null)
                 .commit();
+    }
 
+
+    //metodo que permite elejir un fragment y no volver hacia atras
+    private void showSelectedFragment2(Fragment fragment){
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                //permite regresar hacia atras entre los fragments
+               // .addToBackStack(null)
+                .commit();
     }
 
     private void saveOnPreferences(String rut, String contrasena) {
@@ -159,12 +159,10 @@ public class menuActivity extends AppCompatActivity {
 
 
     private String getuserrutprefs() {
-
         return prefs.getString("Rut", "");
     }
 
     private String getusercontraseñaprefs() {
-
         return prefs.getString("ContraseNa", "");
     }
 

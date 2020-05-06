@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -90,16 +91,14 @@ public class listabuscarrubroFragment extends Fragment {
                         Adaptadortrabajadores ad = new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
                         lista.setAdapter(ad);
                     } else if(listatrabajadoresporrubo.size() == 0){
-                        dp = new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
-                        dp.setTitleText("UwU");
-                        dp.setContentText("No se han encontrado solicitudes pendientes!");
-                        dp.show();
+                        showSelectedFragment(new notfoundFragment());
                     }
                 }
             }
             @Override
             public void onFailure(Call<List<UsuarioTrabajador>> call, Throwable t) {
                 Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                showSelectedFragment(new notfoundFragment());
             }
         });
         return  v;
@@ -109,6 +108,16 @@ public class listabuscarrubroFragment extends Fragment {
         int ciudadid =getuseridciudadprefs();
         //string para asignar los valores del usuario si es que existe
         idciudad=ciudadid;
+    }
+
+
+    private void showSelectedFragment(Fragment fragment){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                //permite regresar hacia atras entre los fragments
+                .addToBackStack(null)
+                .commit();
+
     }
 
     private String getuserrutprefs() {

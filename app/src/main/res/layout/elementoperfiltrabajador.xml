@@ -45,8 +45,10 @@
                     android:id="@+id/txtnombretrabajador"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/colordark"
                     android:fontFamily="sans-serif-condensed-medium"
-                    android:text="Nombre trabajador">
+                    android:text="">
 
                 </TextView>
 
@@ -57,8 +59,10 @@
                     android:layout_below="@id/txtnombretrabajador"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/colordark"
                     android:fontFamily="sans-serif-condensed-medium"
-                    android:text="Rut">
+                    android:text="">
 
                 </TextView>
 
@@ -67,8 +71,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/txtruttrabajador"
+                    android:textSize="14dp"
+                    android:textColor="@color/colordark"
                     android:fontFamily="sans-serif-condensed-medium"
-                    android:text="ciudad">
+                    android:text="">
 
                 </TextView>
 
@@ -76,9 +82,11 @@
                     android:id="@+id/txtcalificaciontrabajador"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="@color/colordark"
                     android:layout_below="@id/txtciudadTrabajador"
                     android:fontFamily="sans-serif-condensed-medium"
-                    android:text="Calificacion">
+                    android:text="">
 
                 </TextView>
 

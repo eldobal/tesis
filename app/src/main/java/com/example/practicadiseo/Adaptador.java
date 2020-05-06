@@ -77,7 +77,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
         int idsolicitud = listasolicitudes.get(i).getIdSolicitud();
 
         numerosolicitud.setText("N Solicitud: "+String.valueOf(listasolicitudes.get(i).getIdSolicitud()));
-        fechasolicitud.setText(listasolicitudes.get(i).getFechaS());
+        fechasolicitud.setText("Fecha: "+listasolicitudes.get(i).getFechaS());
         estadosolicitud.setText(listasolicitudes.get(i).getEstado());
         nombretrabajador.setText(listasolicitudes.get(i).getNombre()+" "+listasolicitudes.get(i).getApellido());
         //icono.setImageResource(imagenes[0]);

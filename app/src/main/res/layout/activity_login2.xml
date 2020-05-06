@@ -92,15 +92,7 @@
                 android:ems="10"
                 android:inputType="textPassword" />
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:layout_below="@id/txtpassword"
-                app:lottie_rawRes="@raw/switch"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
 
-            </com.airbnb.lottie.LottieAnimationView>
 
 
             <Button

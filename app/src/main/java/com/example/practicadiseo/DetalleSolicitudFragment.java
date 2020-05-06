@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.basgeekball.awesomevalidation.AwesomeValidation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,6 +39,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.content.Intent.getIntent;
+import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 
 /**
@@ -69,6 +72,26 @@ public class DetalleSolicitudFragment extends Fragment {
     }
 
 
+
+    @Override
+       public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        numerosolicitud = (TextView) getActivity().findViewById(R.id.txtnumerosolicitud);
+        fechasolicitud = (TextView)getActivity().findViewById(R.id.txtfechasolicitud);
+        fechadetallesolicitud = (TextView)getActivity().findViewById(R.id.txtfechadetallesolicitud);
+        trabajador = (TextView)getActivity().findViewById(R.id.txttrabajadorsolicituddetalle);
+        rubro = (TextView)getActivity().findViewById(R.id.txtrubrosolicituddetalle);
+        precio = (TextView)getActivity().findViewById(R.id.txtpreciosolicitud);
+        estadosolicitud =(TextView)getActivity().findViewById(R.id.txtestadosolicitud);
+        descripciondetallesolicitud =(TextView)getActivity().findViewById(R.id.txtdescripciondetallesolicitud);
+        diagnosticodetallesolicitud =(TextView)getActivity().findViewById(R.id.txtdiagnosticodetallesolicitud1);
+        soluciondetallesolicitud =(TextView)getActivity().findViewById(R.id.txtsoluciondetallesolicitud);
+        imgperfil =(ImageView)getActivity().findViewById(R.id.imgperfilfilasolicitud);
+        btnvolver = (Button)getActivity().findViewById(R.id.btnvolver);
+    }
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,24 +100,6 @@ public class DetalleSolicitudFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_detalle_solicitud, container, false);
          prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
-
-        numerosolicitud = (TextView) v.findViewById(R.id.txtnumerosolicitud);
-        fechasolicitud = (TextView)v.findViewById(R.id.txtfechasolicitud);
-        fechadetallesolicitud = (TextView)v.findViewById(R.id.txtfechadetallesolicitud);
-
-        trabajador = (TextView)v.findViewById(R.id.txttrabajadorsolicituddetalle);
-        rubro = (TextView)v.findViewById(R.id.txtrubrosolicituddetalle);
-        precio = (TextView)v.findViewById(R.id.txtpreciosolicitud);
-        estadosolicitud =(TextView)v.findViewById(R.id.txtestadosolicitud);
-
-        descripciondetallesolicitud =(TextView)v.findViewById(R.id.txtdescripciondetallesolicitud);
-        diagnosticodetallesolicitud =(TextView)v.findViewById(R.id.txtdiagnosticodetallesolicitud1);
-        soluciondetallesolicitud =(TextView)v.findViewById(R.id.txtsoluciondetallesolicitud);
-
-
-
-        imgperfil =(ImageView)v.findViewById(R.id.imgperfilfilasolicitud);
-        btnvolver = (Button)v.findViewById(R.id.btnvolver);
 
 
 

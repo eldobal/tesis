@@ -26,15 +26,22 @@
                android:layout_marginRight="30dp"
                android:layout_marginBottom="30dp">
 
-               <androidx.appcompat.widget.AppCompatImageView
-
+               <com.airbnb.lottie.LottieAnimationView
+                   app:tint="@color/colorAccentllight"
                    android:id="@+id/usericon"
-                   android:layout_width="75dp"
-                   android:layout_height="75dp"
+                   android:layout_width="150dp"
+                   android:layout_height="150dp"
+                   app:lottie_rawRes="@raw/support"
+                   app:lottie_autoPlay="true"
+                   app:lottie_loop="true"
                    android:layout_alignParentTop="true"
                    android:layout_centerHorizontal="true"
-                   android:layout_marginTop="20dp"
-                   android:src="@drawable/icono_contacto"></androidx.appcompat.widget.AppCompatImageView>
+
+                   >
+
+
+               </com.airbnb.lottie.LottieAnimationView>
+
 
 
                <RelativeLayout
@@ -42,7 +49,7 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:layout_below="@id/usericon"
-                   android:layout_marginTop="40dp">
+                 >
 
 
                    <androidx.cardview.widget.CardView

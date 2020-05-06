@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorAccentllight"
+    tools:context=".notfoundFragment">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/locationanimation"
+            android:layout_centerInParent="true"
+            android:layout_height="wrap_content">
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_centerInParent="true"
+                android:id="@+id/location"
+                android:layout_width="350dp"
+                app:lottie_rawRes="@raw/location"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:layout_height="350dp">
+
+            </com.airbnb.lottie.LottieAnimationView>
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_below="@+id/locationanimation"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colordark"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textSize="17sp"
+                android:text="No se Han Encontrado Tecnicos en su Zona"
+                >
+
+            </TextView>
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+
+</FrameLayout>
