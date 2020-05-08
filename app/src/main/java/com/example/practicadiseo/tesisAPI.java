@@ -77,6 +77,13 @@ public interface tesisAPI {
     Call<List<Ciudad>> getCiudades();
 
 
+
+    @POST("api/SolicitudAPI")
+    Call<Solicitud> CancelarSolicitud(@Query("idSolicitud") int idSolicitud
+    );
+
+
+
     @GET("api/SolicitudAPI")
     Call<List<Solicitud>> getSolicitudes(@Query("RUT") String rut);
 

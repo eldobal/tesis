@@ -6,6 +6,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +29,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -77,6 +80,7 @@ public class menuActivity extends AppCompatActivity {
                 //se muestra el fragment de peril
                 if(menuItem.getItemId()== R.id.menu_profile){
                     showSelectedFragment(new perfilFragment());
+
                 }
                 //se muestra el fragment de rubros
                 if(menuItem.getItemId()== R.id.menu_home){
@@ -116,9 +120,11 @@ public class menuActivity extends AppCompatActivity {
             }
         }.start();
     }
-
-
     */
+
+
+
+
 
     //metodo que permite elejir un fragment
     private void showSelectedFragment(Fragment fragment){

@@ -142,6 +142,10 @@ public class DetalleSolicitudFragment extends Fragment {
                     descripciondetallesolicitud.setText(solicituds.getDescripcionP());
                     diagnosticodetallesolicitud.setText(solicituds.getDiagnostico());
                     soluciondetallesolicitud.setText(solicituds.getSolucion());
+
+
+                    //el estado de la solicitud di esta pendiente debera
+
                 }
 
             }

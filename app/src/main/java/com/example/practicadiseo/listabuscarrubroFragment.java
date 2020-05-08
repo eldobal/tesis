@@ -32,10 +32,9 @@ public class listabuscarrubroFragment extends Fragment {
     SweetAlertDialog dp;
     private ListView lista;
     private SharedPreferences prefs;
-    int idciudad =0;
+    int idciudad =0,numeroultimo=0;
 
     ArrayList<UsuarioTrabajador> listatrabajadoresporrubo = new ArrayList<UsuarioTrabajador>();
-    ArrayList<UsuarioTrabajador> listatrabajadores = new ArrayList<UsuarioTrabajador>();
 
 
     public listabuscarrubroFragment() {
@@ -85,6 +84,7 @@ public class listabuscarrubroFragment extends Fragment {
                        //llamada hacia getususario para instanciar el usuario
                         listatrabajadoresporrubo.add(trabajador1);
                     }
+
                     if (listatrabajadoresporrubo.size() > 0) {
                         final View vista = inflater.inflate(R.layout.elementoperfiltrabajador, null);
                         lista = (ListView) v.findViewById(R.id.listadoperfilestrabajadores);
@@ -97,7 +97,6 @@ public class listabuscarrubroFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<List<UsuarioTrabajador>> call, Throwable t) {
-                Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                 showSelectedFragment(new notfoundFragment());
             }
         });
@@ -113,7 +112,7 @@ public class listabuscarrubroFragment extends Fragment {
 
     private void showSelectedFragment(Fragment fragment){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .replace(R.id.container,fragment)
                 //permite regresar hacia atras entre los fragments
                 .addToBackStack(null)
                 .commit();
