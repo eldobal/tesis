@@ -165,20 +165,16 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
-
                             sDialog.dismissWithAnimation();
+
                         }
                     })    .show();
-                    dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                 dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
                         @Override
-                        public void onClick(SweetAlertDialog sweetAlertDialog) {
-
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.cancel();
                         }
                     })
-
-
-
-
                             .show();
 
                 }

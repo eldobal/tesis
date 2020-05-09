@@ -3,12 +3,15 @@ package com.example.practicadiseo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.CountDownTimer;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.text.method.DateTimeKeyListener;
 import android.view.LayoutInflater;
@@ -45,11 +48,13 @@ public class solicitudeFragment extends Fragment {
     private ImageButton btnVolver;
     private SharedPreferences prefs;
     private String rutusuario;
+    Layout uwu ;
     ArrayList<Solicitud> listasolicitudesterminadas;
     ArrayList<Solicitud> listasolicitudactivas;
     ArrayList<Solicitud> Solicitudescomparar;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     Boolean recargado=false;;
+
 
     public solicitudeFragment() {
         // Required empty public constructor
@@ -60,7 +65,6 @@ public class solicitudeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         lista = (ListView) getActivity().findViewById(R.id.listadosolicitudescliente);
         listaactivas = (ListView) getActivity().findViewById(R.id.solicitudactual);
-
     }
 
     @Override
@@ -75,9 +79,13 @@ public class solicitudeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
 
+        SweetAlertDialog pDialog = new SweetAlertDialog(v.getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
+        pDialog.show();
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         //comprobacion de que el rut del usuario exista
 
@@ -147,6 +155,17 @@ public class solicitudeFragment extends Fragment {
                                     dp.show();
                                 }
                             }
+                            new CountDownTimer(700,1000){
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                }
+                                @Override
+                                public void onFinish() {
+                                    pDialog.cancel();
+                                }
+                            }.start();
+
+
                         }
                     }
                     @Override
@@ -169,7 +188,7 @@ public class solicitudeFragment extends Fragment {
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 //permite regresar hacia atras entre los fragments
-                .addToBackStack(null)
+                //.addToBackStack(null)
                 .commit();
     }
     //metodo para traer el rut del usuario hacia la variable local

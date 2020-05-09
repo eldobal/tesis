@@ -14,89 +14,7 @@
         android:orientation="vertical">
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginRight="25dp">
 
-
-            <RelativeLayout
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/imgperfil"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_alignParentLeft="true"
-                    android:background="@color/float_transparent"
-                    android:src="@drawable/userprofile" />
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="100dp">
-
-                    <TextView
-                        android:id="@+id/txtrutcrearsolicitudtrabajador"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Rut:"
-                        android:textColor="@color/colordark"
-                        android:textSize="17dp"></TextView>
-
-
-                    <TextView
-                        android:id="@+id/txtnombrecrearsolicitudtrabajador"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/txtrutcrearsolicitudtrabajador"
-                        android:layout_centerHorizontal="true"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:text="nombre:"
-                        android:textColor="@color/colordark"
-                        android:textSize="17dp"></TextView>
-
-
-                    <TextView
-                        android:id="@+id/txtestadocrearsolicitudtrabajador"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/txtnombrecrearsolicitudtrabajador"
-                        android:layout_centerHorizontal="true"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Estado Usuario:"
-                        android:textColor="@color/colordark"
-                        android:textSize="17dp"></TextView>
-
-
-                    <TextView
-                        android:id="@+id/txtcalificacioncrearsolicitudtrabajador"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/txtestadocrearsolicitudtrabajador"
-                        android:layout_centerHorizontal="true"
-                        android:fontFamily="sans-serif-condensed-medium"
-                        android:text="Calificacion:"
-                        android:textColor="@color/colordark"
-                        android:textSize="17dp"></TextView>
-
-
-                </RelativeLayout>
-
-
-            </RelativeLayout>
-
-
-
-
-        </RelativeLayout>
 
 
         <RelativeLayout
@@ -111,15 +29,108 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="50dp"
+
                 android:layout_marginBottom="60dp"
                 android:scrollbarThumbVertical="@drawable/colorsroll">
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+
+                    <RelativeLayout
+                        android:id="@+id/idpresentacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:layout_marginTop="35dp"
+                            android:layout_marginRight="25dp">
+
+
+                            <RelativeLayout
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <ImageView
+                                    android:id="@+id/imgperfil"
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    android:layout_alignParentLeft="true"
+                                    android:background="@color/float_transparent"
+                                    android:src="@drawable/userprofile" />
+
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="100dp">
+
+                                    <TextView
+                                        android:id="@+id/txtrutcrearsolicitudtrabajador"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_centerHorizontal="true"
+                                        android:fontFamily="sans-serif-condensed-medium"
+                                        android:text="Rut:"
+                                        android:textColor="@color/colordark"
+                                        android:textSize="17dp"></TextView>
+
+
+                                    <TextView
+                                        android:id="@+id/txtnombrecrearsolicitudtrabajador"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/txtrutcrearsolicitudtrabajador"
+                                        android:layout_centerHorizontal="true"
+                                        android:fontFamily="sans-serif-condensed-medium"
+                                        android:text="nombre:"
+                                        android:textColor="@color/colordark"
+                                        android:textSize="17dp"></TextView>
+
+
+                                    <TextView
+                                        android:id="@+id/txtestadocrearsolicitudtrabajador"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/txtnombrecrearsolicitudtrabajador"
+                                        android:layout_centerHorizontal="true"
+                                        android:fontFamily="sans-serif-condensed-medium"
+                                        android:text="Estado Usuario:"
+                                        android:textColor="@color/colordark"
+                                        android:textSize="17dp"></TextView>
+
+
+                                    <TextView
+                                        android:id="@+id/txtcalificacioncrearsolicitudtrabajador"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/txtestadocrearsolicitudtrabajador"
+                                        android:layout_centerHorizontal="true"
+                                        android:fontFamily="sans-serif-condensed-medium"
+                                        android:text="Calificacion:"
+                                        android:textColor="@color/colordark"
+                                        android:textSize="17dp"></TextView>
+
+
+                                </RelativeLayout>
+
+
+                            </RelativeLayout>
+
+
+
+
+                        </RelativeLayout>
+                    </RelativeLayout>
+
                     <androidx.cardview.widget.CardView
+                        android:layout_below="@id/idpresentacion"
                         android:id="@+id/carddescripcionproblema"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -214,27 +225,27 @@
 
                     </RelativeLayout>
 
-                   <RelativeLayout
-                       android:layout_marginTop="25dp"
-                       android:layout_below="@id/fotolayout"
-                       android:layout_width="match_parent"
-                       android:layout_height="250dp">
+                    <RelativeLayout
+                        android:layout_marginTop="25dp"
+                        android:layout_below="@id/fotolayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp">
 
 
 
-                           <ImageView
-                               android:id="@+id/fotocrearsolicitud"
-                               android:layout_width="match_parent"
-                               android:padding="5dp"
-                               android:layout_height="match_parent">
+                        <ImageView
+                            android:id="@+id/fotocrearsolicitud"
+                            android:layout_width="match_parent"
+                            android:padding="5dp"
+                            android:layout_height="match_parent">
 
 
-                           </ImageView>
+                        </ImageView>
 
 
 
 
-                   </RelativeLayout>
+                    </RelativeLayout>
 
 
                 </RelativeLayout>

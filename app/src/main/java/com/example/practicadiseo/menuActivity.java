@@ -51,7 +51,10 @@ public class menuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
-        showSelectedFragment2(new HomeFragment());
+        //cargarfragment(new HomeFragment());
+        //cargarfragment(new perfilFragment());
+        //cargarfragment(new solicitudeFragment());
+        //cargarfragment(new settingsFragment());
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
         //se instancia el gso
@@ -74,6 +77,10 @@ public class menuActivity extends AppCompatActivity {
             Toast.makeText(menuActivity.this, "Nombre"+personName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
         }
         mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
+
+
         mbottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -101,7 +108,7 @@ public class menuActivity extends AppCompatActivity {
 
 
     //metodo para que cuando el usuario este en la actividad principal y quiera retrocer tenga que apretar dos veces el back
-   /* @Override
+    @Override
     public void onBackPressed() {
 
         if (contador==0){
@@ -120,7 +127,7 @@ public class menuActivity extends AppCompatActivity {
             }
         }.start();
     }
-    */
+
 
 
 
@@ -131,17 +138,17 @@ public class menuActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 //permite regresar hacia atras entre los fragments
-                .addToBackStack(null)
+                //.addToBackStack(null)
                 .commit();
     }
 
 
     //metodo que permite elejir un fragment y no volver hacia atras
-    private void showSelectedFragment2(Fragment fragment){
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
+    private void cargarfragment(Fragment fragment){
+        getSupportFragmentManager().beginTransaction().add(R.id.container,fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 //permite regresar hacia atras entre los fragments
-               // .addToBackStack(null)
+                .addToBackStack(null)
                 .commit();
     }
 

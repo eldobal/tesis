@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -120,19 +121,19 @@ public class crearsolicitudFragment extends Fragment {
                             Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                         } else {
                             Solicitud solicitud = response.body();
-
-                            dp =new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
-                            dp.setTitleText("Solicitud Creada");
-                            dp.setContentText("El Trabajador Debera aprobar tu Solicitu mantengase atend@");
-                            dp.setConfirmText("ok Volver a menu!");
-                            dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                        @Override
-                                        public void onClick(SweetAlertDialog sDialog) {
-                                             updateDetail();
-                                            sDialog.dismissWithAnimation();
-                                        }
-                                    })
-                                    .show();
+                            btncrearsolicitud.setClickable(false);
+                            dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
+                            dp.setTitleText("Solicitud Creada!");
+                            dp.show();
+                            new CountDownTimer(1500,1000){
+                                @Override
+                                public void onTick(long millisUntilFinished) {
+                                }
+                                @Override
+                                public void onFinish() {
+                                    updateDetail();
+                                }
+                            }.start();
 
                         }
                     }
@@ -189,5 +190,6 @@ public class crearsolicitudFragment extends Fragment {
     public void updateDetail() {
         Intent intent = new Intent(getActivity(), menuActivity.class);
         startActivity(intent);
+
     }
 }
