@@ -12,6 +12,8 @@ public class Usuario {
     private String Contrasena;
     private String Fono;
 
+    private String Foto;
+
     @SerializedName("id_idCiudad")
     private int idCiudad;
     @SerializedName("id_EstadoUsuario")
@@ -30,6 +32,7 @@ public class Usuario {
         this.idCiudad = idCiudad;
         this.idEstado = idEstado;
         this.idTipo = idTipo;
+        this.Foto=Foto;
     }
 
     public String getRut() {
@@ -68,7 +71,11 @@ public class Usuario {
         return idTipo;
     }
 
+    public String getFoto() {
+        return Foto;
+    }
 
-
-
+    public void setFoto(String foto) {
+        Foto = foto;
+    }
 }

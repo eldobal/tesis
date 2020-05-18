@@ -68,13 +68,9 @@
             </RelativeLayout>
 
 
-
-
             <RelativeLayout
                 android:layout_width="match_parent"
-
                 android:layout_height="wrap_content">
-
 
                 <RelativeLayout
                     android:layout_centerHorizontal="true"
@@ -87,7 +83,7 @@
                         android:textColor="@color/colordark"
                         android:textSize="15dp"
                         android:fontFamily="sans-serif-condensed-medium"
-                        android:text="pruebatecto">
+                        android:text="">
 
                     </TextView>
 
@@ -461,12 +457,12 @@
                             android:layout_marginTop="5dp">
 
                             <ImageView
-
+                                android:id="@+id/imgclientesacada"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
                                  android:textAlignment="center"
-                                android:src="@drawable/userprofile"
+
                                 android:textColor="@color/colordark"
                                 android:textSize="18dp"></ImageView>
 
@@ -507,7 +503,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/botonripple"
-                android:text="Volver" />
+                android:text="Actualizar" />
 
 
         </RelativeLayout>*/

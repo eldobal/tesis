@@ -1,207 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorAccentllight"
-    android:layout_height="match_parent">
-
-
-    <RelativeLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+    android:layout_height="wrap_content">
 
 
         <RelativeLayout
-            android:id="@+id/txtmisoli"
-            android:layout_marginTop="40dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_centerHorizontal="true"
-                android:id="@+id/mydashboard"
-                android:text="Mis Solicitudes"
-                android:textAlignment="center"
-                android:fontFamily="sans-serif-condensed-medium"
-                android:textSize="35sp"
-                android:layout_marginLeft="62dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal">
-            </TextView>
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_below="@+id/txtmisoli"
-
-            android:id="@+id/txtsolicitudactual"
-            android:layout_width="match_parent"
-
-            android:layout_height="300dp">
-
-
-
-                     <androidx.cardview.widget.CardView
-
-        android:id="@+id/cardcambiodepass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_margin="12dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="40dp"
-        android:backgroundTint="@color/colorPrimaryDark"
-        app:cardCornerRadius="30dp"
-        app:cardElevation="6dp">
-
-
-        <LinearLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-
-
-
-            <TextView
-                android:id="@+id/txt010"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:textColor="@color/colorAccentllight"
-                android:textAlignment="center"
-                android:fontFamily="sans-serif-condensed-medium"
-                android:text="Solicitud Actual "
-                android:textSize="20sp"
-
-                android:gravity="center_horizontal"></TextView>
-
-
-
-            <ListView
-                android:layout_below="@+id/txt010"
-                android:id="@+id/solicitudactual"
-                android:layout_width="match_parent"
-
-                android:layout_height="wrap_content">
-            </ListView>
-
-
-
-
-        </LinearLayout>
-
-
-
-
-
-
-
-
-
-    </androidx.cardview.widget.CardView>
-
-
-
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-             android:layout_below="@id/txtsolicitudactual"
-            android:layout_width="match_parent"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <RelativeLayout
-                android:id="@+id/cardcontacto"
+                android:id="@+id/txtmisoli"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content">
 
-                >
-
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardtecnicoinformatico"
+                <TextView
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/mydashboard"
+                    android:text="Mis Solicitudes"
+                    android:textAlignment="center"
+                    android:fontFamily="sans-serif-condensed-medium"
+                    android:textSize="35sp"
+                    android:layout_marginLeft="62dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
-                    android:backgroundTint="@color/colorAccent"
-                    android:clickable="true"
-                    app:cardCornerRadius="30dp"
-                    app:cardElevation="6dp">
-
-                    <LinearLayout
-
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:id="@+id/xxt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-
-                            android:textColor="@color/colordark"
-                            android:textAlignment="center"
-                            android:fontFamily="sans-serif-condensed-medium"
-                            android:text="Solicitudes Terminadas"
-                            android:textSize="20sp"
-
-                            android:gravity="center_horizontal"></TextView>
-
-
-                        <ListView
-
-                            android:id="@+id/listadosolicitudescliente"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-
-
-
-                        </ListView>
-
-
-
-
-
-
-                    </LinearLayout>
-
-
-                </androidx.cardview.widget.CardView>
+                    android:gravity="center_horizontal">
+                </TextView>
 
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_below="@+id/txtmisoli"
+
+                android:id="@+id/txtsolicitudactual"
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/txt010"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colordark"
+                            android:textAlignment="center"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:text="Solicitud Actual "
+                            android:textSize="25sp"
+                            android:gravity="center_horizontal"></TextView>
+
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_marginTop="15dp"
+                            android:id="@+id/cardcambiodepass"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentTop="true"
+                            android:padding="8dp"
+                            android:backgroundTint="@color/colorPrimaryDark"
+                            app:cardCornerRadius="30dp"
+                            app:cardElevation="6dp">
+
+                                  <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                                        android:id="@+id/refresh"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+                                            <ListView
+                                                android:layout_below="@+id/txt010"
+                                                android:id="@+id/solicitudactual"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content">
+                                            </ListView>
+
+
+                                    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
+                         </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_below="@id/txtsolicitudactual"
+                android:layout_width="match_parent"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/cardcontacto"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/xxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:textColor="@color/colordark"
+                        android:textAlignment="center"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:text="Solicitudes Terminadas"
+                        android:textSize="25dp"
+
+                        android:gravity="center_horizontal"></TextView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_below="@+id/xxt"
+                        android:id="@+id/cardtecnicoinformatico"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="12dp"
+                        android:backgroundTint="@color/colorAccent"
+                        android:clickable="true"
+                        app:cardCornerRadius="30dp"
+                        app:cardElevation="6dp">
+
+
+
+                        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                            android:id="@+id/refreshterminadas"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+
+                            <LinearLayout
+
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="16dp">
+
+
+
+                                <ListView
+
+                                    android:id="@+id/listadosolicitudescliente"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent">
+
+
+
+
+                                </ListView>
+
+
+
+
+
+
+                            </LinearLayout>
+
+
+                        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+
+
+
+
+
+
+                    </androidx.cardview.widget.CardView>
+
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+
         </RelativeLayout>
-
-
-
-    </RelativeLayout>
-
-
-
-
-
-
-
-
-
 
 
 

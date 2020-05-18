@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +32,9 @@ public class perfiltrabajadorFragment extends Fragment {
     private String nombretrabajor="",estadotrabador="",calificaciontrabajador="",ruttrabajador="";
     private int idrubro=0;
     private Button btncrearsolicitud;
+    private ImageView foto;
+    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    String urlfoto="";
 
     public perfiltrabajadorFragment() {
         // Required empty public constructor
@@ -49,13 +55,13 @@ public class perfiltrabajadorFragment extends Fragment {
 
         rut= (TextView) v.findViewById(R.id.txtrutperfiltrabajador);
         nombre = (TextView) v.findViewById(R.id.txtnombreperfiltrabajador);
-        correo = (TextView) v.findViewById(R.id.txtcorreoperfiltrabajador);
+
         telefono = (TextView) v.findViewById(R.id.txttelefonoperfiltrabajador);
         ciudad = (TextView) v.findViewById(R.id.txtciudadperfiltrabajador);
         estado = (TextView) v.findViewById(R.id.txtestadoperfiltrabajador);
         calificacion = (TextView) v.findViewById(R.id.txtcalificacionperfiltrabajador);
         btncrearsolicitud=(Button) v.findViewById(R.id.botoncrearsolicitud);
-
+        foto = (ImageView) v.findViewById(R.id.imgperfiltrabajadordetalle);
 
         btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +72,7 @@ public class perfiltrabajadorFragment extends Fragment {
                 bundle.putString("nombretrabajador", (String) nombre.getText());
                 bundle.putString("estadotrabajador", (String) estado.getText());
                 bundle.putString("calificaciontrabajador", (String) calificacion.getText());
+                bundle.putString("imgperfiltrabajador", (String) urlfoto);
                 bundle.putInt("idrubro", idrubro);
                 crearsolicitudFragment crearsolicitudFragment = new crearsolicitudFragment();
                 crearsolicitudFragment.setArguments(bundle);
@@ -106,11 +113,13 @@ public class perfiltrabajadorFragment extends Fragment {
                         UsuarioTrabajador usuarios = response.body();
                         rut.setText("Rut: "+usuarios.getRUT().toString());
                         nombre.setText("Trabajdor: "+usuarios.getNombre().toString()+" "+usuarios.getApellido().toString());
-                        correo.setText("Correo: "+usuarios.getCorreo().toString());
                         telefono.setText("Telefono: "+usuarios.getFono().toString());
                         ciudad.setText("Ciudad: "+usuarios.getCiudad().toString());
                         setestrellas(usuarios.getCalificacion());
                         estado.setText("Estado Trabajador: "+usuarios.getEstado());
+                        urlfoto =usuarios.getFoto();
+                        Glide.with(getContext()).load(String.valueOf(rutaservidor+usuarios.getFoto())).into(foto);
+
                     }
                 }
                 //si falla el request a la pagina mostrara este error

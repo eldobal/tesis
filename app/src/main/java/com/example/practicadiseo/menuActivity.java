@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.FragmentManager;
 import android.content.Context;
@@ -31,8 +32,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class menuActivity extends AppCompatActivity {
     private GoogleSignInClient googleSignInClient;
@@ -42,20 +49,24 @@ public class menuActivity extends AppCompatActivity {
     SweetAlertDialog dp;
     private SharedPreferences prefs;
     int contador=0;
+    SwipeRefreshLayout refreshLayout;
 
-
-
+    String rut="";
+    ArrayList<Solicitud> listasolicitudesterminadas = new ArrayList<Solicitud>();
+    ArrayList<Solicitud> listasolicitudactivas = new ArrayList<Solicitud>();
+    ArrayList<Solicitud> Solicitudescomparar = new ArrayList<Solicitud>();
+    ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
+    final static String rutaservidor= "http://proyectotesis.ddns.net";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
-        //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
-        //cargarfragment(new HomeFragment());
-        //cargarfragment(new perfilFragment());
-        //cargarfragment(new solicitudeFragment());
-        //cargarfragment(new settingsFragment());
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+       setcredentiasexist();
+        //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
+        iniciarfragmentsolitudes();
+        perfilFragment perfilFragment =new perfilFragment();
+        solicitudeFragment solicitudeFragment=new solicitudeFragment();
 
         //se instancia el gso
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -88,6 +99,16 @@ public class menuActivity extends AppCompatActivity {
                 if(menuItem.getItemId()== R.id.menu_profile){
                     showSelectedFragment(new perfilFragment());
 
+                  /*  Bundle bundle = new Bundle();
+                    bundle.putSerializable("arraylistaspendientes", listasolicitudactivas);
+
+                    perfilFragment.setArguments(bundle);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container, perfilFragment, "perfiltag")
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                            //permite regresar hacia atras entre los fragments
+                            .addToBackStack(null)
+                            .commit();*/
+
                 }
                 //se muestra el fragment de rubros
                 if(menuItem.getItemId()== R.id.menu_home){
@@ -95,7 +116,27 @@ public class menuActivity extends AppCompatActivity {
                 }
                 //se muestra el fragment de la lista de solicitudes
                 if(menuItem.getItemId()==R.id.menu_solicitud){
-                    showSelectedFragment(new solicitudeFragment());
+                 //   showSelectedFragment(new solicitudeFragment());
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("arraylistaspendientes", listasolicitudactivas);
+                        bundle.putSerializable("arraylistasterminadas", listasolicitudesterminadas);
+                        solicitudeFragment.setArguments(bundle);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, solicitudeFragment, "solicitudtag")
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                //permite regresar hacia atras entre los fragments
+                                .addToBackStack(null)
+                                .commit();
+
+                  /*
+                        iniciarfragmentsolitudes();
+                        // Reload current fragment
+                        solicitudeFragment solicitudeFragment1 = new solicitudeFragment();
+                        solicitudeFragment1 = (com.example.practicadiseo.solicitudeFragment) getSupportFragmentManager().findFragmentByTag("solicitudtag");
+                        final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        ft.detach(solicitudeFragment1);
+                        ft.attach(solicitudeFragment1);
+                        ft.commit();
+*/
                 }
                 //se muestra el fragment de configuracion y setting
                 if(menuItem.getItemId()== R.id.menu_settings){
@@ -106,7 +147,67 @@ public class menuActivity extends AppCompatActivity {
         });
     }
 
+    private void iniciarfragmentsolitudes() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+        Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut);
+        call.enqueue(new Callback<List<Solicitud>>() {
+            @Override
+            public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
 
+                if (!response.isSuccessful()) {
+                    Toast.makeText(menuActivity.this, "error :" + response.code(), Toast.LENGTH_LONG).show();
+                } else {
+                    List<Solicitud> solicituds = response.body();
+                    for (Solicitud solicitud : solicituds) {
+                        Solicitud Solicitud1 = new Solicitud();
+                        //se setean los valores del trabajador
+                        Solicitud1.setIdSolicitud(solicitud.getIdSolicitud());
+                        Solicitud1.setFechaS(solicitud.getFechaS());
+                        Solicitud1.setNombre(solicitud.getNombre());
+                        Solicitud1.setApellido(solicitud.getApellido());
+                        Solicitud1.setEstado(solicitud.getEstado());
+                        Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
+                        Solicitudes.add(Solicitud1);
+                    }
+                    if(Solicitudescomparar !=Solicitudes) {
+
+                        if (Solicitudes.size() > 0) {
+
+                            Solicitudescomparar = Solicitudes;
+                            for (int i = 0; i < Solicitudes.size(); i++) {
+                                Solicitud soli = new Solicitud();
+                                soli = Solicitudes.get(i);
+                                if (soli.getEstado().equals("PENDIENTE")) {
+                                    listasolicitudactivas.add(soli);
+                                } else {
+                                    listasolicitudesterminadas.add(soli);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Solicitud>> call, Throwable t) {
+                Toast.makeText(menuActivity.this, "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+    }
+
+
+
+
+
+
+
+
+/*
     //metodo para que cuando el usuario este en la actividad principal y quiera retrocer tenga que apretar dos veces el back
     @Override
     public void onBackPressed() {
@@ -127,10 +228,7 @@ public class menuActivity extends AppCompatActivity {
             }
         }.start();
     }
-
-
-
-
+*/
 
 
     //metodo que permite elejir un fragment
@@ -138,7 +236,7 @@ public class menuActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 //permite regresar hacia atras entre los fragments
-                //.addToBackStack(null)
+                .addToBackStack(null)
                 .commit();
     }
 
@@ -162,14 +260,13 @@ public class menuActivity extends AppCompatActivity {
     }
 
     private void setcredentiasexist() {
-        String rut = getuserrutprefs();
-        String contraseña = getusercontraseñaprefs();
-        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
-          //  txtrut.setText(rut);
+       String rutc = getuserrutprefs();
+
+        if (!TextUtils.isEmpty(rutc)) {
+            rut=rutc;
           //  txtpass.setText(contraseña);
         }
     }
-
 
     private String getuserrutprefs() {
         return prefs.getString("Rut", "");

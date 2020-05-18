@@ -22,7 +22,9 @@ import androidx.fragment.app.FragmentTransaction;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.bumptech.glide.Glide;
 import com.example.practicadiseo.DetalleSolicitudFragment;
+import com.google.common.util.concurrent.AtomicDoubleArray;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -45,10 +47,16 @@ public class Adaptador extends BaseAdapter implements Serializable {
     public Adaptador(Context contexto, ArrayList<Solicitud> listasolicitudes) {
         this.contexto = contexto;
         this.listasolicitudes = listasolicitudes;
-
-
         inflater = (LayoutInflater) contexto.getSystemService(contexto.LAYOUT_INFLATER_SERVICE);
     }
+
+    //metodo el cual refresca el listview
+    public void refresh(ArrayList<Solicitud> listasolicitudes){
+        this.listasolicitudes = listasolicitudes;
+        this.notifyDataSetChanged();
+    }
+
+    public void clearData() {  listasolicitudes.clear(); }
 
     @Override
     public int getCount() {
@@ -72,6 +80,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
         final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
 
 
+
          TextView numerosolicitud = (TextView) vista.findViewById(R.id.txtfilanumerosolicitud);
         TextView fechasolicitud = (TextView) vista.findViewById(R.id.txtfilafechasolicitud);
         TextView estadosolicitud = (TextView) vista.findViewById(R.id.txtfilaestadosolicitudelemento);
@@ -79,7 +88,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
        // TextView descripcion = (TextView) vista.findViewById(R.id.txtdescripciondetallesolicitud);
         //solucionar el tema de las imagenes de los trabajadores
-        ImageView icono = (ImageView) vista.findViewById(R.id.imgperfilfilasolicitud);
+        ImageView fototrabajador = (ImageView) vista.findViewById(R.id.imgperfilfilasolicitud);
 
 
         final Button detalle = (Button) vista.findViewById(R.id.btndetallesolicitud);
@@ -100,6 +109,8 @@ public class Adaptador extends BaseAdapter implements Serializable {
         soli.setEstado(listasolicitudes.get(i).getEstado());
         soli.setNombre(listasolicitudes.get(i).getNombre()+" "+listasolicitudes.get(i).getApellido());
 
+
+        Glide.with(vista.getContext()).load(String.valueOf(listasolicitudes.get(i).getFotoT())).into(fototrabajador);
 
         final int posicion = i;
         detalle.setTag(i);
@@ -153,11 +164,13 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                         Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                                     }
                                     else {
-                                        solicitudeFragment solicitudeFragment = new solicitudeFragment();
+                                        listasolicitudes.remove(i);
+                                        refresh(listasolicitudes);
+                                      /* solicitudeFragment solicitudeFragment = new solicitudeFragment();
                                         FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
                                         FragmentTransaction ft = fm.beginTransaction();
                                         ft.replace(R.id.container, solicitudeFragment);
-                                        ft.commit();
+                                        ft.commit();*/
                                     }
                                 }
                                 @Override

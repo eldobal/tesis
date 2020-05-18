@@ -1,9 +1,12 @@
 package com.example.practicadiseo;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +25,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,6 +40,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -40,15 +49,20 @@ import static android.app.Activity.RESULT_OK;
  * A simple {@link Fragment} subclass.
  */
 public class crearsolicitudFragment extends Fragment {
+
+    private final String CARPETA_RAIZ="misImagenesPrueba/";
+    private final String RUTA_IMAGEN=CARPETA_RAIZ+"misFotos";
+    private  Bitmap bitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     SharedPreferences prefs;
     SweetAlertDialog dp;
-    ImageView fotosacada;
+    ImageView fotosacada,imgperfil;
     EditText descripcion;
     private int idrubro=0;
     Button btnfoto,btncrearsolicitud;
-    private String ruttrabajador="",rutcliente="",nombretrabajador="",estadotrabajador="",calificaciontrabajador="",descripcionfinal="";
+    private String ruttrabajador="",rutcliente="",nombretrabajador="",estadotrabajador="",calificaciontrabajador="",descripcionfinal="",rutafoto="";
     private TextView rut,nombre,estado,calificacion;
+    final static String rutaservidor= "http://proyectotesis.ddns.net";
     int idestadosolicitud=0;
     public crearsolicitudFragment() {
         // Required empty public constructor
@@ -66,6 +80,9 @@ public class crearsolicitudFragment extends Fragment {
         nombre =(TextView) v.findViewById(R.id.txtnombrecrearsolicitudtrabajador);
         estado =(TextView) v.findViewById(R.id.txtestadocrearsolicitudtrabajador);
         calificacion =(TextView) v.findViewById(R.id.txtcalificacioncrearsolicitudtrabajador);
+        imgperfil=(ImageView) v.findViewById(R.id.imgperfil);
+
+
         Bundle args = getArguments();
         if (args == null) {
             // No hay datos, manejar excepción
@@ -75,24 +92,20 @@ public class crearsolicitudFragment extends Fragment {
             estadotrabajador = args.getString("estadotrabajador");
             calificaciontrabajador = args.getString("calificaciontrabajador");
             idrubro = args.getInt("idrubro");
-
+            rutafoto = args.getString("imgperfiltrabajador");
         }
 
         rut.setText("Rut: "+ruttrabajador);
         nombre.setText(nombretrabajador);
         estado.setText(estadotrabajador);
         calificacion.setText(calificaciontrabajador);
-
+        Glide.with(getContext()).load(String.valueOf(rutaservidor+rutafoto)).into(imgperfil);
         setcredentiasexist();
         final Button cargar = (Button) v.findViewById(R.id.btncargarfoto);
         final Button btncrearsolicitud = (Button) v.findViewById(R.id.btncrearsolicitud);
 
-
          fotosacada = (ImageView) v.findViewById(R.id.fotocrearsolicitud);
-
-
          descripcion =(EditText) v.findViewById(R.id.txtdescripcioncrearsolicitud);
-
         descripcionfinal= descripcion.getText().toString();
 
 
@@ -108,17 +121,23 @@ public class crearsolicitudFragment extends Fragment {
                 descripcionfinal= descripcion.getText().toString();
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("http://proyectotesis.ddns.net/")
+                        .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 
                 tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
-                Call<Solicitud> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro);
+                //se hace la validacion
+              String imagenstring = convertirimgstring(bitmap);
+
+                //falta pasar el bitmap de la imagen sacada en el post hacia el web api
+                Call<Solicitud> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,imagenstring);
 
                 call1.enqueue(new Callback<Solicitud>() {
                     @Override
                     public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
                         if (!response.isSuccessful()) {
                             Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                            updateDetail();
                         } else {
                             Solicitud solicitud = response.body();
                             btncrearsolicitud.setClickable(false);
@@ -134,11 +153,12 @@ public class crearsolicitudFragment extends Fragment {
                                     updateDetail();
                                 }
                             }.start();
-
                         }
                     }
                     @Override
-                    public void onFailure(Call<Solicitud> call, Throwable t) { }
+                    public void onFailure(Call<Solicitud> call, Throwable t) {
+
+                    }
                 });
 
             }
@@ -156,22 +176,72 @@ public class crearsolicitudFragment extends Fragment {
         return v;
     }
 
-        @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                fotosacada.setImageBitmap(imageBitmap);
-            }
-        }
-
-
 
     private void llamarintent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        //se crea un alertdialog para que
+        final CharSequence[] opciones ={"Tomar Foto","Cargar Imagen","Cancelar"};
+        final AlertDialog.Builder alertOpciones =new AlertDialog.Builder(getContext());
+        alertOpciones.setTitle("Seleccione una Opción");
+
+        alertOpciones.setItems(opciones, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int i) {
+                if(opciones[i].equals("Tomar Foto")){
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                    }
+                }else{
+                    //en esta parte del codigo va el metodo /codigo para cargar la foto desde la galeria
+                    if(opciones[i].equals("Cargar Imagen")){
+                        Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        intent.setType("image/");
+                        startActivityForResult(intent.createChooser(intent,"Seleccione la Aplicacion"),10);
+                    }else{
+                        dialog.dismiss();
+                    }
+                }
+            }
+        });
+        alertOpciones.show();
+
+
+    }
+
+    //metodo con el cual se capturara el evento luego de seleccionar la opcion en el alert dialog
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        //si la opcion es tomarla en el mismo momento
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            bitmap = (Bitmap) extras.get("data");
+            fotosacada.setImageBitmap(bitmap);
         }
+        //si la opcion es cargar la foto desde el dispocitivo
+        if(requestCode == 10){
+            Uri path= data.getData();
+            fotosacada.setImageURI(path);
+
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),path);
+                fotosacada.setImageBitmap(bitmap);
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
+
+    //Metodo en el cual se recive un bitmap lo comprime y lo transforma en base64
+    private String convertirimgstring(Bitmap bitmap){
+        ByteArrayOutputStream array= new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,array);
+        byte[] Imagenbyte =array.toByteArray();
+        String imagenString = Base64.encodeToString(Imagenbyte,Base64.DEFAULT);
+        return imagenString;
     }
 
 
@@ -190,6 +260,5 @@ public class crearsolicitudFragment extends Fragment {
     public void updateDetail() {
         Intent intent = new Intent(getActivity(), menuActivity.class);
         startActivity(intent);
-
     }
 }

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.SignInButton;
 
 import java.io.Serializable;
@@ -37,6 +38,13 @@ public class Adaptadortrabajadores extends BaseAdapter implements Serializable{
         inflater = (LayoutInflater) contexto.getSystemService(contexto.LAYOUT_INFLATER_SERVICE);
     }
 
+    public void refresh(ArrayList<UsuarioTrabajador> Perfilestrabajadores){
+        this.Perfilestrabajadores = Perfilestrabajadores;
+        this.notifyDataSetChanged();
+    }
+
+
+    public void clearData() {  Perfilestrabajadores.clear(); }
     @Override
     public int getCount() {
         return Perfilestrabajadores.size();
@@ -61,7 +69,10 @@ public class Adaptadortrabajadores extends BaseAdapter implements Serializable{
         TextView ruttrabajador = (TextView) vista.findViewById(R.id.txtruttrabajador);
         final TextView calificaciontrabajador = (TextView) vista.findViewById(R.id.txtcalificaciontrabajador);
         TextView ciudadtrabajador = (TextView) vista.findViewById(R.id.txtciudadTrabajador);
-        ImageView icono = (ImageView) vista.findViewById(R.id.imgperfiltrabajador);
+
+        ImageView fotoperfil = (ImageView) vista.findViewById(R.id.imgperfiltrabajador);
+
+
         //declaracion del boton
         final Button perfil = (Button) vista.findViewById(R.id.btnperfiltrabajador);
 
@@ -69,8 +80,17 @@ public class Adaptadortrabajadores extends BaseAdapter implements Serializable{
         nombretrabajador.setText(Perfilestrabajadores.get(i).getNombre());
         ruttrabajador.setText("Rut:"+Perfilestrabajadores.get(i).getRUT());
         ciudadtrabajador.setText("Ciudad:"+Perfilestrabajadores.get(i).getCiudad());
+        //prueba de la carga de la foto
 
-            if(Perfilestrabajadores.get(i).getCalificacion().equals("5")){
+        Glide.with(vista.getContext()).load(String.valueOf(Perfilestrabajadores.get(i).getFoto())).into(fotoperfil);
+
+
+
+
+
+
+
+        if(Perfilestrabajadores.get(i).getCalificacion().equals("5")){
                 calificaciontrabajador.setText("Calificacion:★★★★★");
             }
             if(Perfilestrabajadores.get(i).getCalificacion().equals("4")){
