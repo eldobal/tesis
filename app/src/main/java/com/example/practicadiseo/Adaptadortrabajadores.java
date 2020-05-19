@@ -37,12 +37,11 @@ public class Adaptadortrabajadores extends BaseAdapter implements Serializable{
         this.Perfilestrabajadores = Perfilestrabajadores;
         inflater = (LayoutInflater) contexto.getSystemService(contexto.LAYOUT_INFLATER_SERVICE);
     }
-
+    //metodo el cual se utiliza para actualizar la lista con los cambios
     public void refresh(ArrayList<UsuarioTrabajador> Perfilestrabajadores){
         this.Perfilestrabajadores = Perfilestrabajadores;
         this.notifyDataSetChanged();
     }
-
 
     public void clearData() {  Perfilestrabajadores.clear(); }
     @Override
@@ -69,52 +68,36 @@ public class Adaptadortrabajadores extends BaseAdapter implements Serializable{
         TextView ruttrabajador = (TextView) vista.findViewById(R.id.txtruttrabajador);
         final TextView calificaciontrabajador = (TextView) vista.findViewById(R.id.txtcalificaciontrabajador);
         TextView ciudadtrabajador = (TextView) vista.findViewById(R.id.txtciudadTrabajador);
-
         ImageView fotoperfil = (ImageView) vista.findViewById(R.id.imgperfiltrabajador);
-
-
-        //declaracion del boton
         final Button perfil = (Button) vista.findViewById(R.id.btnperfiltrabajador);
-
 
         nombretrabajador.setText(Perfilestrabajadores.get(i).getNombre());
         ruttrabajador.setText("Rut:"+Perfilestrabajadores.get(i).getRUT());
         ciudadtrabajador.setText("Ciudad:"+Perfilestrabajadores.get(i).getCiudad());
-        //prueba de la carga de la foto
-
+        //se carga la foto del trabajador
         Glide.with(vista.getContext()).load(String.valueOf(Perfilestrabajadores.get(i).getFoto())).into(fotoperfil);
 
-
-
-
-
-
-
+        //declaracion de la calificacion en forma de estrellas
         if(Perfilestrabajadores.get(i).getCalificacion().equals("5")){
                 calificaciontrabajador.setText("Calificacion:★★★★★");
             }
-            if(Perfilestrabajadores.get(i).getCalificacion().equals("4")){
+        if(Perfilestrabajadores.get(i).getCalificacion().equals("4")){
                 calificaciontrabajador.setText("Calificacion:★★★★");
             }
-            if(Perfilestrabajadores.get(i).getCalificacion().equals("3")){
+        if(Perfilestrabajadores.get(i).getCalificacion().equals("3")){
                 calificaciontrabajador.setText("Calificacion:★★★");
             }
-            if(Perfilestrabajadores.get(i).getCalificacion().equals("2")){
+        if(Perfilestrabajadores.get(i).getCalificacion().equals("2")){
                 calificaciontrabajador.setText("Calificacion:★★");
             }
-            if(Perfilestrabajadores.get(i).getCalificacion().equals("1")){
+        if(Perfilestrabajadores.get(i).getCalificacion().equals("1")){
                 calificaciontrabajador.setText("Calificacion:★");
             }
-            if(Perfilestrabajadores.get(i).getCalificacion().equals("0")){
+        if(Perfilestrabajadores.get(i).getCalificacion().equals("0")){
                 calificaciontrabajador.setText("No posee Calificacion");
             }
 
-       //calificaciontrabajador.setText("Calificacion:"+Perfilestrabajadores.get(i).getCalificacion());
-
         final int idrubro = Perfilestrabajadores.get(i).getIdRubro();
-
-        //falta arreglar el tema de imagenes para setarlas
-       // icono.setImageResource();
         trabajadorlista.setNombre(Perfilestrabajadores.get(i).getNombre());
         trabajadorlista.setRubro(Perfilestrabajadores.get(i).getRubro());
         trabajadorlista.setIdCiudad(Perfilestrabajadores.get(i).getIdCiudad());
@@ -122,7 +105,7 @@ public class Adaptadortrabajadores extends BaseAdapter implements Serializable{
         final int posicion = i;
         perfil.setTag(i);
         //boton sobre el detalle de una solicitud individual
-      perfil.setOnClickListener(new View.OnClickListener() {
+        perfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UsuarioTrabajador ut;

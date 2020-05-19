@@ -78,29 +78,20 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
         //declaracion de la vista de cada item de la solicitud
         final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
-
-
-
-         TextView numerosolicitud = (TextView) vista.findViewById(R.id.txtfilanumerosolicitud);
+        TextView numerosolicitud = (TextView) vista.findViewById(R.id.txtfilanumerosolicitud);
         TextView fechasolicitud = (TextView) vista.findViewById(R.id.txtfilafechasolicitud);
         TextView estadosolicitud = (TextView) vista.findViewById(R.id.txtfilaestadosolicitudelemento);
         TextView nombretrabajador = (TextView) vista.findViewById(R.id.txtfilanombretrabajador);
-
        // TextView descripcion = (TextView) vista.findViewById(R.id.txtdescripciondetallesolicitud);
-        //solucionar el tema de las imagenes de los trabajadores
         ImageView fototrabajador = (ImageView) vista.findViewById(R.id.imgperfilfilasolicitud);
-
-
         final Button detalle = (Button) vista.findViewById(R.id.btndetallesolicitud);
 
 
-        int idsolicitud = listasolicitudes.get(i).getIdSolicitud();
 
+        int idsolicitud = listasolicitudes.get(i).getIdSolicitud();
         numerosolicitud.setText("N Solicitud: "+String.valueOf(listasolicitudes.get(i).getIdSolicitud()));
         fechasolicitud.setText("Fecha: "+listasolicitudes.get(i).getFechaS());
         estadosolicitud.setText(listasolicitudes.get(i).getEstado());
-
-
         nombretrabajador.setText(listasolicitudes.get(i).getNombre()+" "+listasolicitudes.get(i).getApellido());
         //icono.setImageResource(imagenes[0]);
 
@@ -108,8 +99,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
         soli.setFechaS(listasolicitudes.get(i).getFechaS());
         soli.setEstado(listasolicitudes.get(i).getEstado());
         soli.setNombre(listasolicitudes.get(i).getNombre()+" "+listasolicitudes.get(i).getApellido());
-
-
+        //se carga la imagen del trabajor en la lista de los trabajadores desde la lista de solicitudes
         Glide.with(vista.getContext()).load(String.valueOf(listasolicitudes.get(i).getFotoT())).into(fototrabajador);
 
         final int posicion = i;
@@ -179,7 +169,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                 }
                             });
                             sDialog.dismissWithAnimation();
-
                         }
                     })    .show();
                  dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
@@ -189,16 +178,9 @@ public class Adaptador extends BaseAdapter implements Serializable {
                         }
                     })
                             .show();
-
                 }
             });
-
         }
-
-
-
         return vista;
     }
-
-
 }

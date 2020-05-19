@@ -6,9 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -25,7 +28,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -43,6 +48,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
+import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 
 /**
@@ -62,12 +68,19 @@ public class crearsolicitudFragment extends Fragment {
     Button btnfoto,btncrearsolicitud;
     private String ruttrabajador="",rutcliente="",nombretrabajador="",estadotrabajador="",calificaciontrabajador="",descripcionfinal="",rutafoto="";
     private TextView rut,nombre,estado,calificacion;
+    //declaracion de la ruta estatica del servidor
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     int idestadosolicitud=0;
     public crearsolicitudFragment() {
         // Required empty public constructor
     }
 
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,7 +94,6 @@ public class crearsolicitudFragment extends Fragment {
         estado =(TextView) v.findViewById(R.id.txtestadocrearsolicitudtrabajador);
         calificacion =(TextView) v.findViewById(R.id.txtcalificacioncrearsolicitudtrabajador);
         imgperfil=(ImageView) v.findViewById(R.id.imgperfil);
-
 
         Bundle args = getArguments();
         if (args == null) {
@@ -104,63 +116,61 @@ public class crearsolicitudFragment extends Fragment {
         final Button cargar = (Button) v.findViewById(R.id.btncargarfoto);
         final Button btncrearsolicitud = (Button) v.findViewById(R.id.btncrearsolicitud);
 
-         fotosacada = (ImageView) v.findViewById(R.id.fotocrearsolicitud);
-         descripcion =(EditText) v.findViewById(R.id.txtdescripcioncrearsolicitud);
+        fotosacada = (ImageView) v.findViewById(R.id.fotocrearsolicitud);
+        descripcion =(EditText) v.findViewById(R.id.txtdescripcioncrearsolicitud);
         descripcionfinal= descripcion.getText().toString();
-
-
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String Fechasolicitud = sdf.format(calendar.getTime());
 
 
-
         btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String imagenstring = convertirimgstring(bitmap);
                 descripcionfinal= descripcion.getText().toString();
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("http://proyectotesis.ddns.net/")
                         .addConverterFactory(ScalarsConverterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
-
                 tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
                 //se hace la validacion
-              String imagenstring = convertirimgstring(bitmap);
-
-                //falta pasar el bitmap de la imagen sacada en el post hacia el web api
-                Call<Solicitud> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,imagenstring);
-
-                call1.enqueue(new Callback<Solicitud>() {
-                    @Override
-                    public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
-                        if (!response.isSuccessful()) {
-                            Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
-                            updateDetail();
-                        } else {
-                            Solicitud solicitud = response.body();
-                            btncrearsolicitud.setClickable(false);
-                            dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
-                            dp.setTitleText("Solicitud Creada!");
-                            dp.show();
-                            new CountDownTimer(1500,1000){
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-                                }
-                                @Override
-                                public void onFinish() {
-                                    updateDetail();
-                                }
-                            }.start();
+                if(imagenstring.isEmpty()||descripcionfinal.isEmpty()){
+                    //no se ha cargado una foto
+                    Snackbar.make(getView(), "Cargue O tome una foto para poder continuar", Snackbar.LENGTH_LONG)
+                            .show();
+                }else{
+                    //falta pasar el bitmap de la imagen sacada en el post hacia el web api
+                    Call<Solicitud> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,imagenstring);
+                    call1.enqueue(new Callback<Solicitud>() {
+                        @Override
+                        public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
+                            if (!response.isSuccessful()) {
+                                Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                updateDetail();
+                            } else {
+                                Solicitud solicitud = response.body();
+                                btncrearsolicitud.setClickable(false);
+                                dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
+                                dp.setTitleText("Solicitud Creada!");
+                                dp.show();
+                                new CountDownTimer(1500,1000){
+                                    @Override
+                                    public void onTick(long millisUntilFinished) {
+                                    }
+                                    @Override
+                                    public void onFinish() {
+                                        updateDetail();
+                                    }
+                                }.start();
+                            }
                         }
-                    }
-                    @Override
-                    public void onFailure(Call<Solicitud> call, Throwable t) {
-
-                    }
-                });
-
+                        @Override
+                        public void onFailure(Call<Solicitud> call, Throwable t) {
+                        }
+                    });
+                }
             }
         });
 

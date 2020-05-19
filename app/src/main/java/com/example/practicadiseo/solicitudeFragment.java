@@ -53,14 +53,9 @@ public class solicitudeFragment extends Fragment  {
     private String rutusuario;
     Layout uwu ;
     int pocision = 0;
-    ArrayList<Solicitud> listasolicitudesterminadas;
-    ArrayList<Solicitud> listasolicitudactivas;
-    ArrayList<Solicitud> listasolicitudactivasinterna;
-    ArrayList<Solicitud> listasolicitudterminadasinterna;
-    ArrayList<Solicitud> Solicitudescomparar;
+    ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudesterminadas = new ArrayList<Solicitud>();
-    Boolean recargado=false;;
     SwipeRefreshLayout refreshLayout,refreshLayoutterminadas;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     Adaptador ads,ads2;
@@ -68,14 +63,9 @@ public class solicitudeFragment extends Fragment  {
         // Required empty public constructor
     }
 
-
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
-
     }
 
     @Override
@@ -86,7 +76,6 @@ public class solicitudeFragment extends Fragment  {
         listasolicitudesterminadas  = new ArrayList<Solicitud>();
         listasolicitudactivas  = new ArrayList<Solicitud>();
         listasolicitudactivasinterna   = new ArrayList<Solicitud>();
-
         listasolicitudterminadasinterna   = new ArrayList<Solicitud>();
         listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
         listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
@@ -97,11 +86,7 @@ public class solicitudeFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
-   /*     SweetAlertDialog pDialog = new SweetAlertDialog(v.getContext(), SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        pDialog.setTitleText("Loading");
-        pDialog.setCancelable(false);
-        pDialog.show();*/
+
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
         listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
@@ -109,11 +94,6 @@ public class solicitudeFragment extends Fragment  {
         //declaracion de los swiperefresh para intanciarlos
         refreshLayout = v.findViewById(R.id.refresh);
         refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
-
-
-
-
-
 
         if (rutusuario.isEmpty()){
             //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
@@ -133,27 +113,6 @@ public class solicitudeFragment extends Fragment  {
                 //se setea el adaptador a la lista del fragments
                 lista.setAdapter(ads2);
                 }
-              /*      if (listasolicitudesterminadas.size() != 0) {
-                        Adaptador ads = new Adaptador(getContext(), listasolicitudesterminadas);
-                        //se setea el adaptador a la lista del fragments
-                        lista.setAdapter(ads);
-                    }
-                } else if (Solicitudes.size() == 0) {
-                    dp = new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
-                    dp.setTitleText("UwU");
-                    dp.setContentText("No se han encontrado Trabajadores!");
-                    dp.show();
-                }*/
-                           /* new CountDownTimer(700,1000){
-                                @Override
-                                public void onTick(long millisUntilFinished) {
-                                }
-                                @Override
-                                public void onFinish() {
-                                    pDialog.cancel();
-                                }
-                            }.start();*/
-                recargado =false;
         }
 
         refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
