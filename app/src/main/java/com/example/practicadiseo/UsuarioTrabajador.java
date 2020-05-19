@@ -15,7 +15,7 @@ public class UsuarioTrabajador {
     private String Rubro;
     private String Solicitud;
     private String Calificacion;
-
+    private String Foto;
     private String Estado;
     private String Ciudad;
 
@@ -28,25 +28,25 @@ public class UsuarioTrabajador {
     private int idTipo;
 
 
-
-
     public UsuarioTrabajador() {
         this.RUT = RUT;
         this.Nombre = Nombre;
         this.Apellido = Apellido;
-        this. Correo = Correo;
+        this.Correo = Correo;
         this.Contrasena = Contrasena;
         this.Fono = Fono;
-        this.idCiudad=idCiudad;
+        this.idCiudad = idCiudad;
         this.Ciudad = Ciudad;
-        this.idRubro=idRubro;
+        this.idRubro = idRubro;
         this.idEstado = idEstado;
         this.idTipo = idTipo;
-        this.Rubro=Rubro;
-        this.Solicitud=Solicitud;
-        this.Calificacion=Calificacion;
-        this.Estado=Estado;
+        this.Foto = Foto;
+        this.Rubro = Rubro;
+        this.Solicitud = Solicitud;
+        this.Calificacion = Calificacion;
+        this.Estado = Estado;
     }
+
     public String getEstado() {
         return Estado;
     }
@@ -165,5 +165,13 @@ public class UsuarioTrabajador {
 
     public void setIdRubro(int idRubro) {
         this.idRubro = idRubro;
+    }
+
+    public String getFoto() {
+        return Foto;
+    }
+
+    public void setFoto(String Foto) {
+        this.Foto = Foto;
     }
 }

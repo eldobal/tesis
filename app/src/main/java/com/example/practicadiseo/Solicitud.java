@@ -20,8 +20,8 @@ public class Solicitud{
     private String DescripcionP;
     private String Diagnostico;
     private String Solucion;
-    private int IdFoto;
-
+    private String idFoto;
+    private String FotoT;
 
 
 
@@ -36,7 +36,7 @@ public class Solicitud{
         this.DescripcionP= DescripcionP;
         this.RUT= RUT;
         this.Precio= Precio;
-        this.IdFoto= IdFoto;
+        this.idFoto= idFoto;
         this.metodoPago=metodoPago;
         this.FechaA=FechaA;
         this.Diagnostico=Diagnostico;
@@ -44,7 +44,7 @@ public class Solicitud{
         this.estado= estado;
         this.Nombre= Nombre;
         this.Apellido= Apellido;
-
+        this.FotoT=FotoT;
     }
 
 
@@ -152,12 +152,20 @@ public class Solicitud{
         Solucion = solucion;
     }
 
-    public int getIdFoto() {
-        return IdFoto;
+    public String getIdFoto() {
+        return idFoto;
     }
 
-    public void setIdFoto(int idFoto) {
-        IdFoto = idFoto;
+    public void setIdFoto(String idFoto) {
+        this.idFoto = idFoto;
+    }
+
+    public String getFotoT() {
+        return FotoT;
+    }
+
+    public void setFotoT(String fotoT) {
+        FotoT = fotoT;
     }
 
     public ArrayList<Solicitud> getLista() {

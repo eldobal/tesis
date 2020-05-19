@@ -17,10 +17,11 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+
                 android:layout_height="match_parent">
                 <ImageView
                     android:id="@+id/imgperfiltrabajador"
-                    android:src="@drawable/userprofile"
+                    android:layout_centerInParent="true"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
                 </ImageView>
@@ -32,6 +33,7 @@
 
 
         <RelativeLayout
+            android:layout_marginLeft="20dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent">
 

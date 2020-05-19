@@ -22,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,11 +63,11 @@ public class DetalleSolicitudFragment extends Fragment {
     private TextView diagnosticodetallesolicitud;
     private TextView soluciondetallesolicitud;
 
-    private ImageView imgperfil;
+    private ImageView imgperfiltrabajador,imgclientesacada;
     SharedPreferences prefs;
     private Button btnvolver;
     private int idsolicitud=0;
-
+    final static String rutaservidor= "http://proyectotesis.ddns.net";
     public DetalleSolicitudFragment() {
         // Required empty public constructor
     }
@@ -86,7 +87,9 @@ public class DetalleSolicitudFragment extends Fragment {
         descripciondetallesolicitud =(TextView)getActivity().findViewById(R.id.txtdescripciondetallesolicitud);
         diagnosticodetallesolicitud =(TextView)getActivity().findViewById(R.id.txtdiagnosticodetallesolicitud1);
         soluciondetallesolicitud =(TextView)getActivity().findViewById(R.id.txtsoluciondetallesolicitud);
-        imgperfil =(ImageView)getActivity().findViewById(R.id.imgperfilfilasolicitud);
+
+        imgperfiltrabajador =(ImageView)getActivity().findViewById(R.id.imgperfilfilasolicitud);
+        imgclientesacada =(ImageView)getActivity().findViewById(R.id.imgclientesacada);
         btnvolver = (Button)getActivity().findViewById(R.id.btnvolver);
     }
 
@@ -143,6 +146,9 @@ public class DetalleSolicitudFragment extends Fragment {
                     diagnosticodetallesolicitud.setText(solicituds.getDiagnostico());
                     soluciondetallesolicitud.setText(solicituds.getSolucion());
 
+                    Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getFotoT())).into(imgperfiltrabajador);
+
+                    Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getIdFoto())).into(imgclientesacada);
 
                     //el estado de la solicitud di esta pendiente debera
 

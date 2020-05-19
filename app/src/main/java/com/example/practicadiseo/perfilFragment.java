@@ -59,7 +59,8 @@ public class perfilFragment extends Fragment {
     SharedPreferences prefs;
     SweetAlertDialog dp;
     private GoogleSignInClient googleSignInClient;
-    private String rutperfil ="",contrasenaperfil="";
+    private String rutperfil ="",contrasenaperfil="",rutaurl="";
+    final static String rutaservidor= "http://proyectotesis.ddns.net";
     private EditText rut,nombre,apellido,correo,telefono;
     private Spinner ciudad;
     private int idCiudad =0;
@@ -116,6 +117,7 @@ public class perfilFragment extends Fragment {
             apellido.setText(personFamilyName);
             correo.setText(personEmail);
             //glide es una libreria con la cual se pueden cargar y descargar imagenespara pode utilizar en androidstudio
+            //glide transforma la ruta que llega y la tranforma en una foto
             Glide.with(this).load(String.valueOf(personPhoto)).into(fotoperfil);
             Toast.makeText(getContext(), "Nombre"+personFamilyName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
         }
@@ -295,6 +297,9 @@ public class perfilFragment extends Fragment {
                        correo.setText(usuarios.getCorreo().toString());
                        telefono.setText(usuarios.getFono().toString());
                        idCiudad = usuarios.getIdCiudad();
+                       rutaurl = usuarios.getFoto();
+                       Glide.with(getContext()).load(String.valueOf(rutaservidor+rutaurl)).into(fotoperfil);
+
                       boolean encontrado = false;
                       for(int i=1; i<listaciudades.size()&&encontrado==false;i++){
                           if(listaciudades.get(i).getIdCiudad() ==idCiudad){

@@ -8,18 +8,24 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface tesisAPI {
 
     //metodo el cual llama a la api la cual entrega un usario /usando actualemente para login
+
     @GET("api/UsuarioAPI")
-    Call<Usuario> getUsuario(@Query("id") String id,
+    Call<Usuario> getLogin(@Query("id") String id,
                                    @Query("pass") String pass
     );
 
+    @GET("api/UsuarioAPI")
+    Call<Usuario> getUsuario(@Query("RUTUSUARIO") String id,
+                             @Query("Contrasena") String pass
+    );
 
-      @GET("api/RubroTrabajadorAPI")
+    @GET("api/RubroTrabajadorAPI")
     Call<List<UsuarioTrabajador>> getRubroTrabajador(@Query("idRubro") int id_Rubro,
                                                      @Query("idciudad") int idCiudad
     );
@@ -38,7 +44,8 @@ public interface tesisAPI {
                                   @Query("Descripcion") String Descripcion,
                                   @Query("RUT_Cliente") String RUT_Cliente,
                                   @Query("RUT_Trabajador") String RUT_Trabajador,
-                                  @Query("Rubro") int Rubro
+                                  @Query("Rubro") int Rubro,
+                                  @Body() String foto
     );
 
 

@@ -6,9 +6,11 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.CountDownTimer;
 import android.text.Layout;
@@ -17,6 +19,7 @@ import android.text.method.DateTimeKeyListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -40,7 +43,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class solicitudeFragment extends Fragment {
+public class solicitudeFragment extends Fragment  {
     SweetAlertDialog dp;
     private static LayoutInflater inflater = null;
     private TextView tvNoRegistros;
@@ -49,22 +52,30 @@ public class solicitudeFragment extends Fragment {
     private SharedPreferences prefs;
     private String rutusuario;
     Layout uwu ;
+    int pocision = 0;
     ArrayList<Solicitud> listasolicitudesterminadas;
     ArrayList<Solicitud> listasolicitudactivas;
+    ArrayList<Solicitud> listasolicitudactivasinterna;
+    ArrayList<Solicitud> listasolicitudterminadasinterna;
     ArrayList<Solicitud> Solicitudescomparar;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
+    ArrayList<Solicitud> Solicitudesterminadas = new ArrayList<Solicitud>();
     Boolean recargado=false;;
-
-
+    SwipeRefreshLayout refreshLayout,refreshLayoutterminadas;
+    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    Adaptador ads,ads2;
     public solicitudeFragment() {
         // Required empty public constructor
     }
 
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        lista = (ListView) getActivity().findViewById(R.id.listadosolicitudescliente);
-        listaactivas = (ListView) getActivity().findViewById(R.id.solicitudactual);
+
+
+
     }
 
     @Override
@@ -74,88 +85,66 @@ public class solicitudeFragment extends Fragment {
         Solicitudescomparar = new ArrayList<Solicitud>();
         listasolicitudesterminadas  = new ArrayList<Solicitud>();
         listasolicitudactivas  = new ArrayList<Solicitud>();
+        listasolicitudactivasinterna   = new ArrayList<Solicitud>();
+
+        listasolicitudterminadasinterna   = new ArrayList<Solicitud>();
+        listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
+        listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
-
-        SweetAlertDialog pDialog = new SweetAlertDialog(v.getContext(), SweetAlertDialog.PROGRESS_TYPE);
+   /*     SweetAlertDialog pDialog = new SweetAlertDialog(v.getContext(), SweetAlertDialog.PROGRESS_TYPE);
         pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
         pDialog.setTitleText("Loading");
         pDialog.setCancelable(false);
-        pDialog.show();
+        pDialog.show();*/
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-        //comprobacion de que el rut del usuario exista
-
         setcredentiasexist();
+        listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
+        lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
+        //declaracion de los swiperefresh para intanciarlos
+        refreshLayout = v.findViewById(R.id.refresh);
+        refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
+
+
+
+
+
+
         if (rutusuario.isEmpty()){
             //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
             Intent intent = new Intent(getContext(), login2Activity.class);
             startActivity(intent);
         }else {
-            if(recargado==false){
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://proyectotesis.ddns.net/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
-                Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rutusuario);
-                call.enqueue(new Callback<List<Solicitud>>() {
-                    @Override
-                    public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
-
-                        if (!response.isSuccessful()) {
-                            Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
-                        } else {
-                            List<Solicitud> solicituds = response.body();
-                            for (Solicitud solicitud : solicituds) {
-                                Solicitud Solicitud1 = new Solicitud();
-                                //se setean los valores del trabajador
-                                Solicitud1.setIdSolicitud(solicitud.getIdSolicitud());
-                                Solicitud1.setFechaS(solicitud.getFechaS());
-                                Solicitud1.setNombre(solicitud.getNombre());
-                                Solicitud1.setApellido(solicitud.getApellido());
-                                Solicitud1.setEstado(solicitud.getEstado());
-                                Solicitudes.add(Solicitud1);
-                            }
-
-                            if(Solicitudescomparar !=Solicitudes) {
-
-                                if (Solicitudes.size() > 0) {
-
-                                    Solicitudescomparar = Solicitudes;
-                                    for (int i = 0; i < Solicitudes.size(); i++) {
-                                        Solicitud soli = new Solicitud();
-                                        soli = Solicitudes.get(i);
-                                        if (soli.getEstado().equals("PENDIENTE")) {
-                                          listasolicitudactivas.add(soli);
-                                        } else {
-                                            listasolicitudesterminadas.add(soli);
-                                        }
-                                    }
-                                    final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
-                                    //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
-                                    if (listasolicitudactivas.size() != 0) {
-                                        Adaptador ads = new Adaptador(getContext(), listasolicitudactivas);
-                                        //se setea el adaptador a la lista del fragments
-                                        listaactivas.setAdapter(ads);
-
-                                    }
-                                    if (listasolicitudesterminadas.size() != 0) {
-                                        Adaptador ads = new Adaptador(getContext(), listasolicitudesterminadas);
-                                        //se setea el adaptador a la lista del fragments
-                                        lista.setAdapter(ads);
-                                    }
-                                } else if (Solicitudes.size() == 0) {
-                                    dp = new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
-                                    dp.setTitleText("UwU");
-                                    dp.setContentText("No se han encontrado Trabajadores!");
-                                    dp.show();
-                                }
-                            }
-                            new CountDownTimer(700,1000){
+                //if (Solicitudes.size() > 0) {
+                final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
+                //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
+                if (listasolicitudactivas.size() != 0) {
+                    ads = new Adaptador(getContext(), listasolicitudactivas);
+                    //se setea el adaptador a la lista del fragments
+                    listaactivas.setAdapter(ads);
+                }
+                if (listasolicitudesterminadas.size() != 0) {
+                 ads2 = new Adaptador(getContext(), listasolicitudesterminadas);
+                //se setea el adaptador a la lista del fragments
+                lista.setAdapter(ads2);
+                }
+              /*      if (listasolicitudesterminadas.size() != 0) {
+                        Adaptador ads = new Adaptador(getContext(), listasolicitudesterminadas);
+                        //se setea el adaptador a la lista del fragments
+                        lista.setAdapter(ads);
+                    }
+                } else if (Solicitudes.size() == 0) {
+                    dp = new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
+                    dp.setTitleText("UwU");
+                    dp.setContentText("No se han encontrado Trabajadores!");
+                    dp.show();
+                }*/
+                           /* new CountDownTimer(700,1000){
                                 @Override
                                 public void onTick(long millisUntilFinished) {
                                 }
@@ -163,25 +152,158 @@ public class solicitudeFragment extends Fragment {
                                 public void onFinish() {
                                     pDialog.cancel();
                                 }
-                            }.start();
+                            }.start();*/
+                recargado =false;
+        }
 
+        refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new CountDownTimer(1500,1000){
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                    }
+                    @Override
+                    public void onFinish() {
+                        reiniciarfragmentterminadas(rutusuario);
+                    }
+                }.start();
+            }
+        });
+
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new CountDownTimer(1000,1000){
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                    }
+                    @Override
+                    public void onFinish() {
+                        reiniciarfragment(rutusuario);
+                    }
+                }.start();
+            }
+        });
+        return v;
+    }
+
+
+    private void reiniciarfragment(String rut) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+        Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut);
+        call.enqueue(new Callback<List<Solicitud>>() {
+            @Override
+            public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
+
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                } else {
+
+                    List<Solicitud> solicituds = response.body();
+                    Solicitudes.clear();
+                    for (Solicitud solicitud : solicituds) {
+                        Solicitud Solicitud1 = new Solicitud();
+                        //se setean los valores del trabajador
+                        Solicitud1.setIdSolicitud(solicitud.getIdSolicitud());
+                        Solicitud1.setFechaS(solicitud.getFechaS());
+                        Solicitud1.setNombre(solicitud.getNombre());
+                        Solicitud1.setApellido(solicitud.getApellido());
+                        Solicitud1.setEstado(solicitud.getEstado());
+                        Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
+                        Solicitudes.add(Solicitud1);
+                    }
+                    listasolicitudactivasinterna.clear();
+                        for (int i = 0; i < Solicitudes.size(); i++) {
+                                Solicitud soli = new Solicitud();
+                                soli = Solicitudes.get(i);
+
+                                if (soli.getEstado().equals("PENDIENTE")) {
+                                    listasolicitudactivasinterna.add(soli);
+                                }else{
+
+                                }
+                            }
+                            //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
+                        if (listasolicitudactivasinterna.size() != 0) {
+                         //se instancia la recarga de los items que se encuentan en la lista de activas / pendientes
+                         ads.refresh(listasolicitudactivasinterna);
+                        }
+                    refreshLayout.setRefreshing(false);
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Solicitud>> call, Throwable t) {
+                Toast.makeText(getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+
+    private void reiniciarfragmentterminadas(String rut) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+        Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut);
+        call.enqueue(new Callback<List<Solicitud>>() {
+            @Override
+            public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
+
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                } else {
+                    List<Solicitud> solicituds = response.body();
+                    Solicitudesterminadas.clear();
+                    for (Solicitud solicitud : solicituds) {
+                        Solicitud Solicitud1 = new Solicitud();
+                        //se setean los valores del trabajador
+                        Solicitud1.setIdSolicitud(solicitud.getIdSolicitud());
+                        Solicitud1.setFechaS(solicitud.getFechaS());
+                        Solicitud1.setNombre(solicitud.getNombre());
+                        Solicitud1.setApellido(solicitud.getApellido());
+                        Solicitud1.setEstado(solicitud.getEstado());
+                        Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
+                        Solicitudesterminadas.add(Solicitud1);
+                    }
+                    listasolicitudterminadasinterna.clear();
+                    for (int i = 0; i < Solicitudesterminadas.size(); i++) {
+                        Solicitud soli = new Solicitud();
+                        soli = Solicitudesterminadas.get(i);
+
+                        if (soli.getEstado().equals("COMPLETADA Y PAGADA")) {
+                            listasolicitudterminadasinterna.add(soli);
+                         } else {
 
                         }
                     }
-                    @Override
-                    public void onFailure(Call<List<Solicitud>> call, Throwable t) {
-                        Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                    //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
+                    if (listasolicitudterminadasinterna.size() != 0) {
+                        //se instancia la recarga de los items que se encuentan en la lista de aceptadas / finalisadas
+
+                        ads2.refresh(listasolicitudterminadasinterna);
                     }
-                });
-
-                recargado =true;
-            }else {
-                showSelectedFragment(new solicitudeFragment());
+                    refreshLayoutterminadas.setRefreshing(false);
+                }
             }
+            @Override
+            public void onFailure(Call<List<Solicitud>> call, Throwable t) {
+                Toast.makeText(getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
 
-        }
-        return v;
     }
+
+
+
+
 
     //metodo que permite elejir un fragment
     private void showSelectedFragment(Fragment fragment){

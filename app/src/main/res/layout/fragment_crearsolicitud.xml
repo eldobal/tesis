@@ -200,30 +200,35 @@
                     <RelativeLayout
                         android:id="@+id/fotolayout"
                         android:layout_below="@id/carddescripcionproblema"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
                             android:layout_width="wrap_content"
-                            android:textSize="22dp"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:textSize="26dp"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="35dp"
+                            android:layout_marginLeft="55dp"
                             android:textColor="@color/colordark"
                             android:layout_height="wrap_content"
-                            android:text="Subir foto "
+                            android:text="Subir foto"
                             ></TextView>
 
                         <Button
                             android:id="@+id/btncargarfoto"
                             android:layout_width="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:layout_marginRight="35dp"
+                            android:layout_marginRight="36dp"
                             android:background="@color/colorPrimaryDark"
-                            android:text="Cargar"
+                            android:text="  Tomar Foto "
                             android:layout_height="wrap_content">
 
                         </Button>
 
                     </RelativeLayout>
+
+
+
+
 
                     <RelativeLayout
                         android:layout_marginTop="25dp"
