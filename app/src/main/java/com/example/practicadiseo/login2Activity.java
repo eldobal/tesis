@@ -86,16 +86,12 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-
-        //hola
         signInButton =(SignInButton) findViewById(R.id.Signbutton);
         txtrut = (EditText) findViewById(R.id.txtemail);
         txtpass = (EditText) findViewById(R.id.txtpassword);
         btnlogin = (Button) findViewById(R.id.btnlogin);
         btnregister = (Button) findViewById(R.id.btnregistrarse);
-
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-
         setcredentiasexist();
 
         if(!usuarioconectado.isEmpty()&&(!contraseñausuarioconectado.isEmpty())){
@@ -106,7 +102,6 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
 
         if (networkInfo != null && networkInfo.isConnected()) {
             // Si hay conexión a Internet en este momento
-
             signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

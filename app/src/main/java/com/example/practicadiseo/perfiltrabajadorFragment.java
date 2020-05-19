@@ -1,5 +1,8 @@
 package com.example.practicadiseo;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -35,7 +38,7 @@ public class perfiltrabajadorFragment extends Fragment {
     private ImageView foto;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     String urlfoto="";
-
+    NetworkInfo networkInfo;
     public perfiltrabajadorFragment() {
         // Required empty public constructor
     }
@@ -45,6 +48,8 @@ public class perfiltrabajadorFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_perfiltrabajador, container, false);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
         Bundle args = getArguments();
         if (args == null) {
             // No hay datos, manejar excepción
@@ -55,7 +60,6 @@ public class perfiltrabajadorFragment extends Fragment {
 
         rut= (TextView) v.findViewById(R.id.txtrutperfiltrabajador);
         nombre = (TextView) v.findViewById(R.id.txtnombreperfiltrabajador);
-
         telefono = (TextView) v.findViewById(R.id.txttelefonoperfiltrabajador);
         ciudad = (TextView) v.findViewById(R.id.txtciudadperfiltrabajador);
         estado = (TextView) v.findViewById(R.id.txtestadoperfiltrabajador);
@@ -63,9 +67,22 @@ public class perfiltrabajadorFragment extends Fragment {
         btncrearsolicitud=(Button) v.findViewById(R.id.botoncrearsolicitud);
         foto = (ImageView) v.findViewById(R.id.imgperfiltrabajadordetalle);
 
+        if(ruttrabajador.isEmpty()){
+            //enviar mensaje de error y reenviar al usuario hacia alguna pantalla de comprovacion
+        }else{
+            if (networkInfo != null && networkInfo.isConnected()) {
+                llenarperfiltrabajador(ruttrabajador);
+            }else{
+                //no hay conexion manejar excepcion
+
+            }
+        }
+
+
         btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (networkInfo != null && networkInfo.isConnected()) {
                 Bundle bundle = new Bundle();
                 //en el bundle se enviaran los siguientes datos para poder operar en el crear soliciutd
                 bundle.putString("ruttrabajador", ruttrabajador);
@@ -79,14 +96,13 @@ public class perfiltrabajadorFragment extends Fragment {
                 getFragmentManager().beginTransaction().replace(R.id.container,crearsolicitudFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
+                }else{
+                    //no hay conexion manejar excepcion
+
+                }
             }
         });
 
-        if(ruttrabajador.isEmpty()){
-            //enviar mensaje de error y reenviar al usuario hacia alguna pantalla de comprovacion
-        }else{
-            llenarperfiltrabajador(ruttrabajador);
-        }
 
         return  v;
     }
@@ -119,7 +135,6 @@ public class perfiltrabajadorFragment extends Fragment {
                         estado.setText("Estado Trabajador: "+usuarios.getEstado());
                         urlfoto =usuarios.getFoto();
                         Glide.with(getContext()).load(String.valueOf(rutaservidor+usuarios.getFoto())).into(foto);
-
                     }
                 }
                 //si falla el request a la pagina mostrara este error

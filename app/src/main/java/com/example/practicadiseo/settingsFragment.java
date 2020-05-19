@@ -144,6 +144,7 @@ public class settingsFragment extends Fragment {
     private void showSelectedFragment(Fragment fragment){
         getFragmentManager().beginTransaction().replace(R.id.container,fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .addToBackStack(null)
                 .commit();
 
     }

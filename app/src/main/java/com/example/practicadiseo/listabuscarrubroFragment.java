@@ -1,6 +1,7 @@
 package com.example.practicadiseo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -40,9 +41,7 @@ public class listabuscarrubroFragment extends Fragment {
     int idciudad =0,numeroultimo=0;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     SwipeRefreshLayout refreshLayouttrabajadores;
-
     ArrayList<UsuarioTrabajador> listatrabajadoresporrubo = new ArrayList<UsuarioTrabajador>();
-
 
     public listabuscarrubroFragment() {
         // Required empty public constructor
@@ -58,20 +57,21 @@ public class listabuscarrubroFragment extends Fragment {
         //se comprueba y trae el id de la ciudad del cliente
         setcredentiasexist();
         lista = (ListView) v.findViewById(R.id.listadoperfilestrabajadores);
+        //instanciacion del refresh para la lista de los trabajadores
         refreshLayouttrabajadores = v.findViewById(R.id.refreshtrabajadores);
-
         final View vista = inflater.inflate(R.layout.elementoperfiltrabajador, null);
+
         Bundle datosRecuperados = getArguments();
         if (datosRecuperados == null) {
             // No hay datos, manejar excepción
+            updateDetail();
         }
         int idrubro = datosRecuperados.getInt("idRubro");
 
-
+        //carga de los trabajdores por el rubro y por la ciudad en la cual se encuentra el usuario
         cargartrabajadores(idrubro,idciudad);
 
-
-
+        //refresh para recargar la lista de los trabajadores
         refreshLayouttrabajadores.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -84,7 +84,6 @@ public class listabuscarrubroFragment extends Fragment {
                         cargartrabajadores(idrubro,idciudad);
                     }
                 }.start();
-
             }
         });
 
@@ -92,30 +91,13 @@ public class listabuscarrubroFragment extends Fragment {
         return  v;
     }
 
-
-    public Bitmap StringToBitMap(String encodedString) {
-        try {
-            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
-        } catch (Exception e) {
-            e.getMessage();
-            return null;
-        }
-    }
-
-
     private void cargartrabajadores(int idrubro, int idciudad) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
-        //declaracion estatica del tipo de usuario el cual debera ser siempre trabajador
-
         Call<List<UsuarioTrabajador>> call = tesisAPI.getRubroTrabajador(idrubro,idciudad);
-        //lamada usuarios por rubro
         call.enqueue(new Callback<List<UsuarioTrabajador>>() {
             @Override
             public void onResponse(Call<List<UsuarioTrabajador>> call, Response<List<UsuarioTrabajador>> response) {
@@ -132,17 +114,16 @@ public class listabuscarrubroFragment extends Fragment {
                         trabajador1.setCalificacion(trabajador.getCalificacion());
                         trabajador1.setCiudad(trabajador.getCiudad());
                         trabajador1.setIdRubro(trabajador.getIdRubro());
+                        //declaracion de la ruta de la imagen del trabajador
                         trabajador1.setFoto(rutaservidor+trabajador.getFoto());
                         //llamada hacia getususario para instanciar el usuario
                         listatrabajadoresporrubo.add(trabajador1);
-
-
                     }
-
                     if (listatrabajadoresporrubo.size() > 0) {
                         Adaptadortrabajadores ad = new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
                         lista.setAdapter(ad);
                     } else if(listatrabajadoresporrubo.size() == 0){
+                        //si no encuentran usuario enviar al fragment con anicmacion de no encontrado
                         showSelectedFragment(new notfoundFragment());
                     }
                     refreshLayouttrabajadores.setRefreshing(false);
@@ -162,14 +143,17 @@ public class listabuscarrubroFragment extends Fragment {
         idciudad=ciudadid;
     }
 
-
     private void showSelectedFragment(Fragment fragment){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
                 .replace(R.id.container,fragment)
                 //permite regresar hacia atras entre los fragments
                 .addToBackStack(null)
                 .commit();
+    }
 
+    public void updateDetail() {
+        Intent intent = new Intent(getActivity(), menuActivity.class);
+        startActivity(intent);
     }
 
     private String getuserrutprefs() {

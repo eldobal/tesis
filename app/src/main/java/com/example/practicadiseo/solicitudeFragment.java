@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -59,6 +61,7 @@ public class solicitudeFragment extends Fragment  {
     SwipeRefreshLayout refreshLayout,refreshLayoutterminadas;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     Adaptador ads,ads2;
+    NetworkInfo NetworkInfo;
     public solicitudeFragment() {
         // Required empty public constructor
     }
@@ -79,7 +82,8 @@ public class solicitudeFragment extends Fragment  {
         listasolicitudterminadasinterna   = new ArrayList<Solicitud>();
         listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
         listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
-
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo = connectivityManager.getActiveNetworkInfo();
     }
 
     @Override
@@ -95,11 +99,15 @@ public class solicitudeFragment extends Fragment  {
         refreshLayout = v.findViewById(R.id.refresh);
         refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
 
-        if (rutusuario.isEmpty()){
-            //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
-            Intent intent = new Intent(getContext(), login2Activity.class);
-            startActivity(intent);
-        }else {
+        //comprueba si es que existe coneccion
+        if (NetworkInfo != null && NetworkInfo.isConnected()) {
+
+
+            if (rutusuario.isEmpty()){
+                //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
+                Intent intent = new Intent(getContext(), login2Activity.class);
+                startActivity(intent);
+            }else {
                 //if (Solicitudes.size() > 0) {
                 final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
                 //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
@@ -109,45 +117,50 @@ public class solicitudeFragment extends Fragment  {
                     listaactivas.setAdapter(ads);
                 }
                 if (listasolicitudesterminadas.size() != 0) {
-                 ads2 = new Adaptador(getContext(), listasolicitudesterminadas);
-                //se setea el adaptador a la lista del fragments
-                lista.setAdapter(ads2);
+                    ads2 = new Adaptador(getContext(), listasolicitudesterminadas);
+                    //se setea el adaptador a la lista del fragments
+                    lista.setAdapter(ads2);
                 }
+            }
+
+            refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new CountDownTimer(1500,1000){
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                        }
+                        @Override
+                        public void onFinish() {
+                            reiniciarfragmentterminadas(rutusuario);
+                        }
+                    }.start();
+                }
+            });
+
+
+            refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new CountDownTimer(1000,1000){
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                        }
+                        @Override
+                        public void onFinish() {
+                            reiniciarfragment(rutusuario);
+                        }
+                    }.start();
+                }
+            });
+
+        }else{
+            //manejar excepcion
+
         }
 
-        refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new CountDownTimer(1500,1000){
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                    }
-                    @Override
-                    public void onFinish() {
-                        reiniciarfragmentterminadas(rutusuario);
-                    }
-                }.start();
-            }
-        });
-
-
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new CountDownTimer(1000,1000){
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                    }
-                    @Override
-                    public void onFinish() {
-                        reiniciarfragment(rutusuario);
-                    }
-                }.start();
-            }
-        });
         return v;
     }
-
 
     private void reiniciarfragment(String rut) {
         Retrofit retrofit = new Retrofit.Builder()
@@ -159,11 +172,9 @@ public class solicitudeFragment extends Fragment  {
         call.enqueue(new Callback<List<Solicitud>>() {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
-
                 if (!response.isSuccessful()) {
                     Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
-
                     List<Solicitud> solicituds = response.body();
                     Solicitudes.clear();
                     for (Solicitud solicitud : solicituds) {
@@ -215,7 +226,6 @@ public class solicitudeFragment extends Fragment  {
         call.enqueue(new Callback<List<Solicitud>>() {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
-
                 if (!response.isSuccessful()) {
                     Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
@@ -246,7 +256,6 @@ public class solicitudeFragment extends Fragment  {
                     //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
                     if (listasolicitudterminadasinterna.size() != 0) {
                         //se instancia la recarga de los items que se encuentan en la lista de aceptadas / finalisadas
-
                         ads2.refresh(listasolicitudterminadasinterna);
                     }
                     refreshLayoutterminadas.setRefreshing(false);
@@ -259,8 +268,6 @@ public class solicitudeFragment extends Fragment  {
         });
 
     }
-
-
 
 
 

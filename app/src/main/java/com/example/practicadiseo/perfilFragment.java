@@ -68,6 +68,7 @@ public class perfilFragment extends Fragment {
     private ArrayList<Ciudad> listaciudades = new ArrayList<Ciudad>();
     private Button editardatos,editarpass;
     AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
+    NetworkInfo networkInfo;
     public perfilFragment() {
         // Required empty public constructor
     }
@@ -80,7 +81,7 @@ public class perfilFragment extends Fragment {
         mAwesomeValidation.addValidation(getActivity(), R.id.apellido, "[a-zA-Z\\s]+", R.string.err_apellido);
         //realizar validacion
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        networkInfo = connectivityManager.getActiveNetworkInfo();
 
     }
 
@@ -100,28 +101,34 @@ public class perfilFragment extends Fragment {
         
        prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
 
-        googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
-        //trozo de codigo para rescatar parametros de la cuenta de usuario
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getContext());
-        if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personGivenName = acct.getGivenName();
-            String personFamilyName = acct.getFamilyName();
-            String personEmail = acct.getEmail();
-            String personId = acct.getId();
-            Uri personPhoto = acct.getPhotoUrl();
-            nombre.setText(personGivenName);
-            apellido.setText(personFamilyName);
-            correo.setText(personEmail);
-            //glide es una libreria con la cual se pueden cargar y descargar imagenespara pode utilizar en androidstudio
-            //glide transforma la ruta que llega y la tranforma en una foto
-            Glide.with(this).load(String.valueOf(personPhoto)).into(fotoperfil);
-            Toast.makeText(getContext(), "Nombre"+personFamilyName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
+            googleSignInClient = GoogleSignIn.getClient(getContext(), gso);
+            //trozo de codigo para rescatar parametros de la cuenta de usuario
+            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getContext());
+            if (acct != null) {
+                String personName = acct.getDisplayName();
+                String personGivenName = acct.getGivenName();
+                String personFamilyName = acct.getFamilyName();
+                String personEmail = acct.getEmail();
+                String personId = acct.getId();
+                Uri personPhoto = acct.getPhotoUrl();
+                nombre.setText(personGivenName);
+                apellido.setText(personFamilyName);
+                correo.setText(personEmail);
+                //glide es una libreria con la cual se pueden cargar y descargar imagenespara pode utilizar en androidstudio
+                //glide transforma la ruta que llega y la tranforma en una foto
+                Glide.with(this).load(String.valueOf(personPhoto)).into(fotoperfil);
+                Toast.makeText(getContext(), "Nombre"+personFamilyName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
+            }
+        }else{
+            //no hay coneccion manejar excepcion
+
         }
+
 
         ciudad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -135,12 +142,18 @@ public class perfilFragment extends Fragment {
         });
         //se comprueban que exista el rut y la contraseña
         setcredentiasexist();
-        //se carga el spiner con las ciudades que hay en la base de datos
-        cargarspiner();
-        //se carga los datos del perfil para setearlos en los campos
-        cargardatosperfil();
-        //seccion de codigo en el cual se debera traer el json con los datos del usuario
-        //donde se setearan los datos a los edittext
+        if (networkInfo != null && networkInfo.isConnected()) {
+            //se carga el spiner con las ciudades que hay en la base de datos
+            cargarspiner();
+            //se carga los datos del perfil para setearlos en los campos
+            cargardatosperfil();
+            //seccion de codigo en el cual se debera traer el json con los datos del usuario
+            //donde se setearan los datos a los edittext
+        }else{
+            //no hay coneccion manejar excepcion
+
+        }
+
 
         ciudad.setEnabled(false);
         ciudad.setClickable(false);
@@ -166,45 +179,53 @@ public class perfilFragment extends Fragment {
                                 public void onClick(View v) {
                                     //metodo para hacer request de cambio de datos por parte del usuario
                                     if (mAwesomeValidation.validate()) {
-                                        actualizarperfil();
-                                        dp = new SweetAlertDialog(v.getContext(), SweetAlertDialog.SUCCESS_TYPE);
-                                        dp.setTitleText("Has Actualizado tu perfil !");
-                                        dp.setContentText("para volver a editar recargue el perfil!");
-                                        dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                            @Override
-                                            public void onClick(SweetAlertDialog sDialog) {
-                                                sDialog.dismissWithAnimation();
-                                                //metodo para cambiar de activity
-                                                updateDetail();
+
+                                        if (networkInfo != null && networkInfo.isConnected()) {
+                                            actualizarperfil();
+                                            dp = new SweetAlertDialog(v.getContext(), SweetAlertDialog.SUCCESS_TYPE);
+                                            dp.setTitleText("Has Actualizado tu perfil !");
+                                            dp.setContentText("para volver a editar recargue el perfil!");
+                                            dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                @Override
+                                                public void onClick(SweetAlertDialog sDialog) {
+                                                    sDialog.dismissWithAnimation();
+                                                    //metodo para cambiar de activity
+                                                    updateDetail();
+                                                }
+                                            })
+                                                    .show();
+                                            //parametros false
+                                            {
+                                                rut.setEnabled(false);
+                                                rut.setFocusable(false);
+                                                rut.setFocusableInTouchMode(false);
+
+                                                correo.setEnabled(false);
+                                                correo.setFocusable(false);
+                                                correo.setFocusableInTouchMode(false);
+
+                                                nombre.setEnabled(false);
+                                                nombre.setFocusable(false);
+                                                nombre.setFocusableInTouchMode(false);
+
+                                                apellido.setEnabled(false);
+                                                apellido.setFocusable(false);
+                                                apellido.setFocusableInTouchMode(false);
+
+                                                telefono.setEnabled(false);
+                                                telefono.setFocusable(false);
+                                                telefono.setFocusableInTouchMode(false);
+
+                                                ciudad.setEnabled(false);
+                                                ciudad.setFocusable(false);
+                                                ciudad.setFocusableInTouchMode(false);
                                             }
-                                        })
-                                                .show();
-                                        //parametros false
-                                        {
-                                            rut.setEnabled(false);
-                                            rut.setFocusable(false);
-                                            rut.setFocusableInTouchMode(false);
+                                        }else{
+                                            //no hay coneccion manejar excepcion
 
-                                            correo.setEnabled(false);
-                                            correo.setFocusable(false);
-                                            correo.setFocusableInTouchMode(false);
-
-                                            nombre.setEnabled(false);
-                                            nombre.setFocusable(false);
-                                            nombre.setFocusableInTouchMode(false);
-
-                                            apellido.setEnabled(false);
-                                            apellido.setFocusable(false);
-                                            apellido.setFocusableInTouchMode(false);
-
-                                            telefono.setEnabled(false);
-                                            telefono.setFocusable(false);
-                                            telefono.setFocusableInTouchMode(false);
-
-                                            ciudad.setEnabled(false);
-                                            ciudad.setFocusable(false);
-                                            ciudad.setFocusableInTouchMode(false);
                                         }
+
+
                                     }
                                 }
                             });

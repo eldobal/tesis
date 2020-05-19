@@ -5,6 +5,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
@@ -43,15 +45,16 @@ public class register2Activity extends AppCompatActivity {
     private Button btnregistrar;
     private int posicion = 0;
     private List<Ciudad> listaciudades;
-    //private Usuario usuario;
-    //private int tipousuario;
-    //private int estadousuario;
+    NetworkInfo networkInfo;
     private int idCiudad =0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register2);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
 
         AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
         //listausuarios = new ArrayList<Usuario>();
@@ -65,8 +68,15 @@ public class register2Activity extends AppCompatActivity {
         spinnerciudades = (Spinner) findViewById(R.id.spinner);
         btnregistrar=(Button)findViewById(R.id.registrarse);
 
-        //carga las ciudades en el spinner
-        cargarspiner();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            //carga las ciudades en el spinner
+            cargarspiner();
+        }else{
+            //manejar exepcion
+        }
+
+
 
         spinnerciudades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -99,8 +109,9 @@ public class register2Activity extends AppCompatActivity {
             public void onClick(View v) {
                 if (mAwesomeValidation.validate()) {
                     if(validaRut(txtrut.getText().toString())) {
-                        if ((txtcontraseña.getText().toString().equals(txtcontraseña2.getText().toString()))
-                        ) {
+                        if ((txtcontraseña.getText().toString().equals(txtcontraseña2.getText().toString()))) {
+
+                            if (networkInfo != null && networkInfo.isConnected()) {
                             String RUT = txtrut.getText().toString();
                             String Correo = txtemail.getText().toString();
                             String Nombre = txtnombre.getText().toString();
@@ -131,6 +142,7 @@ public class register2Activity extends AppCompatActivity {
                                             startActivity(intent);
                                         }
                                     }
+
                                     @Override
                                     public void onFailure(Call<Usuario> call, Throwable t) {
                                         Toast.makeText(getApplicationContext(), "error code " + t.getMessage(), Toast.LENGTH_LONG).show();
@@ -139,9 +151,21 @@ public class register2Activity extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+
+
+                        }else{
+                                //manejar excepcion
+
+                            }
+
+
                         } else {
                             Toast.makeText(getApplicationContext(), "Complete los campos Correctamente", Toast.LENGTH_LONG).show();
                         }
+
+
+
+
                     }else{
                         Toast.makeText(getApplicationContext(), "El Rut No es valido ", Toast.LENGTH_LONG).show();
                     }

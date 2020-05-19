@@ -39,14 +39,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         salud.setOnClickListener(this);
         tecnologia.setOnClickListener(this);
 
-
         return v;
     }
 
     //metodo para que al hacer click en un cardview realice una accion que queramos
     public void onClick(View v){
         Intent i;
-
+        //carga los distintos fragments dependiendo del area que escoja el usuario
         switch (v.getId()){
             case R.id.belleza : showSelectedFragment(new areabellezaFragment()); ;break ;
             case R.id.salud : showSelectedFragment(new areasaludFragment()); ; break ;

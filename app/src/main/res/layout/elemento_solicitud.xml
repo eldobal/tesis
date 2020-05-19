@@ -18,12 +18,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/imgperfilfilasolicitud"
-                android:src="@drawable/userprofile"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </ImageView>
+                android:layout_height="match_parent"
+                android:src="@drawable/userprofile"></ImageView>
         </LinearLayout>
 
     </RelativeLayout>
@@ -98,7 +98,7 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-
+        android:layout_marginLeft="10dp"
         android:layout_height="match_parent">
 
         <LinearLayout

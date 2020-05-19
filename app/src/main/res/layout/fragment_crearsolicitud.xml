@@ -57,13 +57,22 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <ImageView
-                                    android:id="@+id/imgperfil"
-                                    android:layout_width="100dp"
-                                    android:layout_height="100dp"
-                                    android:layout_alignParentLeft="true"
-                                    android:background="@color/float_transparent"
-                                    android:src="@drawable/userprofile" />
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <ImageView
+                                        android:id="@+id/imgperfil"
+                                        android:layout_width="100dp"
+                                        android:layout_height="100dp"
+                                        android:layout_marginRight="20dp"
+                                        android:layout_alignParentLeft="true"
+                                        android:background="@color/float_transparent"
+                                        android:src="@drawable/userprofile" />
+
+                                </RelativeLayout>
+
+
 
 
                                 <RelativeLayout

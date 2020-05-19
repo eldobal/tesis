@@ -66,11 +66,14 @@ public class crearsolicitudFragment extends Fragment {
     EditText descripcion;
     private int idrubro=0;
     Button btnfoto,btncrearsolicitud;
-    private String ruttrabajador="",rutcliente="",nombretrabajador="",estadotrabajador="",calificaciontrabajador="",descripcionfinal="",rutafoto="";
+    private String ruttrabajador="",rutcliente="",nombretrabajador="",estadotrabajador="",calificaciontrabajador="",descripcionfinal="",rutafoto="",imagenstring="";
     private TextView rut,nombre,estado,calificacion;
     //declaracion de la ruta estatica del servidor
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     int idestadosolicitud=0;
+
+
+
     public crearsolicitudFragment() {
         // Required empty public constructor
     }
@@ -99,6 +102,7 @@ public class crearsolicitudFragment extends Fragment {
         if (args == null) {
             // No hay datos, manejar excepción
         }else{
+            //se cargan los datos enviados del trabajador
             ruttrabajador= args.getString("ruttrabajador");
             nombretrabajador = args.getString("nombretrabajador");
             estadotrabajador = args.getString("estadotrabajador");
@@ -123,24 +127,24 @@ public class crearsolicitudFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String Fechasolicitud = sdf.format(calendar.getTime());
 
-
         btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String imagenstring = convertirimgstring(bitmap);
+                imagenstring = convertirimgstring(bitmap);
                 descripcionfinal= descripcion.getText().toString();
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://proyectotesis.ddns.net/")
-                        .addConverterFactory(ScalarsConverterFactory.create())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-                tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
                 //se hace la validacion
                 if(imagenstring.isEmpty()||descripcionfinal.isEmpty()){
-                    //no se ha cargado una foto
-                    Snackbar.make(getView(), "Cargue O tome una foto para poder continuar", Snackbar.LENGTH_LONG)
-                            .show();
+                    //no se ha cargado una foto o la descripcion
+                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                            "Ingrese una descripcion / cargue una foto", Snackbar.LENGTH_LONG);
+                    snackBar.show();
                 }else{
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl("http://proyectotesis.ddns.net/")
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
                     //falta pasar el bitmap de la imagen sacada en el post hacia el web api
                     Call<Solicitud> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,imagenstring);
                     call1.enqueue(new Callback<Solicitud>() {
@@ -173,7 +177,6 @@ public class crearsolicitudFragment extends Fragment {
                 }
             }
         });
-
 
 
         cargar.setOnClickListener(new View.OnClickListener() {
@@ -232,26 +235,28 @@ public class crearsolicitudFragment extends Fragment {
         if(requestCode == 10){
             Uri path= data.getData();
             fotosacada.setImageURI(path);
-
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),path);
                 fotosacada.setImageBitmap(bitmap);
             }catch (IOException e){
                 e.printStackTrace();
             }
-
-
         }
     }
 
 
     //Metodo en el cual se recive un bitmap lo comprime y lo transforma en base64
     private String convertirimgstring(Bitmap bitmap){
-        ByteArrayOutputStream array= new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,array);
-        byte[] Imagenbyte =array.toByteArray();
-        String imagenString = Base64.encodeToString(Imagenbyte,Base64.DEFAULT);
-        return imagenString;
+        if(bitmap==null){
+            //retorna un vacio si esque el bitmat no tiene una foto dentro
+            return "";
+        }else {
+            ByteArrayOutputStream array = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, array);
+            byte[] Imagenbyte = array.toByteArray();
+            String imagenString = Base64.encodeToString(Imagenbyte, Base64.DEFAULT);
+            return imagenString;
+        }
     }
 
 

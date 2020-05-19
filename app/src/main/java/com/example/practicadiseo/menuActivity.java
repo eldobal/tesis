@@ -11,6 +11,8 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -62,61 +64,56 @@ public class menuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-       setcredentiasexist();
+        setcredentiasexist();
         //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
         iniciarfragmentsolitudes();
         perfilFragment perfilFragment =new perfilFragment();
         solicitudeFragment solicitudeFragment=new solicitudeFragment();
 
-        //se instancia el gso
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        // trae el cliende de google
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        //trozo de codigo para rescatar parametros de la cuenta de usuario
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personGivenName = acct.getGivenName();
-            String personFamilyName = acct.getFamilyName();
-            String personEmail = acct.getEmail();
-            String personId = acct.getId();
-            Uri personPhoto = acct.getPhotoUrl();
-            Toast.makeText(menuActivity.this, "Nombre"+personName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
-        }
-        mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
+        if (networkInfo != null && networkInfo.isConnected()) {
 
 
-        mbottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                //se muestra el fragment de peril
-                if(menuItem.getItemId()== R.id.menu_profile){
-                    showSelectedFragment(new perfilFragment());
+            //se instancia el gso
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build();
 
-                  /*  Bundle bundle = new Bundle();
-                    bundle.putSerializable("arraylistaspendientes", listasolicitudactivas);
+            // trae el cliende de google
+            googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-                    perfilFragment.setArguments(bundle);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, perfilFragment, "perfiltag")
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            //permite regresar hacia atras entre los fragments
-                            .addToBackStack(null)
-                            .commit();*/
+            //trozo de codigo para rescatar parametros de la cuenta de usuario
+            GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+            if (acct != null) {
+                String personName = acct.getDisplayName();
+                String personGivenName = acct.getGivenName();
+                String personFamilyName = acct.getFamilyName();
+                String personEmail = acct.getEmail();
+                String personId = acct.getId();
+                Uri personPhoto = acct.getPhotoUrl();
+                Toast.makeText(menuActivity.this, "Nombre"+personName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
+            }
+            mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
 
-                }
-                //se muestra el fragment de rubros
-                if(menuItem.getItemId()== R.id.menu_home){
-                    showSelectedFragment(new HomeFragment());
-                }
-                //se muestra el fragment de la lista de solicitudes
-                if(menuItem.getItemId()==R.id.menu_solicitud){
-                 //   showSelectedFragment(new solicitudeFragment());
+            getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
+
+
+            mbottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                    //se muestra el fragment de peril
+                    if(menuItem.getItemId()== R.id.menu_profile){
+                        showSelectedFragment(new perfilFragment());
+                    }
+                    //se muestra el fragment de rubros
+                    if(menuItem.getItemId()== R.id.menu_home){
+                        showSelectedFragment(new HomeFragment());
+                    }
+                    //se muestra el fragment de la lista de solicitudes
+                    if(menuItem.getItemId()==R.id.menu_solicitud){
+                        //   showSelectedFragment(new solicitudeFragment());
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("arraylistaspendientes", listasolicitudactivas);
                         bundle.putSerializable("arraylistasterminadas", listasolicitudesterminadas);
@@ -126,25 +123,20 @@ public class menuActivity extends AppCompatActivity {
                                 //permite regresar hacia atras entre los fragments
                                 .addToBackStack(null)
                                 .commit();
+                    }
+                    //se muestra el fragment de configuracion y setting
+                    if(menuItem.getItemId()== R.id.menu_settings){
+                        showSelectedFragment(new settingsFragment());
+                    }
+                    return true;
+                }
+            });
 
-                  /*
-                        iniciarfragmentsolitudes();
-                        // Reload current fragment
-                        solicitudeFragment solicitudeFragment1 = new solicitudeFragment();
-                        solicitudeFragment1 = (com.example.practicadiseo.solicitudeFragment) getSupportFragmentManager().findFragmentByTag("solicitudtag");
-                        final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                        ft.detach(solicitudeFragment1);
-                        ft.attach(solicitudeFragment1);
-                        ft.commit();
-*/
-                }
-                //se muestra el fragment de configuracion y setting
-                if(menuItem.getItemId()== R.id.menu_settings){
-                    showSelectedFragment(new settingsFragment());
-                }
-                return true;
-            }
-        });
+        }else{
+            //no hay internet/coneccion manejar excepcion
+            Toast.makeText(menuActivity.this, "Revise su Concexion", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     private void iniciarfragmentsolitudes() {
@@ -196,15 +188,7 @@ public class menuActivity extends AppCompatActivity {
                 Toast.makeText(menuActivity.this, "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
-
     }
-
-
-
-
-
-
 
 
 /*
@@ -239,7 +223,6 @@ public class menuActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .commit();
     }
-
 
     //metodo que permite elejir un fragment y no volver hacia atras
     private void cargarfragment(Fragment fragment){

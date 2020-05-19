@@ -43,8 +43,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colordark"
                 android:fontFamily="sans-serif-condensed-medium"
-                android:textSize="17sp"
-                android:text="No se Han Encontrado Tecnicos en su Zona"
+                android:textSize="18sp"
+                android:text="No se Han Encontrado Trabajadores en su Zona"
                 >
 
             </TextView>

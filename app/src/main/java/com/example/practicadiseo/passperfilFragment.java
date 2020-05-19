@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -40,6 +42,7 @@ public class passperfilFragment extends Fragment {
     private Button btncambiopass;
     private boolean validado = false;
     Usuario usuario = new Usuario();
+    NetworkInfo networkInfo;
     public passperfilFragment() {
         // Required empty public constructor
     }
@@ -52,6 +55,8 @@ public class passperfilFragment extends Fragment {
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
         mAwesomeValidation.addValidation(getActivity(),R.id.cambiocontraseñaperfil, regexPassword, R.string.err_contraseña);
         mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseña2perfil, regexPassword, R.string.err_contraseña2);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
 
         btncambiopass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,26 +82,41 @@ public class passperfilFragment extends Fragment {
         Usuario usuario = new Usuario();
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
 
+
+
         //se comprueba que exita el rut y la contraseña
         setcredentiasexist();
-        //metodo el cual traera los datos del usuario y se comparara la contraseña acutal y la que se trae
-        cargardatosperfil();
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            //metodo el cual traera los datos del usuario y se comparara la contraseña acutal y la que se trae
+            cargardatosperfil();
+        }else{
+            //no hay coneccion manejar excepcion
+
+        }
+
 
         btncambiopass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validado==true) {
-                    String contraseñaactual1 = contraseñaactual.getText().toString();
-                    //String  usuariocontraseña = usuario.getContrasena().toString();
-                    String contraseñanueva = contraseña1.getText().toString();
-                    String contraseñanueva2 = contraseña2.getText().toString();
-                    if (contraseñaactual1.equals(contraseñaactualcomparar) && (contraseñanueva.equals(contraseñanueva2))) {
-                        actualizarperfil();
-                        saveOnPreferences(contraseñanueva2);
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    if (validado==true) {
+                        String contraseñaactual1 = contraseñaactual.getText().toString();
+                        //String  usuariocontraseña = usuario.getContrasena().toString();
+                        String contraseñanueva = contraseña1.getText().toString();
+                        String contraseñanueva2 = contraseña2.getText().toString();
+                        if (contraseñaactual1.equals(contraseñaactualcomparar) && (contraseñanueva.equals(contraseñanueva2))) {
+                            actualizarperfil();
+                            saveOnPreferences(contraseñanueva2);
+                        }
+                    }else{
+                        Toast.makeText(getContext(), "error al validar la contraseña", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Toast.makeText(getContext(), "error al validar la contraseña", Toast.LENGTH_LONG).show();
+                    //no hay coneccion manejar excepcion
+
                 }
+
             }
         });
 
