@@ -86,6 +86,8 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
+
+        //hola
         signInButton =(SignInButton) findViewById(R.id.Signbutton);
         txtrut = (EditText) findViewById(R.id.txtemail);
         txtpass = (EditText) findViewById(R.id.txtpassword);
