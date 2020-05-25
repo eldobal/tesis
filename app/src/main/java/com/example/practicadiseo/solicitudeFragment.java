@@ -246,7 +246,6 @@ public class solicitudeFragment extends Fragment  {
                     for (int i = 0; i < Solicitudesterminadas.size(); i++) {
                         Solicitud soli = new Solicitud();
                         soli = Solicitudesterminadas.get(i);
-
                         if (soli.getEstado().equals("COMPLETADA Y PAGADA")) {
                             listasolicitudterminadasinterna.add(soli);
                          } else {

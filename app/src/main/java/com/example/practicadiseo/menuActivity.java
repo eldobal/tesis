@@ -105,7 +105,7 @@ public class menuActivity extends AppCompatActivity {
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     //se muestra el fragment de peril
                     if(menuItem.getItemId()== R.id.menu_profile){
-                        showSelectedFragment(new perfilFragment());
+                        showSelectedFragment(new crearsolicitudFragment());
                     }
                     //se muestra el fragment de rubros
                     if(menuItem.getItemId()== R.id.menu_home){

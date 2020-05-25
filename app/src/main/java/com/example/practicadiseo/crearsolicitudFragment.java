@@ -1,17 +1,25 @@
 package com.example.practicadiseo;
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -48,6 +56,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 
@@ -65,13 +74,15 @@ public class crearsolicitudFragment extends Fragment {
     ImageView fotosacada,imgperfil;
     EditText descripcion;
     private int idrubro=0;
-    Button btnfoto,btncrearsolicitud;
+    Button btnfoto,btncrearsolicitud,btnprueba;
     private String ruttrabajador="",rutcliente="",nombretrabajador="",estadotrabajador="",calificaciontrabajador="",descripcionfinal="",rutafoto="",imagenstring="";
     private TextView rut,nombre,estado,calificacion;
     //declaracion de la ruta estatica del servidor
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     int idestadosolicitud=0;
-
+    private PendingIntent pendingIntent;
+    private final static String CHANNEL_ID = "NOTIFICACION";
+    private final static int NOTIFICACION_ID = 0;
 
 
     public crearsolicitudFragment() {
@@ -119,7 +130,7 @@ public class crearsolicitudFragment extends Fragment {
         setcredentiasexist();
         final Button cargar = (Button) v.findViewById(R.id.btncargarfoto);
         final Button btncrearsolicitud = (Button) v.findViewById(R.id.btncrearsolicitud);
-
+         btnprueba = (Button) v.findViewById(R.id.btnnotificacionprueba);
         fotosacada = (ImageView) v.findViewById(R.id.fotocrearsolicitud);
         descripcion =(EditText) v.findViewById(R.id.txtdescripcioncrearsolicitud);
         descripcionfinal= descripcion.getText().toString();
@@ -165,6 +176,7 @@ public class crearsolicitudFragment extends Fragment {
                                     }
                                     @Override
                                     public void onFinish() {
+
                                         updateDetail();
                                     }
                                 }.start();
@@ -179,6 +191,16 @@ public class crearsolicitudFragment extends Fragment {
         });
 
 
+        btnprueba.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String prueba = "Sebastian baldovinos";
+                createNotificationChannel();
+                crearnotificacion(prueba);
+            }
+        });
+
+
         cargar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,6 +209,43 @@ public class crearsolicitudFragment extends Fragment {
         });
 
         return v;
+    }
+
+    private void createNotificationChannel(){
+        //se verifica que el SO sea igual o superior a oreo
+        //si es superior crea el notification chanel
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "Noticacion";
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+
+    //metodo para crear la notificacion personalizada
+    private void crearnotificacion(String nombre) {
+        //se instancia el builder para crear la notificacion
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID);
+        //se declaran las propiedades y atributos
+        builder.setSmallIcon(R.drawable.userprofile);
+        builder.setContentTitle("Solicitud Creada Exitosamene!");
+        builder.setColor(Color.BLUE);
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setLights(Color.CYAN, 1000, 1000);
+        builder.setVibrate(new long[]{1000,1000,1000,1000,1000});
+        builder.setDefaults(Notification.DEFAULT_SOUND);
+        //texto para mostrar de forma exancible
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText("esta una parte de la notificacion" +
+                "expandida para "+nombre+"conprobadfhalf" +
+                "dlkjsfhlksfdjhlsfkhglkfjgsfdjg" +
+                "fñsdfkhgldsfhglsfdkghdsfkjlsgldfkjg"));
+
+
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getActivity());
+        //se instancia la notificacion
+        notificationManagerCompat.notify(NOTIFICACION_ID, builder.build());
+
     }
 
 
