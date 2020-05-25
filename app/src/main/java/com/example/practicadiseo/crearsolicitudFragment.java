@@ -69,12 +69,12 @@ public class crearsolicitudFragment extends Fragment {
     private final String RUTA_IMAGEN=CARPETA_RAIZ+"misFotos";
     private  Bitmap bitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    SharedPreferences prefs;
+    SharedPreferences prefs,prefsmaps;
     SweetAlertDialog dp;
     ImageView fotosacada,imgperfil;
     EditText descripcion;
     private int idrubro=0;
-    Button btnfoto,btncrearsolicitud,btnprueba;
+    Button btnfoto,btncrearsolicitud,cargar,btnmapa;
     private String ruttrabajador="",rutcliente="",nombretrabajador="",estadotrabajador="",calificaciontrabajador="",descripcionfinal="",rutafoto="",imagenstring="";
     private TextView rut,nombre,estado,calificacion;
     //declaracion de la ruta estatica del servidor
@@ -83,7 +83,7 @@ public class crearsolicitudFragment extends Fragment {
     private PendingIntent pendingIntent;
     private final static String CHANNEL_ID = "NOTIFICACION";
     private final static int NOTIFICACION_ID = 0;
-
+    String latorigen,longorigen;
 
     public crearsolicitudFragment() {
         // Required empty public constructor
@@ -100,8 +100,10 @@ public class crearsolicitudFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_crearsolicitud, container, false);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        prefsmaps = this.getActivity().getSharedPreferences("ubicacionmapa", Context.MODE_PRIVATE);
 
         rut =(TextView) v.findViewById(R.id.txtrutcrearsolicitudtrabajador);
         nombre =(TextView) v.findViewById(R.id.txtnombrecrearsolicitudtrabajador);
@@ -128,9 +130,9 @@ public class crearsolicitudFragment extends Fragment {
         calificacion.setText(calificaciontrabajador);
         Glide.with(getContext()).load(String.valueOf(rutaservidor+rutafoto)).into(imgperfil);
         setcredentiasexist();
-        final Button cargar = (Button) v.findViewById(R.id.btncargarfoto);
-        final Button btncrearsolicitud = (Button) v.findViewById(R.id.btncrearsolicitud);
-         btnprueba = (Button) v.findViewById(R.id.btnnotificacionprueba);
+        cargar = (Button) v.findViewById(R.id.btncargarfoto);
+        btncrearsolicitud = (Button) v.findViewById(R.id.btncrearsolicitud);
+        btnmapa=(Button) v.findViewById(R.id.btnmapa);
         fotosacada = (ImageView) v.findViewById(R.id.fotocrearsolicitud);
         descripcion =(EditText) v.findViewById(R.id.txtdescripcioncrearsolicitud);
         descripcionfinal= descripcion.getText().toString();
@@ -138,65 +140,76 @@ public class crearsolicitudFragment extends Fragment {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String Fechasolicitud = sdf.format(calendar.getTime());
 
+        latorigen="";
+        longorigen="";
+
         btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setlatlongexist();
                 imagenstring = convertirimgstring(bitmap);
                 descripcionfinal= descripcion.getText().toString();
-                //se hace la validacion
-                if(imagenstring.isEmpty()||descripcionfinal.isEmpty()){
-                    //no se ha cargado una foto o la descripcion
-                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            "Ingrese una descripcion / cargue una foto", Snackbar.LENGTH_LONG);
-                    snackBar.show();
-                }else{
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://proyectotesis.ddns.net/")
-                            .addConverterFactory(ScalarsConverterFactory.create())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-                    tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
-                    //falta pasar el bitmap de la imagen sacada en el post hacia el web api
-                    Call<Solicitud> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,imagenstring);
-                    call1.enqueue(new Callback<Solicitud>() {
-                        @Override
-                        public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
-                            if (!response.isSuccessful()) {
-                                Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
-                                updateDetail();
-                            } else {
-                                Solicitud solicitud = response.body();
-                                btncrearsolicitud.setClickable(false);
-                                dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
-                                dp.setTitleText("Solicitud Creada!");
-                                dp.show();
-                                new CountDownTimer(1500,1000){
-                                    @Override
-                                    public void onTick(long millisUntilFinished) {
-                                    }
-                                    @Override
-                                    public void onFinish() {
+                //se hace la validacion si se ha escojido la direccion
+                if(latorigen!= "" && longorigen!=""){
+                    //validacion si es que la imagen y la descripcion estan vacios
+                    if(descripcionfinal.isEmpty()){
+                        Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                "Ingrese una descripcion / cargue una foto", Snackbar.LENGTH_LONG);
+                        snackBar.show();
+                    }else{
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl("http://proyectotesis.ddns.net/")
+                                .addConverterFactory(ScalarsConverterFactory.create())
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+                        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+                        //falta pasar el bitmap de la imagen sacada en el post hacia el web api
+                        Call<Solicitud> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,imagenstring,latorigen,longorigen);
+                        call1.enqueue(new Callback<Solicitud>() {
+                            @Override
+                            public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
+                                if (!response.isSuccessful()) {
+                                    Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                    updateDetail();
+                                } else {
+                                    Solicitud solicitud = response.body();
+                                    btncrearsolicitud.setClickable(false);
+                                    dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
+                                    dp.setTitleText("Solicitud Creada!");
+                                    dp.show();
+                                    new CountDownTimer(1500,1000){
+                                        @Override
+                                        public void onTick(long millisUntilFinished) {
+                                        }
+                                        @Override
+                                        public void onFinish() {
+                                            crearnotificacion();
+                                            updateDetail();
 
-                                        updateDetail();
-                                    }
-                                }.start();
+                                        }
+                                    }.start();
+                                }
                             }
-                        }
-                        @Override
-                        public void onFailure(Call<Solicitud> call, Throwable t) {
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<Solicitud> call, Throwable t) {
+                            }
+                        });
+                    }
+
+            }else{
+                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                            "Seleccione la ubicacion donde se realizara el trabajo", Snackbar.LENGTH_LONG);
+                    snackBar.show();
                 }
+
             }
         });
 
 
-        btnprueba.setOnClickListener(new View.OnClickListener() {
+        btnmapa.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String prueba = "Sebastian baldovinos";
-                createNotificationChannel();
-                crearnotificacion(prueba);
+            public void onClick(View view) {
+                showSelectedFragment(new mapaFragment());
             }
         });
 
@@ -224,7 +237,7 @@ public class crearsolicitudFragment extends Fragment {
 
 
     //metodo para crear la notificacion personalizada
-    private void crearnotificacion(String nombre) {
+    private void crearnotificacion() {
         //se instancia el builder para crear la notificacion
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getActivity(), CHANNEL_ID);
         //se declaran las propiedades y atributos
@@ -236,11 +249,9 @@ public class crearsolicitudFragment extends Fragment {
         builder.setVibrate(new long[]{1000,1000,1000,1000,1000});
         builder.setDefaults(Notification.DEFAULT_SOUND);
         //texto para mostrar de forma exancible
-        builder.setStyle(new NotificationCompat.BigTextStyle().bigText("esta una parte de la notificacion" +
-                "expandida para "+nombre+"conprobadfhalf" +
-                "dlkjsfhlksfdjhlsfkhglkfjgsfdjg" +
-                "fñsdfkhgldsfhglsfdkghdsfkjlsgldfkjg"));
-
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText("La solicitud se ha creado exitosamente, el trajador" +
+                "sera notificado de inmediato, porfavor este atento a la respuesta" +
+                "podra confirmar la solicitud desde el apartado mis solicitudes"));
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getActivity());
         //se instancia la notificacion
@@ -304,6 +315,15 @@ public class crearsolicitudFragment extends Fragment {
     }
 
 
+    private void showSelectedFragment(Fragment fragment){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                //permite regresar hacia atras entre los fragments
+                .addToBackStack(null)
+                .commit();
+    }
+
+
     //Metodo en el cual se recive un bitmap lo comprime y lo transforma en base64
     private String convertirimgstring(Bitmap bitmap){
         if(bitmap==null){
@@ -335,4 +355,54 @@ public class crearsolicitudFragment extends Fragment {
         Intent intent = new Intent(getActivity(), menuActivity.class);
         startActivity(intent);
     }
+
+    private void setlatlongexist() {
+
+        String latitud = getlatitud();
+        String longitud = getlongitud();
+
+      // Double longitud = getDoublelongitud(prefsmaps,"longitud",0.0);
+
+    if (!TextUtils.isEmpty(latitud)  && !TextUtils.isEmpty(longitud) ) {
+            latorigen=latitud;
+            longorigen=longitud;
+        }
+    }
+
+    double getDouble(final SharedPreferences prefs, final String key, final double defaultValue) {
+        if ( !prefs.contains(key))
+            return defaultValue;
+
+        return Double.longBitsToDouble(prefs.getLong(key, 0));
+    }
+
+    private String getlatitud() {
+        return prefsmaps.getString("Latitud", "");
+    }
+
+    private String getlongitud() {
+        return prefsmaps.getString("Longitud", "");
+    }
+
+
+    SharedPreferences.Editor putDoublelatitud(final SharedPreferences.Editor edit, final String key, final double value) {
+        return edit.putLong(key, Double.doubleToRawLongBits(value));
+    }
+
+
+    private double getDoublelatitud(final SharedPreferences prefsmaps, final String key, final double defaultValue) {
+        return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
+    }
+
+
+    SharedPreferences.Editor putDoublelongirud(final SharedPreferences.Editor edit, final String key, final double value) {
+        return edit.putLong(key, Double.doubleToRawLongBits(value));
+    }
+
+
+    private double getDoublelongitud(final SharedPreferences prefs, final String key, final double defaultValue) {
+        return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
+    }
+
+
 }

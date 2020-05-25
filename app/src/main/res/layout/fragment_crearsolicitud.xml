@@ -205,10 +205,38 @@
 
                     </androidx.cardview.widget.CardView>
 
+                    <RelativeLayout
+                        android:id="@+id/mapacrearsolicitud"
+                        android:layout_below="@id/carddescripcionproblema"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+
+
+                        <Button
+                            android:id="@+id/btnmapa"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="Seleccione la Ubicacion"
+                            android:fontFamily="sans-serif-condensed-medium"
+                            android:textColor="@color/colordark"
+                            android:background="@color/colorPrimaryDark"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:textSize="20dp"
+                            >
+
+                        </Button>
+
+
+                    </RelativeLayout>
+
 
                     <RelativeLayout
+                        android:layout_marginTop="15dp"
                         android:id="@+id/fotolayout"
-                        android:layout_below="@id/carddescripcionproblema"
+                        android:layout_below="@id/mapacrearsolicitud"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
@@ -233,11 +261,7 @@
 
                         </Button>
 
-                        <Button
-                            android:id="@+id/btnnotificacionprueba"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Button" />
+
 
                     </RelativeLayout>
 

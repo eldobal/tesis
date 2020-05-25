@@ -12,6 +12,11 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+
+
+
 
     <application
         android:allowBackup="true"
@@ -26,7 +31,6 @@
             android:name=".menuActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".menuareasActivity" />
         <activity
             android:name=".register2Activity"
             android:configChanges="orientation"
@@ -47,7 +51,13 @@
             android:name=".Main2Activity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".MainActivity" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCw3L9HpgMDW9oxhNZStzcwSw_THxQlJrg" />
+
     </application>
+
+
 
 </manifest>

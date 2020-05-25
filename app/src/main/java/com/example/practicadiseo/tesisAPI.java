@@ -33,6 +33,7 @@ public interface tesisAPI {
 
     @GET("api/UsuarioAPI")
     Call<UsuarioTrabajador> getUsuarioTrabajador(@Query("RUT") String rut
+
     );
 
 
@@ -45,7 +46,10 @@ public interface tesisAPI {
                                   @Query("RUT_Cliente") String RUT_Cliente,
                                   @Query("RUT_Trabajador") String RUT_Trabajador,
                                   @Query("Rubro") int Rubro,
-                                  @Body() String foto
+                                  @Body() String foto,
+                                  @Query("latitud") String latitud,
+                                  @Query("longitud") String longitud
+
     );
 
 

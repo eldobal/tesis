@@ -30,6 +30,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -43,7 +45,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class menuActivity extends AppCompatActivity {
+public class menuActivity extends AppCompatActivity implements mapaFragment.OnFragmentInteractionListener {
     private GoogleSignInClient googleSignInClient;
     TextView nombre,email,id;
     ImageView fotoperfil;
@@ -51,6 +53,7 @@ public class menuActivity extends AppCompatActivity {
     SweetAlertDialog dp;
     private SharedPreferences prefs;
     int contador=0;
+
     SwipeRefreshLayout refreshLayout;
 
     String rut="";

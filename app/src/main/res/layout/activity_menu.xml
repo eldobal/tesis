@@ -21,15 +21,11 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomnavigation"
         android:layout_width="match_parent"
-        app:menu="@menu/menu"
-        android:background="@color/colorAccentllight"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-
+        android:background="@color/colorAccentllight"
+        app:menu="@menu/menu"
         />
-
-
-
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
