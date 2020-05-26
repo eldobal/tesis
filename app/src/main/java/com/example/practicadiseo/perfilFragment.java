@@ -142,17 +142,14 @@ public class perfilFragment extends Fragment {
         });
         //se comprueban que exista el rut y la contraseña
         setcredentiasexist();
-        if (networkInfo != null && networkInfo.isConnected()) {
+
             //se carga el spiner con las ciudades que hay en la base de datos
             cargarspiner();
             //se carga los datos del perfil para setearlos en los campos
             cargardatosperfil();
             //seccion de codigo en el cual se debera traer el json con los datos del usuario
             //donde se setearan los datos a los edittext
-        }else{
-            //no hay coneccion manejar excepcion
 
-        }
 
 
         ciudad.setEnabled(false);

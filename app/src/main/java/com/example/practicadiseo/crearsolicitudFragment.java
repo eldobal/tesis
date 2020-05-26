@@ -150,7 +150,7 @@ public class crearsolicitudFragment extends Fragment {
                 imagenstring = convertirimgstring(bitmap);
                 descripcionfinal= descripcion.getText().toString();
                 //se hace la validacion si se ha escojido la direccion
-                if(latorigen!= "" && longorigen!=""){
+                if(!latorigen.isEmpty() && !longorigen.isEmpty()){
                     //validacion si es que la imagen y la descripcion estan vacios
                     if(descripcionfinal.isEmpty()){
                         Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
@@ -164,30 +164,23 @@ public class crearsolicitudFragment extends Fragment {
                                 .build();
                         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
                         //falta pasar el bitmap de la imagen sacada en el post hacia el web api
-                        Call<Solicitud> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,imagenstring,latorigen,longorigen);
-                        call1.enqueue(new Callback<Solicitud>() {
+                        Call<Solicitud> call = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,latorigen,longorigen,imagenstring);
+                        call.enqueue(new Callback<Solicitud>() {
                             @Override
                             public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
                                 if (!response.isSuccessful()) {
                                     Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                     updateDetail();
                                 } else {
-                                    Solicitud solicitud = response.body();
                                     btncrearsolicitud.setClickable(false);
-                                    dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
-                                    dp.setTitleText("Solicitud Creada!");
-                                    dp.show();
-                                    new CountDownTimer(1500,1000){
-                                        @Override
-                                        public void onTick(long millisUntilFinished) {
-                                        }
-                                        @Override
-                                        public void onFinish() {
+                                            Solicitud solicitud = response.body();
+                                            dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
+                                            dp.setTitleText("Solicitud Creada!");
+                                            dp.show();
+                                            createNotificationChannel();
                                             crearnotificacion();
                                             updateDetail();
 
-                                        }
-                                    }.start();
                                 }
                             }
                             @Override
@@ -197,6 +190,7 @@ public class crearsolicitudFragment extends Fragment {
                     }
 
             }else{
+                    Toast.makeText(getContext(), "pruebaaa", Toast.LENGTH_LONG).show();
                     Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
                             "Seleccione la ubicacion donde se realizara el trabajo", Snackbar.LENGTH_LONG);
                     snackBar.show();

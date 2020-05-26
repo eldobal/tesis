@@ -82,6 +82,7 @@ public class solicitudeFragment extends Fragment  {
         listasolicitudterminadasinterna   = new ArrayList<Solicitud>();
         listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
         listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
+
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
     }
@@ -93,6 +94,8 @@ public class solicitudeFragment extends Fragment  {
 
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
+        reiniciarfragment(rutusuario);
+        reiniciarfragmentterminadas(rutusuario);
         listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
         lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
         //declaracion de los swiperefresh para intanciarlos

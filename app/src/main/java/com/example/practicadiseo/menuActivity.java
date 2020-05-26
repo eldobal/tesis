@@ -61,6 +61,10 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
     ArrayList<Solicitud> listasolicitudactivas = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudescomparar = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
+
+    ArrayList<Notificacion> listanotificaciones = new ArrayList<Notificacion>();
+
+
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +74,10 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
         setcredentiasexist();
         //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
         iniciarfragmentsolitudes();
+        iniciarfragmentnotificaciones();
         perfilFragment perfilFragment =new perfilFragment();
         solicitudeFragment solicitudeFragment=new solicitudeFragment();
-
+        listanotificacionesFragment listanotificacionesFragment = new listanotificacionesFragment();
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
@@ -108,7 +113,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     //se muestra el fragment de peril
                     if(menuItem.getItemId()== R.id.menu_profile){
-                        showSelectedFragment(new crearsolicitudFragment());
+                        showSelectedFragment(new perfilFragment());
                     }
                     //se muestra el fragment de rubros
                     if(menuItem.getItemId()== R.id.menu_home){
@@ -131,6 +136,19 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                     if(menuItem.getItemId()== R.id.menu_settings){
                         showSelectedFragment(new settingsFragment());
                     }
+                    if(menuItem.getItemId()== R.id.menu_notificaciones){
+
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("arraynotificaciones", listanotificaciones);
+                        listanotificacionesFragment.setArguments(bundle);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container, listanotificacionesFragment, "notificacionestag")
+                                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                //permite regresar hacia atras entre los fragments
+                                .addToBackStack(null)
+                                .commit();
+
+                    }
+
                     return true;
                 }
             });
@@ -139,6 +157,44 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
             //no hay internet/coneccion manejar excepcion
             Toast.makeText(menuActivity.this, "Revise su Concexion", Toast.LENGTH_LONG).show();
         }
+
+    }
+
+    private void iniciarfragmentnotificaciones() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+        Call<List<Notificacion>> call = tesisAPI.getNotificacion(rut);
+        call.enqueue(new Callback<List<Notificacion>>() {
+            @Override
+            public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
+
+                if (!response.isSuccessful()) {
+                    Toast.makeText(menuActivity.this, "error :" + response.code(), Toast.LENGTH_LONG).show();
+                } else {
+                    List<Notificacion> notificaciones = response.body();
+                    for (Notificacion notificacion : notificaciones) {
+                        Notificacion notificacion1 = new Notificacion();
+                        //se setean los valores del trabajador
+                        notificacion1.setId(notificacion.getId());
+                        notificacion1.setIdSolicitud(notificacion.getIdSolicitud());
+                        notificacion1.setMensaje(notificacion.getMensaje());
+                        notificacion1.setRUT(notificacion.getRUT());
+                        //se guarda la lista con las notificaciones del usuario conectado
+                        listanotificaciones.add(notificacion1);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Notificacion>> call, Throwable t) {
+                Toast.makeText(menuActivity.this, "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+
 
     }
 

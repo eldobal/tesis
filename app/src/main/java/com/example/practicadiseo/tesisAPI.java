@@ -36,7 +36,11 @@ public interface tesisAPI {
 
     );
 
+    //metodo para traer las notificaciones del cliente que esta ocupando la app
+    @GET("api/NotificacionAPI")
+    Call<List<Notificacion>> getNotificacion(@Query("RUT") String rut
 
+    );
 
 
 
@@ -46,9 +50,9 @@ public interface tesisAPI {
                                   @Query("RUT_Cliente") String RUT_Cliente,
                                   @Query("RUT_Trabajador") String RUT_Trabajador,
                                   @Query("Rubro") int Rubro,
-                                  @Body() String foto,
                                   @Query("latitud") String latitud,
-                                  @Query("longitud") String longitud
+                                  @Query("longitud") String longitud,
+                                   @Body() String foto
 
     );
 
@@ -67,6 +71,12 @@ public interface tesisAPI {
                               @Query("id_TipoUsuario") int id_TipoUsuario
     );
 
+
+    @POST("api/SolicitudAPI")
+    Call<Solicitud> EstadoAtendiendo(@Query("idSolicitud") int idsolicitud,
+                                     @Query("FechaD") String fechaconfirmacion
+
+    );
 
     @POST("api/UsuarioAPI")
     Call<Usuario> ActualizarUsuario(@Query("RUT") String RUT,

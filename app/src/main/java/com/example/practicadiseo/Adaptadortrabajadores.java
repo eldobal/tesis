@@ -44,6 +44,8 @@ public class Adaptadortrabajadores extends BaseAdapter implements Serializable{
     }
 
     public void clearData() {  Perfilestrabajadores.clear(); }
+
+
     @Override
     public int getCount() {
         return Perfilestrabajadores.size();

@@ -89,6 +89,8 @@ public class DetalleSolicitudFragment extends Fragment {
             idsolicitud = datosRecuperados.getInt("idsolicitud");
         }
 
+
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())

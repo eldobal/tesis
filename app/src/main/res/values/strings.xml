@@ -18,4 +18,5 @@
 
     <string name="err_fonoperfil">Ingrese un fono valido</string>
 
+    <string name="map_key" translatable="false">AIzaSyCw3L9HpgMDW9oxhNZStzcwSw_THxQlJrg</string>
 </resources>
