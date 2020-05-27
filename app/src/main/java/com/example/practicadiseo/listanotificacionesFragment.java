@@ -82,7 +82,8 @@ public class listanotificacionesFragment extends Fragment {
             //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
             Intent intent = new Intent(getContext(), login2Activity.class);
             startActivity(intent);
-        }else {
+        }else{
+            reiniciarfragmentnotificaciones(rutusuario);
             //if (Solicitudes.size() > 0) {
             final View vista = inflater.inflate(R.layout.elementonotificacion, null);
             //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
@@ -122,7 +123,7 @@ public class listanotificacionesFragment extends Fragment {
                     public void run() {
                         try {
                             //Ejecuta tu AsyncTask!
-                          reiniciarfragmentnotificaciones(rutusuario);
+                            reiniciarfragmentnotificacionesASYNC(rutusuario);
                         } catch (Exception e) {
                             Log.e("error", e.getMessage());
                         }
@@ -130,7 +131,7 @@ public class listanotificacionesFragment extends Fragment {
                 });
             }
         };
-        timer.schedule(task, 0, 60000);  //ejecutar en intervalo definido por el programador
+        timer.schedule(task, 0, 30000);  //ejecutar en intervalo definido por el programador
 
 
 
@@ -171,6 +172,8 @@ public class listanotificacionesFragment extends Fragment {
                     if (arraylistanotificaciones.size() != 0) {
                         //se instancia la recarga de los items que se encuentan en la lista de activas / pendientes
                         ads.refresh(arraylistanotificaciones);
+                    }else {
+
                     }
                 }
                 refreshnotificaciones.setRefreshing(false);
@@ -178,12 +181,72 @@ public class listanotificacionesFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Notificacion>> call, Throwable t) {
                 Toast.makeText(getActivity(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                refreshnotificaciones.setRefreshing(false);
             }
         });
 
 
 
     }
+
+
+
+
+
+
+
+
+
+    private void reiniciarfragmentnotificacionesASYNC(String rutusuario) {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://proyectotesis.ddns.net/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+        Call<List<Notificacion>> call = tesisAPI.getNotificacion(rutusuario);
+        call.enqueue(new Callback<List<Notificacion>>() {
+            @Override
+            public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
+
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getActivity(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                } else {
+                    arraylistanotificaciones.clear();
+                    List<Notificacion> notificaciones = response.body();
+                    for (Notificacion notificacion : notificaciones) {
+                        Notificacion notificacion1 = new Notificacion();
+                        //se setean los valores del trabajador
+                        notificacion1.setId(notificacion.getId());
+                        notificacion1.setIdSolicitud(notificacion.getIdSolicitud());
+                        notificacion1.setMensaje(notificacion.getMensaje());
+                        notificacion1.setRUT(notificacion.getRUT());
+                        //se guarda la lista con las notificaciones del usuario conectado
+                        arraylistanotificaciones.add(notificacion1);
+                    }
+
+                    if (arraylistanotificaciones.size() != 0) {
+                        //se instancia la recarga de los items que se encuentan en la lista de activas / pendientes
+                        ads.refresh(arraylistanotificaciones);
+                    }else {
+
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Notificacion>> call, Throwable t) {
+                Toast.makeText(getActivity(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+
+
+
+
+
+
 
 
 

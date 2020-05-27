@@ -45,7 +45,7 @@ public interface tesisAPI {
 
 
     @POST("api/SolicitudAPI")
-    Call<Solicitud> PostSolicitud(@Query("Fecha") String Fecha,
+    Call<SolicitudDb> PostSolicitud(@Query("Fecha") String Fecha,
                                   @Query("Descripcion") String Descripcion,
                                   @Query("RUT_Cliente") String RUT_Cliente,
                                   @Query("RUT_Trabajador") String RUT_Trabajador,

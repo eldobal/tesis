@@ -104,13 +104,14 @@ public class solicitudeFragment extends Fragment  {
 
         //comprueba si es que existe coneccion
         if (NetworkInfo != null && NetworkInfo.isConnected()) {
-
-
             if (rutusuario.isEmpty()){
                 //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
                 Intent intent = new Intent(getContext(), login2Activity.class);
                 startActivity(intent);
             }else {
+                reiniciarfragment(rutusuario);
+                reiniciarfragmentterminadas(rutusuario);
+
                 //if (Solicitudes.size() > 0) {
                 final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
                 //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
@@ -196,7 +197,7 @@ public class solicitudeFragment extends Fragment  {
                                 Solicitud soli = new Solicitud();
                                 soli = Solicitudes.get(i);
 
-                                if (soli.getEstado().equals("PENDIENTE")) {
+                                if (soli.getEstado().equals("PENDIENTE") || soli.getEstado().equals("ATENDIENDO") ) {
                                     listasolicitudactivasinterna.add(soli);
                                 }else{
 
@@ -249,7 +250,7 @@ public class solicitudeFragment extends Fragment  {
                     for (int i = 0; i < Solicitudesterminadas.size(); i++) {
                         Solicitud soli = new Solicitud();
                         soli = Solicitudesterminadas.get(i);
-                        if (soli.getEstado().equals("COMPLETADA Y PAGADA")) {
+                        if (soli.getEstado().equals("COMPLETADA Y PAGADA") || soli.getEstado().equals("COMPLETADA Y NO PAGADA") ) {
                             listasolicitudterminadasinterna.add(soli);
                          } else {
 

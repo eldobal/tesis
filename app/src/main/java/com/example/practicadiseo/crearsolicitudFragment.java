@@ -42,6 +42,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -63,7 +64,7 @@ import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class crearsolicitudFragment extends Fragment {
+public class crearsolicitudFragment extends Fragment implements Serializable {
 
     private final String CARPETA_RAIZ="misImagenesPrueba/";
     private final String RUTA_IMAGEN=CARPETA_RAIZ+"misFotos";
@@ -75,7 +76,7 @@ public class crearsolicitudFragment extends Fragment {
     EditText descripcion;
     private int idrubro=0;
     Button btnfoto,btncrearsolicitud,cargar,btnmapa;
-    private String ruttrabajador="",rutcliente="",nombretrabajador="",estadotrabajador="",calificaciontrabajador="",descripcionfinal="",rutafoto="",imagenstring="";
+    private String ruttrabajador="",rutcliente="",nombretrabajador="",estadotrabajador="",calificaciontrabajador="",descripcionfinal="",rutafoto="",imagenstring="",Fechasolicitud="";
     private TextView rut,nombre,estado,calificacion;
     //declaracion de la ruta estatica del servidor
     final static String rutaservidor= "http://proyectotesis.ddns.net";
@@ -138,7 +139,7 @@ public class crearsolicitudFragment extends Fragment {
         descripcionfinal= descripcion.getText().toString();
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        final String Fechasolicitud = sdf.format(calendar.getTime());
+         Fechasolicitud = sdf.format(calendar.getTime());
 
         latorigen="";
         longorigen="";
@@ -157,36 +158,8 @@ public class crearsolicitudFragment extends Fragment {
                                 "Ingrese una descripcion / cargue una foto", Snackbar.LENGTH_LONG);
                         snackBar.show();
                     }else{
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl("http://proyectotesis.ddns.net/")
-                                .addConverterFactory(ScalarsConverterFactory.create())
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-                        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
-                        //falta pasar el bitmap de la imagen sacada en el post hacia el web api
-                        Call<Solicitud> call = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,latorigen,longorigen,imagenstring);
-                        call.enqueue(new Callback<Solicitud>() {
-                            @Override
-                            public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
-                                if (!response.isSuccessful()) {
-                                    Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
-                                    updateDetail();
-                                } else {
-                                    btncrearsolicitud.setClickable(false);
-                                            Solicitud solicitud = response.body();
-                                            dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
-                                            dp.setTitleText("Solicitud Creada!");
-                                            dp.show();
-                                            createNotificationChannel();
-                                            crearnotificacion();
-                                            updateDetail();
+                        crearsolicitud();
 
-                                }
-                            }
-                            @Override
-                            public void onFailure(Call<Solicitud> call, Throwable t) {
-                            }
-                        });
                     }
 
             }else{
@@ -252,6 +225,65 @@ public class crearsolicitudFragment extends Fragment {
         notificationManagerCompat.notify(NOTIFICACION_ID, builder.build());
 
     }
+
+
+    private void crearsolicitud(){
+
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+            //falta pasar el bitmap de la imagen sacada en el post hacia el web api
+            Call<SolicitudDb> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,latorigen,longorigen,imagenstring);
+
+            call1.enqueue(new Callback<SolicitudDb>() {
+                @Override
+                public void onResponse(Call<SolicitudDb> call, Response<SolicitudDb> response) {
+                    if (!response.isSuccessful()) {
+                        Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                    } else {
+                        SolicitudDb solicitud = response.body();
+                        btncrearsolicitud.setClickable(false);
+                        dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
+                        dp.setTitleText("Solicitud Creada!");
+                        dp.show();
+
+                        new CountDownTimer(1000,1000){
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                            }
+                            @Override
+                            public void onFinish() {
+                                createNotificationChannel();
+                                crearnotificacion();
+                                //envio del usuario al menu pricipal
+                                updateDetail();
+                            }
+                        }.start();
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<SolicitudDb> call, Throwable t) {
+                    Toast.makeText(getContext(), "EL ERROR ESTA ACA: "+t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+
+
 
 
     private void llamarintent() {

@@ -144,7 +144,6 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
 
         }
         map.getUiSettings().setZoomControlsEnabled(true);
-        map.getUiSettings().setCompassEnabled(true);
         map.setMyLocationEnabled(true);
 
 

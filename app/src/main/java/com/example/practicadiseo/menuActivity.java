@@ -232,7 +232,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                             for (int i = 0; i < Solicitudes.size(); i++) {
                                 Solicitud soli = new Solicitud();
                                 soli = Solicitudes.get(i);
-                                if (soli.getEstado().equals("PENDIENTE")) {
+                                if (soli.getEstado().equals("PENDIENTE") || soli.getEstado().equals("ATENDIENDO")) {
                                     listasolicitudactivas.add(soli);
                                 } else {
                                     listasolicitudesterminadas.add(soli);
