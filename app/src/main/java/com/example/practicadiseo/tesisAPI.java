@@ -43,7 +43,7 @@ public interface tesisAPI {
     );
 
 
-
+    //metodo llamada para hacer el insert de la solicitud del cliente
     @POST("api/SolicitudAPI")
     Call<SolicitudDb> PostSolicitud(@Query("Fecha") String Fecha,
                                   @Query("Descripcion") String Descripcion,
@@ -53,9 +53,7 @@ public interface tesisAPI {
                                   @Query("latitud") String latitud,
                                   @Query("longitud") String longitud,
                                    @Body() String foto
-
     );
-
 
 
 
@@ -98,9 +96,9 @@ public interface tesisAPI {
     Call<List<Ciudad>> getCiudades();
 
 
-
+    //metodo para cancelar la solicitud del cliente
     @POST("api/SolicitudAPI")
-    Call<Solicitud> CancelarSolicitud(@Query("idSolicitud") int idSolicitud
+    Call<String> CancelarSolicitud(@Query("idSolicitud") int idSolicitud
     );
 
 
@@ -108,6 +106,9 @@ public interface tesisAPI {
     @GET("api/SolicitudAPI")
     Call<List<Solicitud>> getSolicitudes(@Query("RUT") String rut);
 
+
     @GET("api/SolicitudAPI")
     Call<Solicitud> getSolicitudCliente(@Query("id") int id);
+
+
 }

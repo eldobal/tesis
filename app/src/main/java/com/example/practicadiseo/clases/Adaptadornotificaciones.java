@@ -54,13 +54,15 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
     }
 
     //metodo el cual se utiliza para actualizar la lista con los cambios
-    public void refresh(ArrayList<Notificacion> listanotificaciones){
+    public void refresh(ArrayList<Notificacion> listanotificaciones) {
         this.listanotificaciones = listanotificaciones;
         this.notifyDataSetChanged();
     }
 
     //metodo el cual limpia la lista con los elementos que tenga dentro
-    public void clearData() {  listanotificaciones.clear(); }
+    public void clearData() {
+        listanotificaciones.clear();
+    }
 
     @Override
     public int getCount() {
@@ -100,8 +102,8 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
             @Override
             public void onClick(View v) {
 
-                dp=   new SweetAlertDialog(vista.getContext(), SweetAlertDialog.WARNING_TYPE);
-                dp.setTitleText("Conformar La solicitud?");
+                dp = new SweetAlertDialog(vista.getContext(), SweetAlertDialog.WARNING_TYPE);
+                dp.setTitleText("Confirmar La solicitud?");
                 dp.setContentText("si confirma esta solicitud el trbajador realizara el trabajo. so la cancela se eliminara esta solicitud");
                 dp.setConfirmText("Confirmar!");
                 dp.setCancelText("Cancelar!");
@@ -116,14 +118,13 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                 .addConverterFactory(GsonConverterFactory.create())
                                 .build();
                         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
-                        Call<Solicitud> call = tesisAPI.EstadoAtendiendo(listanotificaciones.get(i).getIdSolicitud(),Fechasolicitud);
+                        Call<Solicitud> call = tesisAPI.EstadoAtendiendo(listanotificaciones.get(i).getIdSolicitud(), Fechasolicitud);
                         call.enqueue(new Callback<Solicitud>() {
                             @Override
                             public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
-                                if(!response.isSuccessful()){
-                                    Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
-                                }
-                                else {
+                                if (!response.isSuccessful()) {
+                                    Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                } else {
                                     listanotificaciones.remove(i);
                                     refresh(listanotificaciones);
                                     //colocar aviso de que se ha eliminado la solicitud
@@ -136,41 +137,51 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                         ft.commit();*/
                                 }
                             }
+
                             @Override
                             public void onFailure(Call<Solicitud> call, Throwable t) {
+                                Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+                        sDialog.dismissWithAnimation();
+                    }
+                }).show();
+                dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    @Override
+                    public void onClick(SweetAlertDialog sDialog) {
+                        Retrofit retrofit = new Retrofit.Builder()
+                                .baseUrl("http://proyectotesis.ddns.net/")
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+                        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+                        Call<String> call = tesisAPI.CancelarSolicitud(listanotificaciones.get(i).getIdSolicitud());
+                        call.enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(Call<String> call, Response<String> response) {
+                                if(!response.isSuccessful()){
+                                    Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                                }
+                                else {
+                                    listanotificaciones.remove(i);
+                                    refresh(listanotificaciones);
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<String> call, Throwable t) {
                                 Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         });
                         sDialog.dismissWithAnimation();
                     }
-                })    .show();
-                dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        sDialog.cancel();
-                    }
                 })
                         .show();
 
-
-                /*
-                Bundle bundle = new Bundle();
-                bundle.putInt("idsolicitud", listanotificaciones.get(i).getIdSolicitud());
-                DetalleSolicitudFragment detalleSolicitudFragment = new DetalleSolicitudFragment();
-                detalleSolicitudFragment.setArguments(bundle);
-                FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.container, detalleSolicitudFragment);
-                ft.commit();
-
-                 */
             }
         });
 
 
-
-
-
         return vista;
     }
+
+
 }

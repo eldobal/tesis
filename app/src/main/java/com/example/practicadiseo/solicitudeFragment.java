@@ -15,9 +15,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.text.method.DateTimeKeyListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -109,9 +113,6 @@ public class solicitudeFragment extends Fragment  {
                 Intent intent = new Intent(getContext(), login2Activity.class);
                 startActivity(intent);
             }else {
-                reiniciarfragment(rutusuario);
-                reiniciarfragmentterminadas(rutusuario);
-
                 //if (Solicitudes.size() > 0) {
                 final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
                 //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
@@ -125,7 +126,33 @@ public class solicitudeFragment extends Fragment  {
                     //se setea el adaptador a la lista del fragments
                     lista.setAdapter(ads2);
                 }
+
             }
+
+
+            final Handler handler = new Handler();
+            Timer timer = new Timer();
+
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            try {
+                                //Ejecuta tu AsyncTask!
+                                reiniciarfragment(rutusuario);
+                                reiniciarfragmentterminadas(rutusuario);
+                            } catch (Exception e) {
+                                Log.e("error", e.getMessage());
+                            }
+                        }
+                    });
+                }
+            };
+            timer.schedule(task, 0, 15000);  //ejecutar en intervalo definido por el programador
+
+
+
 
             refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
@@ -181,6 +208,7 @@ public class solicitudeFragment extends Fragment  {
                 } else {
                     List<Solicitud> solicituds = response.body();
                     Solicitudes.clear();
+                    listasolicitudactivas.clear();
                     for (Solicitud solicitud : solicituds) {
                         Solicitud Solicitud1 = new Solicitud();
                         //se setean los valores del trabajador
@@ -192,21 +220,21 @@ public class solicitudeFragment extends Fragment  {
                         Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
                         Solicitudes.add(Solicitud1);
                     }
-                    listasolicitudactivasinterna.clear();
+                    listasolicitudactivas.clear();
                         for (int i = 0; i < Solicitudes.size(); i++) {
                                 Solicitud soli = new Solicitud();
                                 soli = Solicitudes.get(i);
 
-                                if (soli.getEstado().equals("PENDIENTE") || soli.getEstado().equals("ATENDIENDO") ) {
-                                    listasolicitudactivasinterna.add(soli);
+                                if (soli.getEstado().equals("PENDIENTE") || soli.getEstado().equals("ATENDIENDO") || soli.getEstado().equals("CONFIRMADA")  ) {
+                                    listasolicitudactivas.add(soli);
                                 }else{
 
                                 }
                             }
                             //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
-                        if (listasolicitudactivasinterna.size() != 0) {
+                        if (listasolicitudactivas.size() != 0) {
                          //se instancia la recarga de los items que se encuentan en la lista de activas / pendientes
-                         ads.refresh(listasolicitudactivasinterna);
+                         ads.refresh(listasolicitudactivas);
                         }
                     refreshLayout.setRefreshing(false);
                 }

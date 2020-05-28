@@ -28,13 +28,14 @@ CardView cardpeluqueria,cardmanicurista,cardpodologa,cardbarbero,cardmaquillador
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_areabelleza, container, false);
-
         cardpeluqueria =(CardView) v.findViewById(R.id.cardpeluquera);
         cardmanicurista =(CardView) v.findViewById(R.id.cardmanicurista);
         cardpodologa =(CardView) v.findViewById(R.id.cardpodologa);
         cardbarbero=(CardView) v.findViewById(R.id.cardbarbero);
         cardmaquilladora =(CardView) v.findViewById(R.id.cardmaquilladora);
         cardmasajista =(CardView) v.findViewById(R.id.cardmasajista);
+
+
 
         cardpeluqueria.setOnClickListener(new View.OnClickListener() {
             @Override

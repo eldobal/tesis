@@ -20,7 +20,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import com.bumptech.glide.Glide;
 import com.example.practicadiseo.DetalleSolicitudFragment;
@@ -105,7 +107,14 @@ public class Adaptador extends BaseAdapter implements Serializable {
         final int posicion = i;
         detalle.setTag(i);
 
-        if(!listasolicitudes.get(i).getEstado().equals("PENDIENTE")) {
+        if(listasolicitudes.get(i).getEstado().equals("ATENDIENDO")) {
+
+            detalle.setText("Detalle");
+            detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colorAccent));
             //boton sobre el detalle de una solicitud individual
             detalle.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -123,7 +132,86 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     ft.commit();
                 }
             });
-        }else {
+        }if(listasolicitudes.get(i).getEstado().equals("CONFIRMADA")){
+
+            detalle.setText("Confirmar");
+            detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            detalle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    dp = new SweetAlertDialog(vista.getContext(), SweetAlertDialog.WARNING_TYPE);
+                    dp.setTitleText("Confirmar La solicitud?");
+                    dp.setContentText("si confirma esta solicitud el trbajador realizara el trabajo. so la cancela se eliminara esta solicitud");
+                    dp.setConfirmText("Confirmar!");
+                    dp.setCancelText("Cancelar!");
+                    dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            Calendar calendar = Calendar.getInstance();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            final String Fechasolicitud = sdf.format(calendar.getTime());
+                            Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl("http://proyectotesis.ddns.net/")
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+                            Call<Solicitud> call = tesisAPI.EstadoAtendiendo(listasolicitudes.get(i).getIdSolicitud(), Fechasolicitud);
+                            call.enqueue(new Callback<Solicitud>() {
+                                @Override
+                                public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
+                                    if (!response.isSuccessful()) {
+                                        Toast.makeText(vista.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                    } else {
+                                        listasolicitudes.remove(i);
+                                        refresh(listasolicitudes);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<Solicitud> call, Throwable t) {
+                                    Toast.makeText(vista.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            sDialog.dismissWithAnimation();
+                        }
+                    }).show();
+                    dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl("http://proyectotesis.ddns.net/")
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+                            Call<String> call2 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud());
+                            call2.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call2, Response<String> response) {
+                                    if(!response.isSuccessful()){
+                                        Toast.makeText(vista.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                                    }
+                                    else {
+                                        listasolicitudes.remove(i);
+                                        refresh(listasolicitudes);
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<String> call2, Throwable t) {
+                                    Toast.makeText(vista.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                            .show();
+                }
+            });
+        }if(listasolicitudes.get(i).getEstado().equals("PENDIENTE")) {
             detalle.setText("Cancelar");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
             numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
@@ -146,14 +234,15 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
-                            Call<Solicitud> call = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud());
-                            call.enqueue(new Callback<Solicitud>() {
+                            Call<String> call3 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud());
+                            call3.enqueue(new Callback<String>() {
                                 @Override
-                                public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
+                                public void onResponse(Call<String> call3, Response<String> response) {
                                     if(!response.isSuccessful()){
                                         Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                                     }
                                     else {
+
                                         listasolicitudes.remove(i);
                                         refresh(listasolicitudes);
                                       /* solicitudeFragment solicitudeFragment = new solicitudeFragment();
@@ -164,7 +253,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     }
                                 }
                                 @Override
-                                public void onFailure(Call<Solicitud> call, Throwable t) {
+                                public void onFailure(Call<String> call3, Throwable t) {
                                     Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });

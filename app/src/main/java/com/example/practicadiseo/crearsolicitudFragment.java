@@ -71,7 +71,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     private  Bitmap bitmap;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     SharedPreferences prefs,prefsmaps;
-    SweetAlertDialog dp;
+    SweetAlertDialog dp,pDialog;
     ImageView fotosacada,imgperfil;
     EditText descripcion;
     private int idrubro=0;
@@ -139,7 +139,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         descripcionfinal= descripcion.getText().toString();
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-         Fechasolicitud = sdf.format(calendar.getTime());
+        Fechasolicitud = sdf.format(calendar.getTime());
 
         latorigen="";
         longorigen="";
@@ -148,7 +148,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             @Override
             public void onClick(View v) {
                 setlatlongexist();
-                imagenstring = convertirimgstring(bitmap);
                 descripcionfinal= descripcion.getText().toString();
                 //se hace la validacion si se ha escojido la direccion
                 if(!latorigen.isEmpty() && !longorigen.isEmpty()){
@@ -158,7 +157,26 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                                 "Ingrese una descripcion / cargue una foto", Snackbar.LENGTH_LONG);
                         snackBar.show();
                     }else{
+                        btncrearsolicitud.setClickable(false);
+                        pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+                        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+                        pDialog.setTitleText("Loading");
+                        pDialog.setCancelable(false);
+                        pDialog.show();
+                        //metodo para crear la solicitud con los parametros
+                        imagenstring = convertirimgstring(bitmap);
+                        new CountDownTimer(2000,1000){
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                            }
+                            @Override
+                            public void onFinish() {
+
+                            }
+                        }.start();
+
                         crearsolicitud();
+
 
                     }
 
@@ -172,7 +190,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             }
         });
 
-
+        //metodo el cual carga el fragment de mapa
         btnmapa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,7 +198,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             }
         });
 
-
+        //metodo para cargar la foto
         cargar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,6 +209,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         return v;
     }
 
+    //metodo el cual verifica la version del so para crear el canal
     private void createNotificationChannel(){
         //se verifica que el SO sea igual o superior a oreo
         //si es superior crea el notification chanel
@@ -216,20 +235,16 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         builder.setVibrate(new long[]{1000,1000,1000,1000,1000});
         builder.setDefaults(Notification.DEFAULT_SOUND);
         //texto para mostrar de forma exancible
-        builder.setStyle(new NotificationCompat.BigTextStyle().bigText("La solicitud se ha creado exitosamente, el trajador" +
-                "sera notificado de inmediato, porfavor este atento a la respuesta" +
-                "podra confirmar la solicitud desde el apartado mis solicitudes"));
-
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText("La solicitud se ha creado exitosamente, el " +nombretrabajador+
+                ". sera notificado de inmediato, porfavor este atento a la respuesta" +
+                " podra confirmar la solicitud desde el apartado mis solicitudes"));
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getActivity());
         //se instancia la notificacion
         notificationManagerCompat.notify(NOTIFICACION_ID, builder.build());
-
     }
 
 
     private void crearsolicitud(){
-
-        try {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://proyectotesis.ddns.net/")
                     .addConverterFactory(ScalarsConverterFactory.create())
@@ -238,52 +253,33 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
             //falta pasar el bitmap de la imagen sacada en el post hacia el web api
             Call<SolicitudDb> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,latorigen,longorigen,imagenstring);
-
             call1.enqueue(new Callback<SolicitudDb>() {
                 @Override
-                public void onResponse(Call<SolicitudDb> call, Response<SolicitudDb> response) {
+                public void onResponse(Call<SolicitudDb> call1, Response<SolicitudDb> response) {
                     if (!response.isSuccessful()) {
                         Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                     } else {
+                        pDialog.cancel();
                         SolicitudDb solicitud = response.body();
-                        btncrearsolicitud.setClickable(false);
                         dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
                         dp.setTitleText("Solicitud Creada!");
                         dp.show();
-
-                        new CountDownTimer(1000,1000){
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                            }
-                            @Override
-                            public void onFinish() {
-                                createNotificationChannel();
-                                crearnotificacion();
-                                //envio del usuario al menu pricipal
-                                updateDetail();
-                            }
-                        }.start();
-
+                        createNotificationChannel();
+                        crearnotificacion();
+                        //envio del usuario al menu pricipal
+                        updateDetail();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<SolicitudDb> call, Throwable t) {
+                public void onFailure(Call<SolicitudDb> call1, Throwable t) {
                     Toast.makeText(getContext(), "EL ERROR ESTA ACA: "+t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 }
             });
 
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-
 
     }
-
-
-
 
 
     private void llamarintent() {
@@ -310,6 +306,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                         dialog.dismiss();
                     }
                 }
+
             }
         });
         alertOpciones.show();
@@ -330,7 +327,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         //si la opcion es cargar la foto desde el dispocitivo
         if(requestCode == 10){
             Uri path= data.getData();
-            fotosacada.setImageURI(path);
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),path);
                 fotosacada.setImageBitmap(bitmap);
@@ -338,6 +334,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                 e.printStackTrace();
             }
         }
+
     }
 
 
@@ -357,7 +354,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             return "";
         }else {
             ByteArrayOutputStream array = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, array);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, array);
             byte[] Imagenbyte = array.toByteArray();
             String imagenString = Base64.encodeToString(Imagenbyte, Base64.DEFAULT);
             return imagenString;

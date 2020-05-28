@@ -60,7 +60,6 @@ public class listanotificacionesFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //lista de notificaciones en un array para recibirlas con el get arguments
         arraylistanotificaciones = (ArrayList<Notificacion>) getArguments().getSerializable("arraynotificaciones");
-
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
     }
@@ -75,42 +74,7 @@ public class listanotificacionesFragment extends Fragment {
         //prefs que contienen datos del usuario
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
-        listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
-        refreshnotificaciones =(SwipeRefreshLayout) v.findViewById(R.id.refreshnotificaciones);
-
-        if (rutusuario.isEmpty()){
-            //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
-            Intent intent = new Intent(getContext(), login2Activity.class);
-            startActivity(intent);
-        }else{
-            reiniciarfragmentnotificaciones(rutusuario);
-            //if (Solicitudes.size() > 0) {
-            final View vista = inflater.inflate(R.layout.elementonotificacion, null);
-            //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
-            if (arraylistanotificaciones.size() != 0) {
-                ads = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
-                //se setea el adaptador a la lista del fragments
-                listanotificaciones.setAdapter(ads);
-            }
-
-        }
-
-
-
-        refreshnotificaciones.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new CountDownTimer(1500,1000){
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                    }
-                    @Override
-                    public void onFinish() {
-                        reiniciarfragmentnotificaciones(rutusuario);
-                    }
-                }.start();
-            }
-        });
+        reiniciarfragmentnotificacionesASYNC(rutusuario);
 
 
         final Handler handler = new Handler();
@@ -131,7 +95,48 @@ public class listanotificacionesFragment extends Fragment {
                 });
             }
         };
-        timer.schedule(task, 0, 30000);  //ejecutar en intervalo definido por el programador
+        timer.schedule(task, 0, 15000);  //ejecutar en intervalo definido por el programador
+
+
+
+
+        listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
+        refreshnotificaciones =(SwipeRefreshLayout) v.findViewById(R.id.refreshnotificaciones);
+
+        if (rutusuario.isEmpty()){
+            //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
+            Intent intent = new Intent(getContext(), login2Activity.class);
+            startActivity(intent);
+        }else{
+            //if (Solicitudes.size() > 0) {
+            final View vista = inflater.inflate(R.layout.elementonotificacion, null);
+            //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
+            if (arraylistanotificaciones.size() != 0) {
+                ads = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
+                //se setea el adaptador a la lista del fragments
+                listanotificaciones.setAdapter(ads);
+            }
+
+        }
+
+
+
+       /* refreshnotificaciones.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new CountDownTimer(1500,1000){
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                    }
+                    @Override
+                    public void onFinish() {
+                        reiniciarfragmentnotificaciones(rutusuario);
+                    }
+                }.start();
+            }
+        });
+        */
+
 
 
 
@@ -176,12 +181,12 @@ public class listanotificacionesFragment extends Fragment {
 
                     }
                 }
-                refreshnotificaciones.setRefreshing(false);
+             //   refreshnotificaciones.setRefreshing(false);
             }
             @Override
             public void onFailure(Call<List<Notificacion>> call, Throwable t) {
                 Toast.makeText(getActivity(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
-                refreshnotificaciones.setRefreshing(false);
+             //   refreshnotificaciones.setRefreshing(false);
             }
         });
 

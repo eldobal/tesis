@@ -131,6 +131,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                                 //permite regresar hacia atras entre los fragments
                                 .addToBackStack(null)
                                 .commit();
+
                     }
                     //se muestra el fragment de configuracion y setting
                     if(menuItem.getItemId()== R.id.menu_settings){
@@ -138,9 +139,9 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                     }
                     if(menuItem.getItemId()== R.id.menu_notificaciones){
 
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("arraynotificaciones", listanotificaciones);
-                        listanotificacionesFragment.setArguments(bundle);
+                        Bundle bundle2 = new Bundle();
+                        bundle2.putSerializable("arraynotificaciones", listanotificaciones);
+                        listanotificacionesFragment.setArguments(bundle2);
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, listanotificacionesFragment, "notificacionestag")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                 //permite regresar hacia atras entre los fragments
@@ -175,6 +176,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                 if (!response.isSuccessful()) {
                     Toast.makeText(menuActivity.this, "error :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
+                    listanotificaciones.clear();
                     List<Notificacion> notificaciones = response.body();
                     for (Notificacion notificacion : notificaciones) {
                         Notificacion notificacion1 = new Notificacion();
@@ -212,6 +214,8 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                 if (!response.isSuccessful()) {
                     Toast.makeText(menuActivity.this, "error :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
+                    listasolicitudactivas.clear();
+                    listasolicitudesterminadas.clear();
                     List<Solicitud> solicituds = response.body();
                     for (Solicitud solicitud : solicituds) {
                         Solicitud Solicitud1 = new Solicitud();
@@ -232,7 +236,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                             for (int i = 0; i < Solicitudes.size(); i++) {
                                 Solicitud soli = new Solicitud();
                                 soli = Solicitudes.get(i);
-                                if (soli.getEstado().equals("PENDIENTE") || soli.getEstado().equals("ATENDIENDO")) {
+                                if (soli.getEstado().equals("PENDIENTE") || soli.getEstado().equals("ATENDIENDO") || soli.getEstado().equals("CONFIRMADA")  ) {
                                     listasolicitudactivas.add(soli);
                                 } else {
                                     listasolicitudesterminadas.add(soli);

@@ -33,7 +33,7 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_marginRight="3dp"
+        android:layout_marginRight="7dp"
         android:layout_height="match_parent">
 
 
@@ -98,7 +98,7 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="15dp"
         android:layout_height="match_parent">
 
         <LinearLayout
