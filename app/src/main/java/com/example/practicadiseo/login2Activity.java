@@ -208,12 +208,10 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         String contraseña = getusercontraseñaprefs();
         int ciudadid =getuseridciudadprefs();
         //string para asignar los valores del usuario si es que existe
-        usuarioconectado=rut.toString();
-        contraseñausuarioconectado=contraseña.toString();
         idciudad=ciudadid;
         if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)&& ciudadid !=0) {
-            txtrut.setText(rut);
-            txtpass.setText(contraseña);
+            usuarioconectado=rut.toString();
+            contraseñausuarioconectado=contraseña.toString();
         }
     }
 

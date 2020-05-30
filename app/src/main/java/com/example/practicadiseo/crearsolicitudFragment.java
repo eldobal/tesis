@@ -105,17 +105,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         prefsmaps = this.getActivity().getSharedPreferences("ubicacionmapa", Context.MODE_PRIVATE);
 
-        rut =(TextView) getActivity().findViewById(R.id.txtrutcrearsolicitudtrabajador);
-        nombre =(TextView) getActivity().findViewById(R.id.txtnombrecrearsolicitudtrabajador);
-        estado =(TextView) getActivity().findViewById(R.id.txtestadocrearsolicitudtrabajador);
-        calificacion =(TextView) getActivity().findViewById(R.id.txtcalificacioncrearsolicitudtrabajador);
-        imgperfil=(ImageView) getActivity().findViewById(R.id.imgperfil);
-        cargar = (Button) getActivity().findViewById(R.id.btncargarfoto);
-        btncrearsolicitud = (Button) getActivity().findViewById(R.id.btncrearsolicitud);
-        btnmapa=(Button) getActivity().findViewById(R.id.btnmapa);
-        fotosacada = (ImageView) getActivity().findViewById(R.id.fotocrearsolicitud);
-        descripcion =(EditText) getActivity().findViewById(R.id.txtdescripcioncrearsolicitud);
-
 
     }
 
@@ -125,6 +114,18 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_crearsolicitud, container, false);
+
+        rut =(TextView) v.findViewById(R.id.txtrutcrearsolicitudtrabajador);
+        nombre =(TextView) v.findViewById(R.id.txtnombrecrearsolicitudtrabajador);
+        estado =(TextView) v.findViewById(R.id.txtestadocrearsolicitudtrabajador);
+        calificacion =(TextView) v.findViewById(R.id.txtcalificacioncrearsolicitudtrabajador);
+        imgperfil=(ImageView) v.findViewById(R.id.imgperfil);
+        cargar = (Button) v.findViewById(R.id.btncargarfoto);
+        btncrearsolicitud = (Button) v.findViewById(R.id.btncrearsolicitud);
+        btnmapa=(Button) v.findViewById(R.id.btnmapa);
+        fotosacada = (ImageView) v.findViewById(R.id.fotocrearsolicitud);
+        descripcion =(EditText) v.findViewById(R.id.txtdescripcioncrearsolicitud);
+
 
         Bundle args = getArguments();
         if (args == null) {
@@ -141,8 +142,9 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
 
         rut.setText("Rut: "+ruttrabajador);
         nombre.setText(nombretrabajador);
-        estado.setText(estadotrabajador);
-        calificacion.setText(calificaciontrabajador);
+        estado.setText("Estado: "+estadotrabajador);
+        //se setean las estrellas dependiendo de la calificacion
+       setestrellas(calificaciontrabajador);
 
         Glide.with(getContext()).load(String.valueOf(rutaservidor+rutafoto)).into(imgperfil);
         //se verifica si existe el rut de usuario
@@ -278,6 +280,52 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
 
     private void llamarintent() {
         //se crea un alertdialog para que
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        View view = inflater.inflate(R.layout.alertdialog01,null);
+        builder.setView(view);
+
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        Button btntomarfoto = view.findViewById(R.id.alertbtntomarfoto);
+        Button btncargarfoto = view.findViewById(R.id.alertbtncargarfoto);
+        Button btncancelar = view.findViewById(R.id.alertbtncancelar);
+
+
+        btncargarfoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/");
+                startActivityForResult(intent.createChooser(intent,"Seleccione la Aplicacion"),10);
+                dialog.dismiss();
+            }
+        });
+
+        btntomarfoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                }
+                dialog.dismiss();
+            }
+        });
+
+        btncancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+
+        /*
         final CharSequence[] opciones ={"Tomar Foto","Cargar Imagen","Cancelar"};
         final AlertDialog.Builder alertOpciones =new AlertDialog.Builder(getContext());
         alertOpciones.setTitle("Seleccione una Opción");
@@ -302,7 +350,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                 }
             }
         });
-        alertOpciones.show();
+        alertOpciones.show();     */
 
     }
 
@@ -389,5 +437,27 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         return prefsmaps.getString("Longitud", "");
     }
 
+
+
+    private void  setestrellas(String calificaciona) {
+        if(calificaciona.equals("5")){
+            calificacion.setText("Calificacion: ★★★★★");
+        }
+        if(calificaciona.equals("4")){
+            calificacion.setText("Calificacion: ★★★★");
+        }
+        if(calificaciona.equals("3")){
+            calificacion.setText("Calificacion: ★★★");
+        }
+        if(calificaciona.equals("2")){
+            calificacion.setText("Calificacion: ★★");
+        }
+        if(calificaciona.equals("1")){
+            calificacion.setText("Calificacion: ★");
+        }
+        if(calificaciona.equals("0")){
+            calificacion.setText("Calificacion: No posee Calificacion");
+        }
+    }
 
 }

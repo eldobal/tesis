@@ -23,14 +23,13 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="15dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="12dp">
 
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
-                android:layout_marginBottom="60dp"
+                android:layout_marginBottom="55dp"
                 android:scrollbarThumbVertical="@drawable/colorsroll">
 
 
@@ -47,9 +46,9 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="25dp"
-                            android:layout_marginTop="35dp"
-                            android:layout_marginRight="25dp">
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_marginRight="20dp">
 
 
                             <RelativeLayout
@@ -58,14 +57,14 @@
                                 android:layout_height="wrap_content">
 
                                 <RelativeLayout
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content">
 
                                     <ImageView
                                         android:id="@+id/imgperfil"
                                         android:layout_width="100dp"
-                                        android:layout_height="100dp"
                                         android:layout_marginRight="20dp"
+                                        android:layout_height="100dp"
                                         android:layout_alignParentLeft="true"
                                         android:background="@color/float_transparent"
                                         android:src="@drawable/userprofile" />
@@ -78,15 +77,16 @@
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="100dp">
+
+                                    android:layout_marginLeft="113dp">
 
                                     <TextView
                                         android:id="@+id/txtrutcrearsolicitudtrabajador"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_centerHorizontal="true"
+                                        android:layout_alignParentLeft="true"
                                         android:fontFamily="sans-serif-condensed-medium"
-                                        android:text="Rut:"
+                                        android:text=""
                                         android:textColor="@color/colordark"
                                         android:textSize="17dp"></TextView>
 
@@ -96,9 +96,9 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_below="@+id/txtrutcrearsolicitudtrabajador"
-                                        android:layout_centerHorizontal="true"
+                                        android:layout_alignParentLeft="true"
                                         android:fontFamily="sans-serif-condensed-medium"
-                                        android:text="nombre:"
+                                        android:text=""
                                         android:textColor="@color/colordark"
                                         android:textSize="17dp"></TextView>
 
@@ -108,9 +108,9 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_below="@+id/txtnombrecrearsolicitudtrabajador"
-                                        android:layout_centerHorizontal="true"
+                                        android:layout_alignParentLeft="true"
                                         android:fontFamily="sans-serif-condensed-medium"
-                                        android:text="Estado Usuario:"
+                                        android:text=""
                                         android:textColor="@color/colordark"
                                         android:textSize="17dp"></TextView>
 
@@ -120,9 +120,9 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_below="@+id/txtestadocrearsolicitudtrabajador"
-                                        android:layout_centerHorizontal="true"
+                                        android:layout_alignParentLeft="true"
                                         android:fontFamily="sans-serif-condensed-medium"
-                                        android:text="Calificacion:"
+                                        android:text=""
                                         android:textColor="@color/colordark"
                                         android:textSize="17dp"></TextView>
 
@@ -222,6 +222,7 @@
                             android:fontFamily="sans-serif-condensed-medium"
                             android:textColor="@color/colordark"
                             android:background="@color/colorPrimaryDark"
+                            android:layout_marginTop="10dp"
                             android:layout_marginRight="20dp"
                             android:layout_marginLeft="20dp"
                             android:textSize="20dp"
@@ -256,7 +257,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="36dp"
                             android:background="@color/colorPrimaryDark"
-                            android:text="  Tomar Foto "
+                            android:text="  Cargar Foto "
                             android:layout_height="wrap_content">
 
                         </Button>
@@ -303,7 +304,9 @@
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:textSize="16dp"
 
                 android:background="@drawable/botonripple"
                 android:text="Crear Solicitud"

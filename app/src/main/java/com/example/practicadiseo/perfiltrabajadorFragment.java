@@ -39,6 +39,8 @@ public class perfiltrabajadorFragment extends Fragment {
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     String urlfoto="";
     NetworkInfo networkInfo;
+
+    UsuarioTrabajador trabajador =new UsuarioTrabajador();
     public perfiltrabajadorFragment() {
         // Required empty public constructor
     }
@@ -85,10 +87,10 @@ public class perfiltrabajadorFragment extends Fragment {
                 if (networkInfo != null && networkInfo.isConnected()) {
                 Bundle bundle = new Bundle();
                 //en el bundle se enviaran los siguientes datos para poder operar en el crear soliciutd
-                bundle.putString("ruttrabajador", ruttrabajador);
-                bundle.putString("nombretrabajador", (String) nombre.getText());
-                bundle.putString("estadotrabajador", (String) estado.getText());
-                bundle.putString("calificaciontrabajador", (String) calificacion.getText());
+                bundle.putString("ruttrabajador", trabajador.getRUT());
+                bundle.putString("nombretrabajador", trabajador.getNombre()+" "+trabajador.getApellido());
+                bundle.putString("estadotrabajador", trabajador.getEstado());
+                bundle.putString("calificaciontrabajador", trabajador.getCalificacion());
                 bundle.putString("imgperfiltrabajador", (String) urlfoto);
                 bundle.putInt("idrubro", idrubro);
                 crearsolicitudFragment crearsolicitudFragment = new crearsolicitudFragment();
@@ -127,12 +129,13 @@ public class perfiltrabajadorFragment extends Fragment {
                     else {
                         //respuesta del request y seteo de los valores del usuario encontrado en los campos de la vista
                         UsuarioTrabajador usuarios = response.body();
-                        rut.setText("Rut: "+usuarios.getRUT().toString());
-                        nombre.setText("Trabajdor: "+usuarios.getNombre().toString()+" "+usuarios.getApellido().toString());
-                        telefono.setText("Telefono: "+usuarios.getFono().toString());
-                        ciudad.setText("Ciudad: "+usuarios.getCiudad().toString());
+                        trabajador = usuarios;
+                        rut.setText(usuarios.getRUT().toString());
+                        nombre.setText(usuarios.getNombre().toString()+" "+usuarios.getApellido().toString());
+                        telefono.setText(usuarios.getFono().toString());
+                        ciudad.setText(usuarios.getCiudad().toString());
                         setestrellas(usuarios.getCalificacion());
-                        estado.setText("Estado Trabajador: "+usuarios.getEstado());
+                        estado.setText(usuarios.getEstado());
                         urlfoto =usuarios.getFoto();
                         Glide.with(getContext()).load(String.valueOf(rutaservidor+usuarios.getFoto())).into(foto);
                     }
@@ -154,22 +157,23 @@ public class perfiltrabajadorFragment extends Fragment {
 
    private void  setestrellas(String calificaciona) {
         if(calificaciona.equals("5")){
-            calificacion.setText("Calificacion: ★★★★★");
+            calificacion.setText("★★★★★");
         }
        if(calificaciona.equals("4")){
-           calificacion.setText("Calificacion: ★★★★");
+           calificacion.setText("★★★★");
        }
        if(calificaciona.equals("3")){
-           calificacion.setText("Calificacion: ★★★");
+           calificacion.setText("★★★");
        }
        if(calificaciona.equals("2")){
-           calificacion.setText("Calificacion: ★★");
+           calificacion.setText("★★");
        }
        if(calificaciona.equals("1")){
-           calificacion.setText("Calificacion: ★");
+           calificacion.setText("★");
        }
        if(calificaciona.equals("0")){
-           calificacion.setText("Calificacion: No posee Calificacion");
+           calificacion.setText("No posee Calificacion");
        }
    }
+
 }

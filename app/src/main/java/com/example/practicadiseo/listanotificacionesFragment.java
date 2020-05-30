@@ -1,5 +1,6 @@
 package com.example.practicadiseo;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +27,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.practicadiseo.clases.Adaptadornotificaciones;
 
 import java.util.ArrayList;
@@ -46,10 +49,12 @@ public class listanotificacionesFragment extends Fragment {
     ListView listanotificaciones;
     NetworkInfo NetworkInfo;
     SwipeRefreshLayout refreshnotificaciones;
-    SharedPreferences prefs;
+    SharedPreferences prefs,asycprefs;
+    LottieAnimationView animationnotification ;
     ArrayList<Notificacion> arraylistanotificaciones= new ArrayList<Notificacion>();;
     Adaptadornotificaciones ads;
     private String rutusuario;
+    int azynctiempo =0;
 
     public listanotificacionesFragment() {
         // Required empty public constructor
@@ -59,8 +64,10 @@ public class listanotificacionesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) { super.onCreate(savedInstanceState);
         //lista de notificaciones en un array para recibirlas con el get arguments
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         arraylistanotificaciones = (ArrayList<Notificacion>) getArguments().getSerializable("arraynotificaciones");
         listanotificaciones = (ListView) getActivity().findViewById(R.id.listanotificaciones);
+
         //refreshnotificaciones =(SwipeRefreshLayout) getActivity().findViewById(R.id.refreshnotificaciones);
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -70,8 +77,10 @@ public class listanotificacionesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_listanotificaciones, container, false);
+        animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
         //prefs que contienen datos del usuario
         setcredentiasexist();
+        settiempoasyncexist();
         reiniciarfragmentnotificacionesASYNC(rutusuario);
         if (rutusuario.isEmpty()){
             //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
@@ -105,7 +114,7 @@ public class listanotificacionesFragment extends Fragment {
                 });
             }
         };
-        timer.schedule(task, 0, 15000);  //ejecutar en intervalo definido por el programador
+        timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
 
        /* refreshnotificaciones.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -151,9 +160,15 @@ public class listanotificacionesFragment extends Fragment {
                         arraylistanotificaciones.add(notificacion1);
                     }
                     if (arraylistanotificaciones.size() != 0) {
+                        animationnotification.setVisibility(View.INVISIBLE);
+                        animationnotification.pauseAnimation();
                         //se instancia la recarga de los items que se encuentan en la lista de activas / pendientes
                         ads.refresh(arraylistanotificaciones);
+
                     }else {
+                        animationnotification.playAnimation();
+                        animationnotification.setVisibility(View.VISIBLE);
+
 
                     }
                 }
@@ -176,5 +191,20 @@ public class listanotificacionesFragment extends Fragment {
     private String getuserrutprefs() {
         return prefs.getString("Rut", "");
     }
+
+
+
+    private void settiempoasyncexist() {
+        int tiempoasync = gettiempoasync();
+        if (tiempoasync!=0) {
+            azynctiempo=tiempoasync;
+        }
+    }
+
+    private int gettiempoasync() {
+        return asycprefs.getInt("tiempo", 0);
+    }
+
+
 
 }

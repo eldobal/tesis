@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +40,7 @@ public class listabuscarrubroFragment extends Fragment {
     SweetAlertDialog dp;
     private ListView lista;
     private SharedPreferences prefs;
+
     int idciudad =0,numeroultimo=0;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     SwipeRefreshLayout refreshLayouttrabajadores;
@@ -59,6 +62,8 @@ public class listabuscarrubroFragment extends Fragment {
         lista = (ListView) v.findViewById(R.id.listadoperfilestrabajadores);
         //instanciacion del refresh para la lista de los trabajadores
         refreshLayouttrabajadores = v.findViewById(R.id.refreshtrabajadores);
+
+
         final View vista = inflater.inflate(R.layout.elementoperfiltrabajador, null);
 
         Bundle datosRecuperados = getArguments();
@@ -110,7 +115,7 @@ public class listabuscarrubroFragment extends Fragment {
                         UsuarioTrabajador trabajador1 = new UsuarioTrabajador();
                         //se setean los valores del trabajador
                         trabajador1.setRUT(trabajador.getRUT().toString());
-                        trabajador1.setNombre(trabajador.getNombre());
+                        trabajador1.setNombre(trabajador.getNombre()+" "+trabajador.getApellido());
                         trabajador1.setCalificacion(trabajador.getCalificacion());
                         trabajador1.setCiudad(trabajador.getCiudad());
                         trabajador1.setIdRubro(trabajador.getIdRubro());
@@ -122,6 +127,7 @@ public class listabuscarrubroFragment extends Fragment {
                     if (listatrabajadoresporrubo.size() > 0) {
                         Adaptadortrabajadores ad = new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
                         lista.setAdapter(ad);
+
                     } else if(listatrabajadoresporrubo.size() == 0){
                         //si no encuentran usuario enviar al fragment con anicmacion de no encontrado
                         showSelectedFragment(new notfoundFragment());

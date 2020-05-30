@@ -28,6 +28,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+
+
+
+
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -40,22 +44,34 @@
                         app:cardCornerRadius="30dp"
                         app:cardElevation="6dp">
 
+
+
                         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                             android:id="@+id/refreshtrabajadores"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
+
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center"
                                 android:orientation="vertical"
-                                android:padding="16dp">
+                                android:padding="8dp">
+
+
 
                                 <ListView
                                     android:id="@+id/listadoperfilestrabajadores"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"></ListView>
+                                    android:layout_height="match_parent">
+
+
+                                </ListView>
+
+
+
+
 
                             </LinearLayout>
 

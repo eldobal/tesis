@@ -16,12 +16,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
             android:layout_marginTop="40dp">
+
+
+
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imgperfiltrabajadordetalle"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="175dp"
+                android:layout_height="175dp"
                 android:layout_centerInParent="true"
                 android:background="@color/float_transparent"
                 android:src="@drawable/userprofile"></androidx.appcompat.widget.AppCompatImageView>
@@ -30,117 +34,283 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="30dp">
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
+           >
 
 
-            <ScrollView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="55dp"
+                android:layout_height="match_parent"
 
-                android:scrollbarThumbVertical="@drawable/colorsroll">
+                >
 
-                <RelativeLayout
+                <ScrollView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="50dp"
+                    android:layout_marginTop="30dp"
                     android:layout_centerHorizontal="true"
                     android:orientation="horizontal">
 
-                    <RelativeLayout
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/cardperfiltrabajador"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:orientation="horizontal">
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1"
+                        android:layout_margin="10dp"
+                        android:backgroundTint="@color/colorAccent"
+                        android:clickable="true"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="8dp">
 
+                        <RelativeLayout
 
-                        <TextView
-                            android:id="@+id/txtrutperfiltrabajador"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
-                            android:fontFamily="sans-serif-condensed-medium"
-                            android:text="Rut:"
-                            android:textColor="@color/colordark"
-                            android:textSize="22dp"></TextView>
+                            android:gravity="center"
+                            android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/txtnombreperfiltrabajador"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/txtrutperfiltrabajador"
-                            android:layout_centerHorizontal="true"
-                            android:fontFamily="sans-serif-condensed-medium"
-                            android:text="nombre y apellido :"
-                            android:textColor="@color/colordark"
-                            android:textSize="22dp"></TextView>
+                            <LinearLayout
+                                android:id="@+id/uwu"
+                                android:layout_marginTop="14dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:layout_marginBottom="4dp"
 
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text="Rut:"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="22dp"></TextView>
 
-
-
-
-                        <TextView
-                            android:id="@+id/txttelefonoperfiltrabajador"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/txtnombreperfiltrabajador"
-                            android:layout_centerHorizontal="true"
-                            android:fontFamily="sans-serif-condensed-medium"
-                            android:text="Telefono:"
-                            android:textColor="@color/colordark"
-                            android:textSize="22dp"></TextView>
-
-                        <TextView
-                            android:id="@+id/txtciudadperfiltrabajador"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/txttelefonoperfiltrabajador"
-                            android:layout_centerHorizontal="true"
-                            android:fontFamily="sans-serif-condensed-medium"
-                            android:text="Ciudad:"
-                            android:textColor="@color/colordark"
-                            android:textSize="22dp"></TextView>
-
-                        <TextView
-                            android:id="@+id/txtestadoperfiltrabajador"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/txtciudadperfiltrabajador"
-                            android:layout_centerHorizontal="true"
-                            android:fontFamily="sans-serif-condensed-medium"
-                            android:text="Estado Actual Usuario:"
-                            android:textColor="@color/colordark"
-                            android:textSize="22dp"></TextView>
-
-                        <TextView
-                            android:id="@+id/txtcalificacionperfiltrabajador"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/txtestadoperfiltrabajador"
-                            android:layout_centerHorizontal="true"
-                            android:fontFamily="sans-serif-condensed-medium"
-                            android:text="CALIFICACION:"
-                            android:textColor="@color/colordark"
-                            android:textSize="22dp"></TextView>
+                                <TextView
+                                    android:id="@+id/txtrutperfiltrabajador"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text=""
+                                    android:textColor="@color/colordark"
+                                    android:textSize="22dp"></TextView>
 
 
-                    </RelativeLayout>
-                </RelativeLayout>
+                            </LinearLayout>
 
-            </ScrollView>
 
-            <Button
-                android:id="@+id/botoncrearsolicitud"
-                android:layout_width="120dp"
-                android:layout_height="45dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:background="@drawable/botonripple"
-                android:text="Solicitar"
-                android:textColor="@drawable/botonpressed" />
+                            <LinearLayout
+                                android:id="@id/uwu2"
+                                android:layout_margin="4dp"
+                                android:layout_below="@+id/uwu"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text="Nombre: "
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="22dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/txtnombreperfiltrabajador"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/uwu"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text=""
+                                    android:textColor="@color/colordark"
+                                    android:textSize="22dp"></TextView>
+
+                            </LinearLayout>
+
+
+
+
+                            <LinearLayout
+                                android:layout_margin="4dp"
+                                android:id="@id/uwu3"
+                                android:layout_below="@+id/uwu2"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text="Telefono: "
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="22dp"></TextView>
+
+
+                                <TextView
+                                    android:id="@+id/txttelefonoperfiltrabajador"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/txtnombreperfiltrabajador"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text=""
+                                    android:textColor="@color/colordark"
+                                    android:textSize="22dp"></TextView>
+
+                            </LinearLayout>
+
+
+
+
+                            <LinearLayout
+                                android:layout_margin="4dp"
+                                android:id="@id/uwu4"
+                                android:layout_below="@+id/uwu3"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text="Ciudad: "
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="22dp"></TextView>
+
+
+                                <TextView
+                                    android:id="@+id/txtciudadperfiltrabajador"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/txttelefonoperfiltrabajador"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text=""
+                                    android:textColor="@color/colordark"
+                                    android:textSize="22dp"></TextView>
+
+                            </LinearLayout>
+
+
+
+                            <LinearLayout
+                                android:id="@id/uwu5"
+                                android:layout_margin="4dp"
+                                android:layout_below="@+id/uwu4"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text="Estado: "
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="22dp"></TextView>
+
+
+                                <TextView
+                                    android:id="@+id/txtestadoperfiltrabajador"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/txtciudadperfiltrabajador"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text=""
+                                    android:textColor="@color/colordark"
+                                    android:textSize="22dp"></TextView>
+
+                            </LinearLayout>
+
+
+
+
+                            <LinearLayout
+                                android:layout_marginTop="4dp"
+                                android:layout_marginLeft="4dp"
+                                android:layout_marginRight="4dp"
+                                android:layout_marginBottom="14dp"
+
+                                android:layout_below="@+id/uwu5"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:layout_centerHorizontal="true"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text="Calificacion: "
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="22dp"></TextView>
+
+
+                                <TextView
+                                    android:id="@+id/txtcalificacionperfiltrabajador"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/txtestadoperfiltrabajador"
+                                    android:layout_centerHorizontal="true"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:text=""
+                                    android:textColor="@color/colordark"
+                                    android:textSize="22dp"></TextView>
+
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+
+
+                </ScrollView>
+
+
+                <Button
+                    android:id="@+id/botoncrearsolicitud"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/botonripple"
+                    android:text="Solicitar"
+                    android:textSize="20dp"
+                    android:textColor="@drawable/botonpressed" />
+
+            </RelativeLayout>
+
+
         </RelativeLayout>
+
+
+
+
 
 
     </LinearLayout>

@@ -108,6 +108,8 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
 
         map = googleMap;
+        map.getUiSettings().setZoomControlsEnabled(true);
+        map.setMyLocationEnabled(true);
 
         if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
 
@@ -143,8 +145,7 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
             }
 
         }
-        map.getUiSettings().setZoomControlsEnabled(true);
-        map.setMyLocationEnabled(true);
+
 
 
         btnconfirmarubicacion.setOnClickListener(new View.OnClickListener() {

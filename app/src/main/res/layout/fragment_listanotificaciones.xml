@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorAccentllight"
     tools:context=".listanotificacionesFragment">
 
@@ -34,19 +35,40 @@
           android:layout_below="@+id/txtnoti01"
           android:layout_height="wrap_content">
 
-          <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-              android:id="@+id/refreshnotificaciones"
+
+
+          <ListView
+
+              android:id="@+id/listanotificaciones"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-              <ListView
+              android:layout_height="match_parent">
 
-                  android:id="@+id/listanotificaciones"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
 
-              </ListView>
+          </ListView>
 
-          </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+      </LinearLayout>
+
+
+
+      <LinearLayout
+          android:id="@+id/layoutanimacion"
+          android:layout_width="match_parent"
+          android:layout_marginTop="10dp"
+          android:layout_below="@+id/txtnoti01"
+          android:layout_height="match_parent">
+
+
+          <com.airbnb.lottie.LottieAnimationView
+              android:layout_gravity="center"
+              android:id="@+id/animationotification"
+              android:layout_width="match_parent"
+              app:lottie_rawRes="@raw/nonotifications"
+              app:lottie_autoPlay="false"
+              app:lottie_loop="false"
+              android:layout_height="match_parent">
+
+          </com.airbnb.lottie.LottieAnimationView>
 
 
       </LinearLayout>
