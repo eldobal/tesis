@@ -63,9 +63,8 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
 
     ArrayList<Notificacion> listanotificaciones = new ArrayList<Notificacion>();
-
-
     final static String rutaservidor= "http://proyectotesis.ddns.net";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,8 +81,6 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-
-
             //se instancia el gso
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
@@ -104,7 +101,6 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                 Toast.makeText(menuActivity.this, "Nombre"+personName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
             }
             mbottomNavigationView=(BottomNavigationView) findViewById(R.id.bottomnavigation);
-
             getSupportFragmentManager().beginTransaction().replace(R.id.container,new HomeFragment()).commit();
 
 
@@ -131,14 +127,12 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                                 //permite regresar hacia atras entre los fragments
                                 .addToBackStack(null)
                                 .commit();
-
                     }
                     //se muestra el fragment de configuracion y setting
                     if(menuItem.getItemId()== R.id.menu_settings){
                         showSelectedFragment(new settingsFragment());
                     }
                     if(menuItem.getItemId()== R.id.menu_notificaciones){
-
                         Bundle bundle2 = new Bundle();
                         bundle2.putSerializable("arraynotificaciones", listanotificaciones);
                         listanotificacionesFragment.setArguments(bundle2);
@@ -147,13 +141,11 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                                 //permite regresar hacia atras entre los fragments
                                 .addToBackStack(null)
                                 .commit();
-
                     }
 
                     return true;
                 }
             });
-
         }else{
             //no hay internet/coneccion manejar excepcion
             Toast.makeText(menuActivity.this, "Revise su Concexion", Toast.LENGTH_LONG).show();
@@ -162,7 +154,6 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
     }
 
     private void iniciarfragmentnotificaciones() {
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -172,7 +163,6 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
         call.enqueue(new Callback<List<Notificacion>>() {
             @Override
             public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
-
                 if (!response.isSuccessful()) {
                     Toast.makeText(menuActivity.this, "error :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
@@ -196,8 +186,6 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
             }
         });
 
-
-
     }
 
     private void iniciarfragmentsolitudes() {
@@ -210,7 +198,6 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
         call.enqueue(new Callback<List<Solicitud>>() {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
-
                 if (!response.isSuccessful()) {
                     Toast.makeText(menuActivity.this, "error :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
@@ -276,7 +263,6 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
         }.start();
     }
 */
-
 
     //metodo que permite elejir un fragment
     private void showSelectedFragment(Fragment fragment){

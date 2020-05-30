@@ -73,7 +73,6 @@ public interface tesisAPI {
     @POST("api/SolicitudAPI")
     Call<Solicitud> EstadoAtendiendo(@Query("idSolicitud") int idsolicitud,
                                      @Query("FechaD") String fechaconfirmacion
-
     );
 
     @POST("api/UsuarioAPI")
@@ -88,7 +87,6 @@ public interface tesisAPI {
     @POST("api/UsuarioAPI")
     Call<Usuario> UsuarioPass(@Query("RUT") String RUT,
                               @Query("Contrasena") String Contrasena
-
     );
 
     //metodo el cual trae el listado de ciudades / usando acutalmente para cargar el spiner de ciudades en el registrar usaurio

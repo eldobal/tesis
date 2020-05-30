@@ -44,6 +44,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -84,7 +85,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     private PendingIntent pendingIntent;
     private final static String CHANNEL_ID = "NOTIFICACION";
     private final static int NOTIFICACION_ID = 0;
-    String latorigen,longorigen;
+    String latorigen="",longorigen="";
 
     public crearsolicitudFragment() {
         // Required empty public constructor
@@ -98,19 +99,32 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        View v = inflater.inflate(R.layout.fragment_crearsolicitud, container, false);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //declarar todos los componentes de la vistas
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         prefsmaps = this.getActivity().getSharedPreferences("ubicacionmapa", Context.MODE_PRIVATE);
 
-        rut =(TextView) v.findViewById(R.id.txtrutcrearsolicitudtrabajador);
-        nombre =(TextView) v.findViewById(R.id.txtnombrecrearsolicitudtrabajador);
-        estado =(TextView) v.findViewById(R.id.txtestadocrearsolicitudtrabajador);
-        calificacion =(TextView) v.findViewById(R.id.txtcalificacioncrearsolicitudtrabajador);
-        imgperfil=(ImageView) v.findViewById(R.id.imgperfil);
+        rut =(TextView) getActivity().findViewById(R.id.txtrutcrearsolicitudtrabajador);
+        nombre =(TextView) getActivity().findViewById(R.id.txtnombrecrearsolicitudtrabajador);
+        estado =(TextView) getActivity().findViewById(R.id.txtestadocrearsolicitudtrabajador);
+        calificacion =(TextView) getActivity().findViewById(R.id.txtcalificacioncrearsolicitudtrabajador);
+        imgperfil=(ImageView) getActivity().findViewById(R.id.imgperfil);
+        cargar = (Button) getActivity().findViewById(R.id.btncargarfoto);
+        btncrearsolicitud = (Button) getActivity().findViewById(R.id.btncrearsolicitud);
+        btnmapa=(Button) getActivity().findViewById(R.id.btnmapa);
+        fotosacada = (ImageView) getActivity().findViewById(R.id.fotocrearsolicitud);
+        descripcion =(EditText) getActivity().findViewById(R.id.txtdescripcioncrearsolicitud);
+
+
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View v = inflater.inflate(R.layout.fragment_crearsolicitud, container, false);
 
         Bundle args = getArguments();
         if (args == null) {
@@ -129,20 +143,16 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         nombre.setText(nombretrabajador);
         estado.setText(estadotrabajador);
         calificacion.setText(calificaciontrabajador);
+
         Glide.with(getContext()).load(String.valueOf(rutaservidor+rutafoto)).into(imgperfil);
+        //se verifica si existe el rut de usuario
         setcredentiasexist();
-        cargar = (Button) v.findViewById(R.id.btncargarfoto);
-        btncrearsolicitud = (Button) v.findViewById(R.id.btncrearsolicitud);
-        btnmapa=(Button) v.findViewById(R.id.btnmapa);
-        fotosacada = (ImageView) v.findViewById(R.id.fotocrearsolicitud);
-        descripcion =(EditText) v.findViewById(R.id.txtdescripcioncrearsolicitud);
+
         descripcionfinal= descripcion.getText().toString();
+        //formato del calendario el cual toma la fecha actual.
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Fechasolicitud = sdf.format(calendar.getTime());
-
-        latorigen="";
-        longorigen="";
 
         btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,23 +173,11 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                         pDialog.setTitleText("Loading");
                         pDialog.setCancelable(false);
                         pDialog.show();
-                        //metodo para crear la solicitud con los parametros
+                        //se carga y convierte la foto la cual es usuario cargo/tomo desde su celular
                         imagenstring = convertirimgstring(bitmap);
-                        new CountDownTimer(2000,1000){
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                            }
-                            @Override
-                            public void onFinish() {
-
-                            }
-                        }.start();
-
+                        //metodo para crear la solicitud con los parametros
                         crearsolicitud();
-
-
                     }
-
             }else{
                     Toast.makeText(getContext(), "pruebaaa", Toast.LENGTH_LONG).show();
                     Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
@@ -270,15 +268,11 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                         updateDetail();
                     }
                 }
-
                 @Override
                 public void onFailure(Call<SolicitudDb> call1, Throwable t) {
                     Toast.makeText(getContext(), "EL ERROR ESTA ACA: "+t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 }
             });
-
-
-
     }
 
 
@@ -306,11 +300,9 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                         dialog.dismiss();
                     }
                 }
-
             }
         });
         alertOpciones.show();
-
 
     }
 
@@ -380,24 +372,14 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     }
 
     private void setlatlongexist() {
-
         String latitud = getlatitud();
         String longitud = getlongitud();
-
-      // Double longitud = getDoublelongitud(prefsmaps,"longitud",0.0);
-
     if (!TextUtils.isEmpty(latitud)  && !TextUtils.isEmpty(longitud) ) {
             latorigen=latitud;
             longorigen=longitud;
         }
     }
 
-    double getDouble(final SharedPreferences prefs, final String key, final double defaultValue) {
-        if ( !prefs.contains(key))
-            return defaultValue;
-
-        return Double.longBitsToDouble(prefs.getLong(key, 0));
-    }
 
     private String getlatitud() {
         return prefsmaps.getString("Latitud", "");
@@ -405,26 +387,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
 
     private String getlongitud() {
         return prefsmaps.getString("Longitud", "");
-    }
-
-
-    SharedPreferences.Editor putDoublelatitud(final SharedPreferences.Editor edit, final String key, final double value) {
-        return edit.putLong(key, Double.doubleToRawLongBits(value));
-    }
-
-
-    private double getDoublelatitud(final SharedPreferences prefsmaps, final String key, final double defaultValue) {
-        return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
-    }
-
-
-    SharedPreferences.Editor putDoublelongirud(final SharedPreferences.Editor edit, final String key, final double value) {
-        return edit.putLong(key, Double.doubleToRawLongBits(value));
-    }
-
-
-    private double getDoublelongitud(final SharedPreferences prefs, final String key, final double defaultValue) {
-        return Double.longBitsToDouble(prefs.getLong(key, Double.doubleToLongBits(defaultValue)));
     }
 
 

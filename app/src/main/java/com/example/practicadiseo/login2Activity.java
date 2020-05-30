@@ -75,30 +75,29 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
+        prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        setcredentiasexist();
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
-            // Si hay conexión a Internet en este momento
-        //google gso
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        signInButton =(SignInButton) findViewById(R.id.Signbutton);
-        txtrut = (EditText) findViewById(R.id.txtemail);
-        txtpass = (EditText) findViewById(R.id.txtpassword);
-        btnlogin = (Button) findViewById(R.id.btnlogin);
-        btnregister = (Button) findViewById(R.id.btnregistrarse);
-        prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-        setcredentiasexist();
-
+        //se comprueba si existe
         if(!usuarioconectado.isEmpty()&&(!contraseñausuarioconectado.isEmpty())){
             Intent intent = new Intent(login2Activity.this, menuActivity.class);
             saveOnPreferences(usuarioconectado,contraseñausuarioconectado,idciudad);
             startActivity(intent);
         }
+        // Si hay conexión a Internet en este momento
+        //google gso
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+        signInButton =(SignInButton) findViewById(R.id.Signbutton);
+        txtrut = (EditText) findViewById(R.id.txtemail);
+        txtpass = (EditText) findViewById(R.id.txtpassword);
+        btnlogin = (Button) findViewById(R.id.btnlogin);
+        btnregister = (Button) findViewById(R.id.btnregistrarse);
 
         if (networkInfo != null && networkInfo.isConnected()) {
             // Si hay conexión a Internet en este momento
@@ -146,12 +145,10 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                             else {
                                 //respuesta del request
                                 Usuario usuarios = response.body();
-
                                 //declaracion de variables del response
                                 String usuarioconectadopass = usuarios.getContrasena().toString();
                                 String usuarioconectado = usuarios.getRut().toString();
-                                 idciudad = usuarios.getIdCiudad();
-
+                                idciudad = usuarios.getIdCiudad();
                                 //if que compara los datos rescatados del response con los datos ingresados
                                 if (usuarioconectado.equals(rut) && usuarioconectadopass.equals(contrasena)) {
                                     Intent intent = new Intent(login2Activity.this, menuActivity.class);
@@ -168,15 +165,13 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                             Toast.makeText(getApplicationContext(), " Error al Iniciar Sesion", Toast.LENGTH_LONG).show();
                         }
                     });
-
-
             }
-
         });
         } else {
             // No hay conexión a Internet en este momento
             Toast.makeText(this, "Revise su coneecion antes de iniciar session ", Toast.LENGTH_LONG).show();
         }
+
 
         btnregister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,9 +179,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                 Intent intent = new Intent(login2Activity.this, register2Activity.class);
                 startActivity(intent);
             }
-
         });
-
         } else {
             // No hay conexión a Internet en este momento
             Toast.makeText(this, "Revise su coneecion ", Toast.LENGTH_LONG).show();
@@ -198,13 +191,9 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     private void singIn(){
         Intent signIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signIntent,Signincode);
-
     }
 
     private void saveOnPreferences(String rut, String contrasena,int idciudad) {
-
-
-
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("Rut", rut);
         editor.putString("ContraseNa", contrasena);
@@ -212,8 +201,6 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         //linea la cual guarda todos los valores en la pref antes de continuar
         editor.commit();
         editor.apply();
-
-
     }
 
     private void setcredentiasexist() {
@@ -227,22 +214,18 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)&& ciudadid !=0) {
             txtrut.setText(rut);
             txtpass.setText(contraseña);
-
         }
     }
 
     private String getuserrutprefs() {
-
         return prefs.getString("Rut", "");
     }
 
     private int getuseridciudadprefs() {
-
         return prefs.getInt("idCiudad", 0);
     }
 
     private String getusercontraseñaprefs() {
-
         return prefs.getString("ContraseNa", "");
     }
 
@@ -263,7 +246,6 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         //si coinciden se ejecuta el metodo handlesigninresult
         if (requestCode == Signincode) {
@@ -290,8 +272,6 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-
-
     //metodo para diririr al usuario hacia una activity que queramos
     private void goMainScreen() {
         Intent intent = new Intent(this,menuActivity.class);
@@ -299,10 +279,8 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         startActivity(intent);
     }
 
-
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
 }

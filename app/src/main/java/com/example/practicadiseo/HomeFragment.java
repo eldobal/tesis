@@ -59,7 +59,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         getFragmentManager().beginTransaction().replace(R.id.container,fragment)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-
     }
 
 }
