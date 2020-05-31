@@ -83,12 +83,22 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
                     try {
                         addresslist= geocoder.getFromLocationName(location,1);
 
-                    }catch (IOException e){}
+                    }catch (IOException e){
+                        Toast.makeText(getActivity(), "Revise su DIRECCION ", Toast.LENGTH_LONG).show();
                     }
-                    Address address = addresslist.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
-                    map.addMarker(new MarkerOptions().position(latLng).title(location));
-                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                    }
+                    if(addresslist.size() !=0 ){
+                        Address address = addresslist.get(0);
+                        LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
+                        map.addMarker(new MarkerOptions().position(latLng).title(location));
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,17));
+
+                    }else{
+                        Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                "Ingrese Una direccion valida", Snackbar.LENGTH_LONG);
+                        snackBar.show();
+                    }
+
                 return false;
             }
 
@@ -108,8 +118,7 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
 
         map = googleMap;
-        map.getUiSettings().setZoomControlsEnabled(true);
-        map.setMyLocationEnabled(true);
+
 
         if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
 
@@ -146,6 +155,8 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
 
         }
 
+        map.getUiSettings().setZoomControlsEnabled(true);
+        map.setMyLocationEnabled(true);
 
 
         btnconfirmarubicacion.setOnClickListener(new View.OnClickListener() {
@@ -190,7 +201,7 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
                     LatLng miposicion = new LatLng(latitudorigen,longitudorigen);
 
                     map.addMarker(new MarkerOptions().position(miposicion).title("estoy aqui!"));
-
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(miposicion,15));
 
                     map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                         @Override

@@ -76,12 +76,13 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-        setcredentiasexist();
+
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
         //se comprueba si existe
+            setcredentiasexist();
         if(!usuarioconectado.isEmpty()&&(!contraseñausuarioconectado.isEmpty())){
             Intent intent = new Intent(login2Activity.this, menuActivity.class);
             saveOnPreferences(usuarioconectado,contraseñausuarioconectado,idciudad);
@@ -152,7 +153,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                                 //if que compara los datos rescatados del response con los datos ingresados
                                 if (usuarioconectado.equals(rut) && usuarioconectadopass.equals(contrasena)) {
                                     Intent intent = new Intent(login2Activity.this, menuActivity.class);
-                                    saveOnPreferences(rut,contrasena,idciudad);
+                                    saveOnPreferences(rut,contrasena,1);
                                     startActivity(intent);
                                     finish();
                                 }
