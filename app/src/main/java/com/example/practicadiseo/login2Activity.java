@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,32 +63,48 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     public static final int  Signincode = 777;
     private GoogleSignInClient googleSignInClient;
     SweetAlertDialog dp;
-    SharedPreferences prefs;
+    LottieAnimationView loading;
+    SharedPreferences prefs,asycprefs;
     private EditText txtrut,txtpass;
     private Button btnlogin,btnregister;
     private String usuarioconectado="",contraseñausuarioconectado="";
     int idciudad=0;
+    int azynctiempo =0;
     private SignInButton signInButton;
 
     public login2Activity() {
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
-        prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        AlertDialog.Builder builderlogin = new AlertDialog.Builder(this);
+        LayoutInflater inflaterload = getLayoutInflater();
+        View viewlogin = inflaterload.inflate(R.layout.alertdialogloaginglogin,null);
 
+        builderlogin.setView(viewlogin);
+        AlertDialog dialog = builderlogin.create();
+        dialog.show();
+
+        prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        asycprefs = getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
         if (networkInfo != null && networkInfo.isConnected()) {
         //se comprueba si existe
             setcredentiasexist();
+            settiempoasyncexist();
         if(!usuarioconectado.isEmpty()&&(!contraseñausuarioconectado.isEmpty())){
             Intent intent = new Intent(login2Activity.this, menuActivity.class);
             saveOnPreferences(usuarioconectado,contraseñausuarioconectado,idciudad);
             startActivity(intent);
+            dialog.dismiss();
+        }else{
+            dialog.dismiss();
         }
         // Si hay conexión a Internet en este momento
         //google gso
@@ -122,6 +140,14 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
+                if(!TextUtils.isEmpty(txtrut.getText()) && !TextUtils.isEmpty(txtpass.getText())){
+                    AlertDialog.Builder builderlogin2 = new AlertDialog.Builder(login2Activity.this);
+                    LayoutInflater inflaterload2 = getLayoutInflater();
+                    View viewlogin2 = inflaterload2.inflate(R.layout.alertdialogloaginglogin,null);
+
+                    builderlogin2.setView(viewlogin2);
+                    AlertDialog dialog2 = builderlogin2.create();
+                    dialog2.show();
 
                     String rut = txtrut.getText().toString();
                     String contrasena = txtpass.getText().toString();
@@ -131,16 +157,15 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
                     tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
-
                     //metodo para llamar a la funcion que queramos
-                    Call<Usuario> call = tesisAPI.getUsuario(rut,contrasena);
+                    Call<Usuario> call = tesisAPI.getLogin(rut,contrasena);
                     call.enqueue(new Callback<Usuario>() {
                         @Override
                         public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-
                             //si esta malo se ejecuta este trozo
                             if(!response.isSuccessful()){
                                 Toast.makeText(getApplicationContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                                dialog2.dismiss();
                             }
                             //de lo contrario se ejecuta esta parte
                             else {
@@ -152,20 +177,28 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                                 idciudad = usuarios.getIdCiudad();
                                 //if que compara los datos rescatados del response con los datos ingresados
                                 if (usuarioconectado.equals(rut) && usuarioconectadopass.equals(contrasena)) {
-                                    Intent intent = new Intent(login2Activity.this, menuActivity.class);
-                                    saveOnPreferences(rut,contrasena,1);
-                                    startActivity(intent);
-                                    finish();
+                                    if(azynctiempo==0){
+                                        azynctiempo =15000;
+                                        saveOnazyncPreferences(azynctiempo);
+                                    }
+                                        Intent intent = new Intent(login2Activity.this, menuActivity.class);
+                                        saveOnPreferences(rut,contrasena,idciudad);
+                                        startActivity(intent);
+                                        finish();
+                                        dialog2.dismiss();
                                 }
                             }
                         }
-
                         //si falla el request a la pagina mostrara este error
                         @Override
                         public void onFailure(Call<Usuario> call, Throwable t) {
                             Toast.makeText(getApplicationContext(), " Error al Iniciar Sesion", Toast.LENGTH_LONG).show();
                         }
                     });
+                }else{
+                    Toast.makeText(getApplicationContext(), "introdusca datos antes de logear", Toast.LENGTH_LONG).show();
+                }
+
             }
         });
         } else {
@@ -281,5 +314,31 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     }
+
+
+
+
+    private void saveOnazyncPreferences(int tiempoasync) {
+        SharedPreferences.Editor editor = asycprefs.edit();
+        editor.putInt("tiempo", tiempoasync);
+        //linea la cual guarda todos los valores en la pref antes de continuar
+        editor.commit();
+        editor.apply();
+    }
+
+    private void settiempoasyncexist() {
+        int tiempoasync = gettiempoasync();
+        if (tiempoasync!=0) {
+            azynctiempo=tiempoasync;
+        }
+    }
+
+    private int gettiempoasync() {
+        return asycprefs.getInt("tiempo", 0);
+    }
+
+
+
+
 
 }

@@ -11,8 +11,8 @@ public class Usuario {
     private String Correo;
     private String Contrasena;
     private String Fono;
-
     private String Foto;
+
 
     @SerializedName("id_idCiudad")
     private int idCiudad;

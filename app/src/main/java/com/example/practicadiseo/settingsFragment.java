@@ -222,8 +222,6 @@ public class settingsFragment extends Fragment {
     }
 
 
-
-
     private void saveOnPreferences(int tiempoasync) {
         SharedPreferences.Editor editor = asycprefs.edit();
         editor.putInt("tiempo", tiempoasync);

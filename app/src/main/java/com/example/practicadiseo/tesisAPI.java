@@ -20,6 +20,7 @@ public interface tesisAPI {
                                    @Query("pass") String pass
     );
 
+    //llamada que se utiliza en el perfilfragment del usuario
     @GET("api/UsuarioAPI")
     Call<Usuario> getUsuario(@Query("RUTUSUARIO") String id,
                              @Query("Contrasena") String pass
