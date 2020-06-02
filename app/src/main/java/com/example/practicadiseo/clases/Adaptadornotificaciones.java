@@ -1,28 +1,17 @@
 package com.example.practicadiseo.clases;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.example.practicadiseo.DetalleSolicitudFragment;
-import com.example.practicadiseo.Notificacion;
 import com.example.practicadiseo.R;
-import com.example.practicadiseo.Solicitud;
-import com.example.practicadiseo.UsuarioTrabajador;
-import com.example.practicadiseo.perfiltrabajadorFragment;
-import com.example.practicadiseo.tesisAPI;
+import com.example.practicadiseo.interfaces.tesisAPI;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -117,7 +106,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                 .baseUrl("http://proyectotesis.ddns.net/")
                                 .addConverterFactory(GsonConverterFactory.create())
                                 .build();
-                        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+                        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
                         Call<Solicitud> call = tesisAPI.EstadoAtendiendo(listanotificaciones.get(i).getIdSolicitud(), Fechasolicitud);
                         call.enqueue(new Callback<Solicitud>() {
                             @Override
@@ -153,7 +142,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                 .baseUrl("http://proyectotesis.ddns.net/")
                                 .addConverterFactory(GsonConverterFactory.create())
                                 .build();
-                        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+                        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
                         Call<String> call = tesisAPI.CancelarSolicitud(listanotificaciones.get(i).getIdSolicitud());
                         call.enqueue(new Callback<String>() {
                             @Override

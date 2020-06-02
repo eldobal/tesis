@@ -1,14 +1,18 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.interfaces;
+
+import com.example.practicadiseo.clases.Ciudad;
+import com.example.practicadiseo.clases.Notificacion;
+import com.example.practicadiseo.clases.Solicitud;
+import com.example.practicadiseo.clases.SolicitudDb;
+import com.example.practicadiseo.clases.Usuario;
+import com.example.practicadiseo.clases.UsuarioTrabajador;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface tesisAPI {
@@ -17,7 +21,7 @@ public interface tesisAPI {
 
     @GET("api/UsuarioAPI")
     Call<Usuario> getLogin(@Query("id") String id,
-                                   @Query("pass") String pass
+                           @Query("pass") String pass
     );
 
     //llamada que se utiliza en el perfilfragment del usuario
@@ -47,13 +51,13 @@ public interface tesisAPI {
     //metodo llamada para hacer el insert de la solicitud del cliente
     @POST("api/SolicitudAPI")
     Call<SolicitudDb> PostSolicitud(@Query("Fecha") String Fecha,
-                                  @Query("Descripcion") String Descripcion,
-                                  @Query("RUT_Cliente") String RUT_Cliente,
-                                  @Query("RUT_Trabajador") String RUT_Trabajador,
-                                  @Query("Rubro") int Rubro,
-                                  @Query("latitud") String latitud,
-                                  @Query("longitud") String longitud,
-                                   @Body() String foto
+                                    @Query("Descripcion") String Descripcion,
+                                    @Query("RUT_Cliente") String RUT_Cliente,
+                                    @Query("RUT_Trabajador") String RUT_Trabajador,
+                                    @Query("Rubro") int Rubro,
+                                    @Query("latitud") String latitud,
+                                    @Query("longitud") String longitud,
+                                    @Body() String foto
     );
 
 

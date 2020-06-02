@@ -1,7 +1,6 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.fragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -13,24 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.bumptech.glide.Glide;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.example.practicadiseo.R;
+import com.example.practicadiseo.clases.Solicitud;
+import com.example.practicadiseo.interfaces.tesisAPI;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -38,9 +26,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-
-import static android.content.Intent.getIntent;
-import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 
 /**
@@ -95,7 +80,7 @@ public class DetalleSolicitudFragment extends Fragment {
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
         Call<Solicitud> call = tesisAPI.getSolicitudCliente(idsolicitud);
         call.enqueue(new Callback<Solicitud>() {
             @Override

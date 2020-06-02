@@ -7,7 +7,7 @@
     android:scrollbarThumbVertical="@drawable/colorsroll"
     android:background="@color/colorAccentllight"
 
-    tools:context=".preguntasFragment">
+    tools:context=".fragments.preguntasFragment">
 
     <LinearLayout
         android:orientation="vertical"

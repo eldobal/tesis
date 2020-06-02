@@ -1,27 +1,27 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-import com.airbnb.lottie.L;
+
 import com.basgeekball.awesomevalidation.AwesomeValidation;
-import com.basgeekball.awesomevalidation.utility.RegexTemplate;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.practicadiseo.clases.Ciudad;
+import com.example.practicadiseo.R;
+import com.example.practicadiseo.clases.Usuario;
+import com.example.practicadiseo.interfaces.tesisAPI;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -126,7 +126,7 @@ public class register2Activity extends AppCompatActivity {
                                     .baseUrl("http://proyectotesis.ddns.net/")
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
-                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
                             //metodo para llamar a la funcion que queramos
                             Call<Usuario> call = tesisAPI.PostUsuario(RUT, Nombre, Apellido, Correo, Contrasena, Fono, id_idCiudad, id_EstadoUsuario, id_TipoUsuario);
                             try {
@@ -226,7 +226,7 @@ public class register2Activity extends AppCompatActivity {
                     .baseUrl("http://proyectotesis.ddns.net/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
 
             //metodo para llamar a la funcion que queramos
             Call<List<Ciudad>> call = tesisAPI.getCiudades();

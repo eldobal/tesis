@@ -1,4 +1,4 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +10,11 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.practicadiseo.R;
+import com.example.practicadiseo.fragments.areabellezaFragment;
+import com.example.practicadiseo.fragments.areasaludFragment;
+import com.example.practicadiseo.fragments.areatecnologiaFragment;
 
 /**
  * A simple {@link Fragment} subclass.

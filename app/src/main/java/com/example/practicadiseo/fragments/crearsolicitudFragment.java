@@ -1,4 +1,4 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.fragments;
 
 import android.app.AlertDialog;
 import android.app.Notification;
@@ -6,7 +6,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -23,7 +22,6 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -36,18 +34,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.bumptech.glide.Glide;
+import com.example.practicadiseo.R;
+import com.example.practicadiseo.activitys.menuActivity;
+import com.example.practicadiseo.clases.SolicitudDb;
+import com.example.practicadiseo.interfaces.tesisAPI;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -59,7 +57,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 
 /**
@@ -250,7 +247,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
             //falta pasar el bitmap de la imagen sacada en el post hacia el web api
             Call<SolicitudDb> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,latorigen,longorigen,imagenstring);
             call1.enqueue(new Callback<SolicitudDb>() {

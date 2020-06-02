@@ -1,39 +1,38 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.activitys;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.app.FragmentManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.example.practicadiseo.fragments.HomeFragment;
+import com.example.practicadiseo.clases.Notificacion;
+import com.example.practicadiseo.R;
+import com.example.practicadiseo.clases.Solicitud;
+import com.example.practicadiseo.fragments.listanotificacionesFragment;
+import com.example.practicadiseo.fragments.mapaFragment;
+import com.example.practicadiseo.fragments.perfilFragment;
+import com.example.practicadiseo.fragments.settingsFragment;
+import com.example.practicadiseo.fragments.solicitudeFragment;
+import com.example.practicadiseo.interfaces.tesisAPI;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,7 +157,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
         Call<List<Notificacion>> call = tesisAPI.getNotificacion(rut);
         call.enqueue(new Callback<List<Notificacion>>() {
             @Override
@@ -193,7 +192,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
         Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut);
         call.enqueue(new Callback<List<Solicitud>>() {
             @Override

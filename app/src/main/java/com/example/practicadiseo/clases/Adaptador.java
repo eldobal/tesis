@@ -1,8 +1,6 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.clases;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -25,8 +22,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.bumptech.glide.Glide;
-import com.example.practicadiseo.DetalleSolicitudFragment;
-import com.google.common.util.concurrent.AtomicDoubleArray;
+import com.example.practicadiseo.fragments.DetalleSolicitudFragment;
+import com.example.practicadiseo.R;
+import com.example.practicadiseo.interfaces.tesisAPI;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -159,7 +157,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .baseUrl("http://proyectotesis.ddns.net/")
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
-                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
                             Call<Solicitud> call = tesisAPI.EstadoAtendiendo(listasolicitudes.get(i).getIdSolicitud(), Fechasolicitud);
                             call.enqueue(new Callback<Solicitud>() {
                                 @Override
@@ -187,7 +185,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .baseUrl("http://proyectotesis.ddns.net/")
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
-                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
                             Call<String> call2 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud());
                             call2.enqueue(new Callback<String>() {
                                 @Override
@@ -233,7 +231,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .baseUrl("http://proyectotesis.ddns.net/")
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
-                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
                             Call<String> call3 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud());
                             call3.enqueue(new Callback<String>() {
                                 @Override
