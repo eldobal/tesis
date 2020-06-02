@@ -1,4 +1,4 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.fragments;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -12,13 +12,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.practicadiseo.R;
+import com.example.practicadiseo.clases.UsuarioTrabajador;
+import com.example.practicadiseo.fragments.crearsolicitudFragment;
+import com.example.practicadiseo.interfaces.tesisAPI;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -114,7 +116,7 @@ public class perfiltrabajadorFragment extends Fragment {
                     .baseUrl("http://proyectotesis.ddns.net/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
             //metodo para llamar a la funcion que queramos
             //llamar a la funcion de get usuario la cual se le envia los datos (rut)
             Call<UsuarioTrabajador> call = tesisAPI.getUsuarioTrabajador(ruttrabajador);

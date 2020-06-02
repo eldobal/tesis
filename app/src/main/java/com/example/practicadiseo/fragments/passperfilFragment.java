@@ -1,6 +1,5 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +19,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.example.practicadiseo.R;
+import com.example.practicadiseo.activitys.menuActivity;
+import com.example.practicadiseo.clases.Usuario;
+import com.example.practicadiseo.interfaces.tesisAPI;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -53,7 +56,7 @@ public class passperfilFragment extends Fragment {
         AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
         //validacion contraseñas con alto nivel de dificultad
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
-        mAwesomeValidation.addValidation(getActivity(),R.id.cambiocontraseñaperfil, regexPassword, R.string.err_contraseña);
+        mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseñaperfil, regexPassword, R.string.err_contraseña);
         mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseña2perfil, regexPassword, R.string.err_contraseña2);
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -138,7 +141,7 @@ public class passperfilFragment extends Fragment {
                     .baseUrl("http://proyectotesis.ddns.net/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
             //metodo para llamar a la funcion que queramos
             //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
             Call<Usuario> call = tesisAPI.getUsuario(rutperfil,contrasenaperfil);
@@ -172,7 +175,7 @@ public class passperfilFragment extends Fragment {
                     .baseUrl("http://proyectotesis.ddns.net/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
             try {
                 //metodo para llamar a la funcion que queramos
                 //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )

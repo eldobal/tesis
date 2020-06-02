@@ -1,14 +1,12 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.fragments;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,22 +16,22 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Layout;
 import android.text.TextUtils;
-import android.text.method.DateTimeKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.practicadiseo.R;
+import com.example.practicadiseo.activitys.login2Activity;
+import com.example.practicadiseo.clases.Adaptador;
+import com.example.practicadiseo.clases.Solicitud;
+import com.example.practicadiseo.interfaces.tesisAPI;
+
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -198,7 +196,7 @@ public class solicitudeFragment extends Fragment  {
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
         Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut);
         call.enqueue(new Callback<List<Solicitud>>() {
             @Override
@@ -253,7 +251,7 @@ public class solicitudeFragment extends Fragment  {
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
         Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut);
         call.enqueue(new Callback<List<Solicitud>>() {
             @Override

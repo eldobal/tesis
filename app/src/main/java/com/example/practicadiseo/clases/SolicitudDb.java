@@ -1,4 +1,4 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.clases;
 
 import java.util.ArrayList;
 

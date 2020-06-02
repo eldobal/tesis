@@ -1,6 +1,4 @@
-package com.example.practicadiseo;
-
-import android.media.midi.MidiSender;
+package com.example.practicadiseo.clases;
 
 import java.util.ArrayList;
 

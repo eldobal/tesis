@@ -28,16 +28,16 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".menuActivity"
+            android:name=".activitys.menuActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".register2Activity"
+            android:name=".activitys.register2Activity"
             android:configChanges="orientation"
             android:noHistory="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".login2Activity"
+            android:name=".activitys.login2Activity"
             android:configChanges="orientation"
             android:noHistory="true"
             android:screenOrientation="portrait">

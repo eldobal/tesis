@@ -1,6 +1,5 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.fragments;
 
-import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,23 +11,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.example.practicadiseo.R;
+import com.example.practicadiseo.activitys.login2Activity;
 import com.example.practicadiseo.clases.Adaptadornotificaciones;
+import com.example.practicadiseo.clases.Notificacion;
+import com.example.practicadiseo.interfaces.tesisAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,7 +136,7 @@ public class listanotificacionesFragment extends Fragment {
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.tesisAPI.class);
+        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
         Call<List<Notificacion>> call = tesisAPI.getNotificacion(rutusuario);
         call.enqueue(new Callback<List<Notificacion>>() {
             @Override

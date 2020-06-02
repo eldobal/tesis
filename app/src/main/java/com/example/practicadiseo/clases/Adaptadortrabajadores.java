@@ -1,7 +1,6 @@
-package com.example.practicadiseo;
+package com.example.practicadiseo.clases;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +9,14 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import  android.app.Fragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.SignInButton;
+import com.example.practicadiseo.R;
+import com.example.practicadiseo.fragments.perfiltrabajadorFragment;
 
 import java.io.Serializable;
 import java.util.ArrayList;

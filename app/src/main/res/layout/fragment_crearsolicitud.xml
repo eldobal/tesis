@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorAccentllight"
     android:layout_height="match_parent"
-    tools:context=".crearsolicitudFragment">
+    tools:context=".fragments.crearsolicitudFragment">
 
 
     <LinearLayout
