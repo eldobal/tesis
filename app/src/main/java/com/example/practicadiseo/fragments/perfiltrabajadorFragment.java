@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.example.practicadiseo.R;
 import com.example.practicadiseo.clases.UsuarioTrabajador;
@@ -36,6 +37,7 @@ public class perfiltrabajadorFragment extends Fragment {
     private TextView rut,nombre,apellido,correo,telefono,ciudad,estado,calificacion;
     private String nombretrabajor="",estadotrabador="",calificaciontrabajador="",ruttrabajador="";
     private int idrubro=0;
+    LottieAnimationView loadingdots2 ;
     private Button btncrearsolicitud;
     private ImageView foto;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
@@ -70,6 +72,8 @@ public class perfiltrabajadorFragment extends Fragment {
         calificacion = (TextView) v.findViewById(R.id.txtcalificacionperfiltrabajador);
         btncrearsolicitud=(Button) v.findViewById(R.id.botoncrearsolicitud);
         foto = (ImageView) v.findViewById(R.id.imgperfiltrabajadordetalle);
+        loadingdots2 =(LottieAnimationView) v.findViewById(R.id.loadindots2);
+
 
         if(ruttrabajador.isEmpty()){
             //enviar mensaje de error y reenviar al usuario hacia alguna pantalla de comprovacion
@@ -139,6 +143,8 @@ public class perfiltrabajadorFragment extends Fragment {
                         setestrellas(usuarios.getCalificacion());
                         estado.setText(usuarios.getEstado());
                         urlfoto =usuarios.getFoto();
+                        loadingdots2.setVisibility(View.INVISIBLE);
+                        loadingdots2.cancelAnimation();
                         Glide.with(getContext()).load(String.valueOf(rutaservidor+usuarios.getFoto())).into(foto);
                     }
                 }

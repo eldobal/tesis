@@ -51,7 +51,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
@@ -59,24 +58,69 @@
                                 android:orientation="vertical"
                                 android:padding="8dp">
 
-
-
                                 <ListView
                                     android:id="@+id/listadoperfilestrabajadores"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent">
-
-
                                 </ListView>
-
-
-
-
 
                             </LinearLayout>
 
+
                         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+
+                        <LinearLayout
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="8dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/preloaderlistatrabajador"
+                                app:lottie_rawRes="@raw/preloaderlistatrabajadores"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                app:lottie_autoPlay="true"
+                                app:lottie_loop="true"
+                                ></com.airbnb.lottie.LottieAnimationView>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="8dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                                <com.airbnb.lottie.LottieAnimationView
+                                    android:layout_centerInParent="true"
+                                    android:id="@+id/notfoundtrabajador"
+                                    android:layout_width="350dp"
+                                    app:lottie_rawRes="@raw/location"
+                                    app:lottie_autoPlay="false"
+                                    app:lottie_loop="false"
+                                    android:layout_height="350dp">
+                                </com.airbnb.lottie.LottieAnimationView>
+
+
+
+                                <TextView
+                                    android:id="@+id/txtnotfound"
+                                    android:layout_centerInParent="true"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colordark"
+                                    android:fontFamily="sans-serif-condensed-medium"
+                                    android:textSize="18sp"
+                                    android:text="">
+                                </TextView>
+
+
+                        </LinearLayout>
 
 
 

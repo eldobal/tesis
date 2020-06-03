@@ -30,6 +30,7 @@ import com.example.practicadiseo.activitys.login2Activity;
 import com.example.practicadiseo.clases.Adaptador;
 import com.example.practicadiseo.clases.Solicitud;
 import com.example.practicadiseo.interfaces.tesisAPI;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,10 +54,9 @@ public class solicitudeFragment extends Fragment  {
     private TextView tvNoRegistros;
     private ListView lista,listaactivas;
     private ImageButton btnVolver;
-    private SharedPreferences prefs;
+    private SharedPreferences prefs,asycprefs;
     private String rutusuario;
-    Layout uwu ;
-    int pocision = 0;
+    int azynctiempo =0;
     ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudesterminadas = new ArrayList<Solicitud>();
@@ -93,8 +93,9 @@ public class solicitudeFragment extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
-
+        asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        settiempoasyncexist();
         setcredentiasexist();
         reiniciarfragment(rutusuario);
         reiniciarfragmentterminadas(rutusuario);
@@ -106,6 +107,7 @@ public class solicitudeFragment extends Fragment  {
 
         //comprueba si es que existe coneccion
         if (NetworkInfo != null && NetworkInfo.isConnected()) {
+
             if (rutusuario.isEmpty()){
                 //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
                 Intent intent = new Intent(getContext(), login2Activity.class);
@@ -147,7 +149,7 @@ public class solicitudeFragment extends Fragment  {
                     });
                 }
             };
-            timer.schedule(task, 0, 15000);  //ejecutar en intervalo definido por el programador
+            timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
 
 
 
@@ -299,7 +301,6 @@ public class solicitudeFragment extends Fragment  {
     }
 
 
-
     //metodo que permite elejir un fragment
     private void showSelectedFragment(Fragment fragment){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
@@ -319,4 +320,20 @@ public class solicitudeFragment extends Fragment  {
     private String getuserrutprefs() {
         return prefs.getString("Rut", "");
     }
+
+
+
+    private void settiempoasyncexist() {
+        int tiempoasync = gettiempoasync();
+        if (tiempoasync!=0) {
+            azynctiempo=tiempoasync;
+        }
+    }
+
+    private int gettiempoasync() {
+        return asycprefs.getInt("tiempo", 0);
+    }
+
+
+
 }

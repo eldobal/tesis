@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -48,6 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import id.zelory.compressor.Compressor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,6 +69,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     private final String CARPETA_RAIZ="misImagenesPrueba/";
     private final String RUTA_IMAGEN=CARPETA_RAIZ+"misFotos";
     private  Bitmap bitmap;
+    Compressor compressor;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     SharedPreferences prefs,prefsmaps;
     SweetAlertDialog dp,pDialog;
@@ -153,6 +156,17 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Fechasolicitud = sdf.format(calendar.getTime());
 
+
+        if(!imagenstring.isEmpty()){
+            Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                    "La imagen se encuentra en el imagenstring ", Snackbar.LENGTH_LONG);
+            snackBar.show();
+            StringToBitMap(imagenstring);
+
+        }
+
+
+
         btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,8 +186,9 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                         pDialog.setTitleText("Loading");
                         pDialog.setCancelable(false);
                         pDialog.show();
-                        //se carga y convierte la foto la cual es usuario cargo/tomo desde su celular
-                        imagenstring = convertirimgstring(bitmap);
+
+
+
                         //metodo para crear la solicitud con los parametros
                         crearsolicitud();
                     }
@@ -362,7 +377,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             fotosacada.setImageBitmap(bitmap);
         }
         //si la opcion es cargar la foto desde el dispocitivo
-        if(requestCode == 10){
+                if(requestCode == 10){
             Uri path= data.getData();
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),path);
@@ -371,6 +386,9 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                 e.printStackTrace();
             }
         }
+
+        //se carga y convierte la foto la cual es usuario cargo/tomo desde su celular
+        imagenstring = convertirimgstring(bitmap);
 
     }
 
@@ -397,6 +415,24 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             return imagenString;
         }
     }
+
+
+
+    public Bitmap StringToBitMap(String encodedString) {
+        try {
+            byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            fotosacada.setImageBitmap(bitmap);
+            return bitmap;
+        } catch (Exception e) {
+            e.getMessage();
+            return null;
+        }
+    }
+
+
+
+
 
 
     private void setcredentiasexist() {

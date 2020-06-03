@@ -60,7 +60,7 @@ dependencies {
     implementation 'com.google.maps.android:android-maps-utils:0.5+'
 
 
-    implementation 'id.zelory:compressor:2.1.0'
+    implementation 'id.zelory:compressor:3.0.0'
 
 
 }

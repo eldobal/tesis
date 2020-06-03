@@ -13,8 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.practicadiseo.R;
 import com.example.practicadiseo.activitys.menuActivity;
 import com.example.practicadiseo.clases.Adaptadortrabajadores;
@@ -38,8 +40,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class listabuscarrubroFragment extends Fragment {
     SweetAlertDialog dp;
     private ListView lista;
+    private TextView txtnotfound;
     private SharedPreferences prefs;
-
+    LottieAnimationView preloaderlista,notfound;
     int idciudad =0,numeroultimo=0;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     SwipeRefreshLayout refreshLayouttrabajadores;
@@ -56,6 +59,11 @@ public class listabuscarrubroFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_listabuscarrubro, container, false);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        preloaderlista =(LottieAnimationView) v.findViewById(R.id.preloaderlistatrabajador);
+        notfound=(LottieAnimationView) v.findViewById(R.id.notfoundtrabajador);
+        txtnotfound =(TextView) v.findViewById(R.id.txtnotfound);
+        txtnotfound.setText("");
+        notfound.setVisibility(View.INVISIBLE);
         //se comprueba y trae el id de la ciudad del cliente
         setcredentiasexist();
         lista = (ListView) v.findViewById(R.id.listadoperfilestrabajadores);
@@ -124,19 +132,36 @@ public class listabuscarrubroFragment extends Fragment {
                         listatrabajadoresporrubo.add(trabajador1);
                     }
                     if (listatrabajadoresporrubo.size() > 0) {
+                        txtnotfound.setText("");
+                        notfound.setVisibility(View.INVISIBLE);
+                        notfound.pauseAnimation();
+
+
+
+                        preloaderlista.setVisibility(View.INVISIBLE);
+                        preloaderlista.pauseAnimation();
                         Adaptadortrabajadores ad = new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
                         lista.setAdapter(ad);
 
                     } else if(listatrabajadoresporrubo.size() == 0){
+                        preloaderlista.setVisibility(View.INVISIBLE);
+                        preloaderlista.pauseAnimation();
                         //si no encuentran usuario enviar al fragment con anicmacion de no encontrado
-                        showSelectedFragment(new notfoundFragment());
+                        notfound.setVisibility(View.VISIBLE);
+                        notfound.playAnimation();
+                        notfound.loop(true);
+                        txtnotfound.setText("No Se Han Encontrado Trabajadores para este Rubro");
                     }
                     refreshLayouttrabajadores.setRefreshing(false);
                 }
             }
             @Override
             public void onFailure(Call<List<UsuarioTrabajador>> call, Throwable t) {
-                showSelectedFragment(new notfoundFragment());
+                txtnotfound.setText("No Se Han Encontrado Trabajadores para este Rubro");
+                preloaderlista.setVisibility(View.INVISIBLE);
+                notfound.setVisibility(View.VISIBLE);
+                notfound.playAnimation();
+                notfound.loop(true);
             }
         });
 
