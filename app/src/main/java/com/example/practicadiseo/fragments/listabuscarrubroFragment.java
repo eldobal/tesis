@@ -69,8 +69,6 @@ public class listabuscarrubroFragment extends Fragment {
         lista = (ListView) v.findViewById(R.id.listadoperfilestrabajadores);
         //instanciacion del refresh para la lista de los trabajadores
         refreshLayouttrabajadores = v.findViewById(R.id.refreshtrabajadores);
-
-
         final View vista = inflater.inflate(R.layout.elementoperfiltrabajador, null);
 
         Bundle datosRecuperados = getArguments();
@@ -136,8 +134,7 @@ public class listabuscarrubroFragment extends Fragment {
                         notfound.setVisibility(View.INVISIBLE);
                         notfound.pauseAnimation();
 
-
-
+                        
                         preloaderlista.setVisibility(View.INVISIBLE);
                         preloaderlista.pauseAnimation();
                         Adaptadortrabajadores ad = new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
