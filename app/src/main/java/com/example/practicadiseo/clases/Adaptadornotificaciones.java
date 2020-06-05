@@ -31,7 +31,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
     private static LayoutInflater inflater = null;
     Context contexto;
     ArrayList<Notificacion> listanotificaciones;
-    ArrayList<Notificacion> lista;
+
 
     Notificacion notificacion = new Notificacion();
 

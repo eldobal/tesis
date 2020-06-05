@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -49,7 +50,7 @@ public class listanotificacionesFragment extends Fragment {
     SharedPreferences prefs,asycprefs;
     LottieAnimationView animationnotification ;
     ArrayList<Notificacion> arraylistanotificaciones= new ArrayList<Notificacion>();;
-    Adaptadornotificaciones ads;
+    Adaptadornotificaciones ads ,adsnoti;
     private String rutusuario;
     int azynctiempo =0;
 
@@ -63,7 +64,6 @@ public class listanotificacionesFragment extends Fragment {
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         arraylistanotificaciones = (ArrayList<Notificacion>) getArguments().getSerializable("arraynotificaciones");
-        listanotificaciones = (ListView) getActivity().findViewById(R.id.listanotificaciones);
 
         //refreshnotificaciones =(SwipeRefreshLayout) getActivity().findViewById(R.id.refreshnotificaciones);
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -74,11 +74,14 @@ public class listanotificacionesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_listanotificaciones, container, false);
+        listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
         animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
         //prefs que contienen datos del usuario
         setcredentiasexist();
         settiempoasyncexist();
-        reiniciarfragmentnotificacionesASYNC(rutusuario);
+
+
+
         if (rutusuario.isEmpty()){
             //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
             Intent intent = new Intent(getContext(), login2Activity.class);
@@ -88,9 +91,9 @@ public class listanotificacionesFragment extends Fragment {
             final View vista = inflater.inflate(R.layout.elementonotificacion, null);
             //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
             if (arraylistanotificaciones.size() != 0) {
-                ads = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
+                adsnoti = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
                 //se setea el adaptador a la lista del fragments
-                listanotificaciones.setAdapter(ads);
+                listanotificaciones.setAdapter(adsnoti);
             }
         }
 
@@ -160,7 +163,7 @@ public class listanotificacionesFragment extends Fragment {
                         animationnotification.setVisibility(View.INVISIBLE);
                         animationnotification.pauseAnimation();
                         //se instancia la recarga de los items que se encuentan en la lista de activas / pendientes
-                        ads.refresh(arraylistanotificaciones);
+                        adsnoti.refresh(arraylistanotificaciones);
 
                     }else {
                         animationnotification.playAnimation();
