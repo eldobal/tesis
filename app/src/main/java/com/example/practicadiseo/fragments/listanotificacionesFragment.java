@@ -74,13 +74,12 @@ public class listanotificacionesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_listanotificaciones, container, false);
-        listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
-        animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
+        reiniciarfragmentnotificacionesASYNC(rutusuario);
         //prefs que contienen datos del usuario
         setcredentiasexist();
         settiempoasyncexist();
-
-
+        listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
+        animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
 
         if (rutusuario.isEmpty()){
             //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
@@ -114,7 +113,7 @@ public class listanotificacionesFragment extends Fragment {
                 });
             }
         };
-        timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
+        timer.schedule(task, 5000, azynctiempo);  //ejecutar en intervalo definido por el programador
 
        /* refreshnotificaciones.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -160,16 +159,13 @@ public class listanotificacionesFragment extends Fragment {
                         arraylistanotificaciones.add(notificacion1);
                     }
                     if (arraylistanotificaciones.size() != 0) {
+                        adsnoti.refresh(arraylistanotificaciones);
                         animationnotification.setVisibility(View.INVISIBLE);
                         animationnotification.pauseAnimation();
                         //se instancia la recarga de los items que se encuentan en la lista de activas / pendientes
-                        adsnoti.refresh(arraylistanotificaciones);
-
                     }else {
-                        animationnotification.playAnimation();
                         animationnotification.setVisibility(View.VISIBLE);
-
-
+                        animationnotification.playAnimation();
                     }
                 }
             }
@@ -191,7 +187,6 @@ public class listanotificacionesFragment extends Fragment {
     private String getuserrutprefs() {
         return prefs.getString("Rut", "");
     }
-
 
 
     private void settiempoasyncexist() {

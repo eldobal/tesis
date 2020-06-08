@@ -116,14 +116,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                 } else {
                                     listanotificaciones.remove(i);
                                     refresh(listanotificaciones);
-                                    //colocar aviso de que se ha eliminado la solicitud
 
-
-                                      /* solicitudeFragment solicitudeFragment = new solicitudeFragment();
-                                        FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
-                                        FragmentTransaction ft = fm.beginTransaction();
-                                        ft.replace(R.id.container, solicitudeFragment);
-                                        ft.commit();*/
                                 }
                             }
 
