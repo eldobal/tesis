@@ -49,7 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
-import id.zelory.compressor.Compressor;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,7 +69,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     private final String CARPETA_RAIZ="misImagenesPrueba/";
     private final String RUTA_IMAGEN=CARPETA_RAIZ+"misFotos";
     private  Bitmap bitmap;
-    Compressor compressor;
+
     static final int REQUEST_IMAGE_CAPTURE = 1;
     SharedPreferences prefs,prefsmaps;
     SweetAlertDialog dp,pDialog;

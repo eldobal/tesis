@@ -71,7 +71,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
         //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
-        iniciarfragmentsolitudes();
+       // iniciarfragmentsolitudes();
         iniciarfragmentnotificaciones();
         perfilFragment perfilFragment =new perfilFragment();
         solicitudeFragment solicitudeFragment=new solicitudeFragment();
@@ -116,8 +116,8 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                     }
                     //se muestra el fragment de la lista de solicitudes
                     if(menuItem.getItemId()==R.id.menu_solicitud){
-                        //   showSelectedFragment(new solicitudeFragment());
-                        Bundle bundle = new Bundle();
+                           showSelectedFragment(new solicitudeFragment());
+                       /* Bundle bundle = new Bundle();
                         bundle.putSerializable("arraylistaspendientes", listasolicitudactivas);
                         bundle.putSerializable("arraylistasterminadas", listasolicitudesterminadas);
                         solicitudeFragment.setArguments(bundle);
@@ -126,13 +126,15 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                                 //permite regresar hacia atras entre los fragments
                                 .addToBackStack(null)
                                 .commit();
+                        */
                     }
                     //se muestra el fragment de configuracion y setting
                     if(menuItem.getItemId()== R.id.menu_settings){
                         showSelectedFragment(new settingsFragment());
                     }
                     if(menuItem.getItemId()== R.id.menu_notificaciones){
-                        Bundle bundle2 = new Bundle();
+
+                       Bundle bundle2 = new Bundle();
                         bundle2.putSerializable("arraynotificaciones", listanotificaciones);
                         listanotificacionesFragment.setArguments(bundle2);
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, listanotificacionesFragment, "notificacionestag")
@@ -140,6 +142,8 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                                 //permite regresar hacia atras entre los fragments
                                 .addToBackStack(null)
                                 .commit();
+
+
                     }
 
                     return true;
@@ -187,7 +191,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
 
     }
 
-    private void iniciarfragmentsolitudes() {
+   /* private void iniciarfragmentsolitudes() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -237,7 +241,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                 Toast.makeText(menuActivity.this, "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-    }
+    }  */
 
 
 /*

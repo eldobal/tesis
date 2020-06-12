@@ -82,8 +82,8 @@ public class solicitudeFragment extends Fragment  {
         listasolicitudactivas  = new ArrayList<Solicitud>();
         listasolicitudactivasinterna   = new ArrayList<Solicitud>();
         listasolicitudterminadasinterna   = new ArrayList<Solicitud>();
-        listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
-        listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
+      //  listasolicitudactivas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistaspendientes");
+      //  listasolicitudesterminadas = (ArrayList<Solicitud>) getArguments().getSerializable("arraylistasterminadas");
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
@@ -95,12 +95,18 @@ public class solicitudeFragment extends Fragment  {
         View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        ads = new Adaptador(getContext(), listasolicitudactivas);
+        ads2 = new Adaptador(getContext(), listasolicitudesterminadas);
         settiempoasyncexist();
         setcredentiasexist();
+
+
+
         reiniciarfragment(rutusuario);
         reiniciarfragmentterminadas(rutusuario);
         listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
         lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
+
         //declaracion de los swiperefresh para intanciarlos
         refreshLayout = v.findViewById(R.id.refresh);
         refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
@@ -117,14 +123,14 @@ public class solicitudeFragment extends Fragment  {
                 final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
                 //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
                 if (listasolicitudactivas.size() != 0) {
-                    ads = new Adaptador(getContext(), listasolicitudactivas);
+
                     //se setea el adaptador a la lista del fragments
-                    listaactivas.setAdapter(ads);
+
                 }
                 if (listasolicitudesterminadas.size() != 0) {
-                    ads2 = new Adaptador(getContext(), listasolicitudesterminadas);
+
                     //se setea el adaptador a la lista del fragments
-                    lista.setAdapter(ads2);
+
                 }
 
             }
@@ -138,18 +144,22 @@ public class solicitudeFragment extends Fragment  {
                 public void run() {
                     handler.post(new Runnable() {
                         public void run() {
-                            try {
-                                //Ejecuta tu AsyncTask!
-                                reiniciarfragment(rutusuario);
-                                reiniciarfragmentterminadas(rutusuario);
-                            } catch (Exception e) {
-                                Log.e("error", e.getMessage());
+
+                            if (isAdded() && isVisible() && getUserVisibleHint()) {
+                                try {
+                                    //Ejecuta tu AsyncTask!
+                                    reiniciarfragment(rutusuario);
+                                    reiniciarfragmentterminadas(rutusuario);
+                                } catch (Exception e) {
+                                    Log.e("error", e.getMessage());
+                                }
                             }
+
                         }
                     });
                 }
             };
-            timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
+            timer.schedule(task, 3000, azynctiempo);  //ejecutar en intervalo definido por el programador
 
 
 
@@ -235,6 +245,7 @@ public class solicitudeFragment extends Fragment  {
                         if (listasolicitudactivas.size() != 0) {
                          //se instancia la recarga de los items que se encuentan en la lista de activas / pendientes
                          ads.refresh(listasolicitudactivas);
+                            listaactivas.setAdapter(ads);
                         }
                     refreshLayout.setRefreshing(false);
                 }
@@ -288,6 +299,7 @@ public class solicitudeFragment extends Fragment  {
                     if (listasolicitudterminadasinterna.size() != 0) {
                         //se instancia la recarga de los items que se encuentan en la lista de aceptadas / finalisadas
                         ads2.refresh(listasolicitudterminadasinterna);
+                        lista.setAdapter(ads2);
                     }
                     refreshLayoutterminadas.setRefreshing(false);
                 }
