@@ -1,6 +1,7 @@
 package com.example.practicadiseo.fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -43,7 +44,7 @@ public class perfiltrabajadorFragment extends Fragment {
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     String urlfoto="";
     NetworkInfo networkInfo;
-
+    SharedPreferences prefsmaps;
     UsuarioTrabajador trabajador =new UsuarioTrabajador();
     public perfiltrabajadorFragment() {
         // Required empty public constructor
@@ -85,6 +86,7 @@ public class perfiltrabajadorFragment extends Fragment {
 
             }
         }
+
 
 
         btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
@@ -183,5 +185,9 @@ public class perfiltrabajadorFragment extends Fragment {
            calificacion.setText("No posee Calificacion");
        }
    }
+
+
+
+
 
 }

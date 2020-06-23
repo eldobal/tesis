@@ -63,7 +63,7 @@ public class listanotificacionesFragment extends Fragment {
         //lista de notificaciones en un array para recibirlas con el get arguments
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
-        arraylistanotificaciones = (ArrayList<Notificacion>) getArguments().getSerializable("arraynotificaciones");
+        //arraylistanotificaciones = (ArrayList<Notificacion>) getArguments().getSerializable("arraynotificaciones");
 
         //refreshnotificaciones =(SwipeRefreshLayout) getActivity().findViewById(R.id.refreshnotificaciones);
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -74,10 +74,12 @@ public class listanotificacionesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_listanotificaciones, container, false);
-        reiniciarfragmentnotificacionesASYNC(rutusuario);
+
         //prefs que contienen datos del usuario
         setcredentiasexist();
         settiempoasyncexist();
+        reiniciarfragmentnotificacionesASYNC(rutusuario);
+
         listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
         animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
 
@@ -159,7 +161,9 @@ public class listanotificacionesFragment extends Fragment {
                         arraylistanotificaciones.add(notificacion1);
                     }
                     if (arraylistanotificaciones.size() != 0) {
-                        adsnoti.refresh(arraylistanotificaciones);
+                        adsnoti = new Adaptadornotificaciones(getContext(), arraylistanotificaciones);
+                        listanotificaciones.setAdapter(adsnoti);
+                        // adsnoti.refresh(arraylistanotificaciones);
                         animationnotification.setVisibility(View.INVISIBLE);
                         animationnotification.pauseAnimation();
                         //se instancia la recarga de los items que se encuentan en la lista de activas / pendientes

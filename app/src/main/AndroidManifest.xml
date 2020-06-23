@@ -30,7 +30,10 @@
         <activity
             android:name=".activitys.menuActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" >
+
+
+        </activity>
         <activity
             android:name=".activitys.register2Activity"
             android:configChanges="orientation"

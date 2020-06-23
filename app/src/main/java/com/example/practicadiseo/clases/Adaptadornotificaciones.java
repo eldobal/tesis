@@ -1,10 +1,15 @@
 package com.example.practicadiseo.clases;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,80 +91,138 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
         final int posicion = i;
         card.setTag(i);
 
+        String textocomparar = "Solicitud "+notificacion.getId()+" fue cancelada";
 
-        card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                dp = new SweetAlertDialog(vista.getContext(), SweetAlertDialog.WARNING_TYPE);
-                dp.setTitleText("Confirmar La solicitud?");
-                dp.setContentText("si confirma esta solicitud el trbajador realizara el trabajo. so la cancela se eliminara esta solicitud");
-                dp.setConfirmText("Confirmar!");
-                dp.setCancelText("Cancelar!");
-                dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        Calendar calendar = Calendar.getInstance();
-                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                        final String Fechasolicitud = sdf.format(calendar.getTime());
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl("http://proyectotesis.ddns.net/")
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-                        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                        Call<Solicitud> call = tesisAPI.EstadoAtendiendo(listanotificaciones.get(i).getIdSolicitud(), Fechasolicitud);
-                        call.enqueue(new Callback<Solicitud>() {
-                            @Override
-                            public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
-                                if (!response.isSuccessful()) {
-                                    Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
-                                } else {
-                                    listanotificaciones.remove(i);
-                                    refresh(listanotificaciones);
 
+        if (notificacion.getMensaje().equals(textocomparar)){
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+            View viewsync = inflater.inflate(R.layout.alernotificacioncancelada,null);
+            builder.setView(viewsync);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            TextView textoalertnotificacion= (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+
+            Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
+
+
+            textoalertnotificacion.setText("La notificacion con el id: "+notificacion.getId()+" ha sido cancelada por el cliente" +
+                    "lo cual significa que la solitud se ha eliminado ");
+
+            dismiss.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Retrofit retrofit = new Retrofit.Builder()
+                            .baseUrl("http://proyectotesis.ddns.net/")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                    tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
+                    Call<String> call = tesisAPI.EliminarSoliPermanente(listanotificaciones.get(i).getIdSolicitud());
+                    call.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            if (!response.isSuccessful()) {
+                                Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                            } else {
+                                listanotificaciones.remove(i);
+                                refresh(listanotificaciones);
+                                dialog.dismiss();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                  dialog.dismiss();
+
+                }
+            });
+
+        }else {
+
+            card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    dp = new SweetAlertDialog(vista.getContext(), SweetAlertDialog.WARNING_TYPE);
+                    dp.setTitleText("Confirmar La solicitud?");
+                    dp.setContentText("si confirma esta solicitud el trbajador realizara el trabajo. so la cancela se eliminara esta solicitud");
+                    dp.setConfirmText("Confirmar!");
+                    dp.setCancelText("Cancelar!");
+                    dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl("http://proyectotesis.ddns.net/")
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
+                            Call<String> call = tesisAPI.EstadoAtendiendo(listanotificaciones.get(i).getIdSolicitud());
+                            call.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+                                    if (!response.isSuccessful()) {
+                                        Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                    } else {
+                                        listanotificaciones.remove(i);
+                                        refresh(listanotificaciones);
+
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(Call<Solicitud> call, Throwable t) {
-                                Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        sDialog.dismissWithAnimation();
-                    }
-                }).show();
-                dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        Retrofit retrofit = new Retrofit.Builder()
-                                .baseUrl("http://proyectotesis.ddns.net/")
-                                .addConverterFactory(GsonConverterFactory.create())
-                                .build();
-                        tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                        Call<String> call = tesisAPI.CancelarSolicitud(listanotificaciones.get(i).getIdSolicitud());
-                        call.enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(Call<String> call, Response<String> response) {
-                                if(!response.isSuccessful()){
-                                    Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
+                                    Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
-                                else {
-                                    listanotificaciones.remove(i);
-                                    refresh(listanotificaciones);
+                            });
+                            sDialog.dismissWithAnimation();
+                        }
+                    }).show();
+                    dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl("http://proyectotesis.ddns.net/")
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+                            tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
+                            Call<String> call = tesisAPI.CancelarSolicitud(listanotificaciones.get(i).getIdSolicitud());
+                            call.enqueue(new Callback<String>() {
+                                @Override
+                                public void onResponse(Call<String> call, Response<String> response) {
+                                    if(!response.isSuccessful()){
+                                        Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                                    }
+                                    else {
+                                        listanotificaciones.remove(i);
+                                        refresh(listanotificaciones);
+                                    }
                                 }
-                            }
-                            @Override
-                            public void onFailure(Call<String> call, Throwable t) {
-                                Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                        sDialog.dismissWithAnimation();
-                    }
-                })
-                        .show();
+                                @Override
+                                public void onFailure(Call<String> call, Throwable t) {
+                                    Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                            sDialog.dismissWithAnimation();
+                        }
+                    })
+                            .show();
 
-            }
-        });
+                }
+            });
+
+        }
+
+
+
+
 
 
         return vista;

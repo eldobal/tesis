@@ -133,8 +133,8 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                         showSelectedFragment(new settingsFragment());
                     }
                     if(menuItem.getItemId()== R.id.menu_notificaciones){
-
-                       Bundle bundle2 = new Bundle();
+                        showSelectedFragment(new listanotificacionesFragment());
+                 /*      Bundle bundle2 = new Bundle();
                         bundle2.putSerializable("arraynotificaciones", listanotificaciones);
                         listanotificacionesFragment.setArguments(bundle2);
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, listanotificacionesFragment, "notificacionestag")
@@ -143,7 +143,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                                 .addToBackStack(null)
                                 .commit();
 
-
+*/
                     }
 
                     return true;

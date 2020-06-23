@@ -158,7 +158,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                            Call<Solicitud> call = tesisAPI.EstadoAtendiendo(listasolicitudes.get(i).getIdSolicitud(), Fechasolicitud);
+                            Call<Solicitud> call = tesisAPI.EstadoAtendiendo(listasolicitudes.get(i).getIdSolicitud());
                             call.enqueue(new Callback<Solicitud>() {
                                 @Override
                                 public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
@@ -167,6 +167,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     } else {
                                         listasolicitudes.remove(i);
                                         refresh(listasolicitudes);
+
                                     }
                                 }
 

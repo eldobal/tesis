@@ -76,8 +76,8 @@ public interface tesisAPI {
 
 
     @POST("api/SolicitudAPI")
-    Call<Solicitud> EstadoAtendiendo(@Query("idSolicitud") int idsolicitud,
-                                     @Query("FechaD") String fechaconfirmacion
+    Call<String> EstadoAtendiendo(@Query("idSolicitud") int idsolicitud
+
     );
 
     @POST("api/UsuarioAPI")
@@ -101,7 +101,7 @@ public interface tesisAPI {
 
     //metodo para cancelar la solicitud del cliente
     @POST("api/SolicitudAPI")
-    Call<String> CancelarSolicitud(@Query("idSolicitud") int idSolicitud
+    Call<String> CancelarSolicitud(@Query("idcancelarC") int idSolicitud
     );
 
 
@@ -112,6 +112,12 @@ public interface tesisAPI {
 
     @GET("api/SolicitudAPI")
     Call<Solicitud> getSolicitudCliente(@Query("id") int id);
+
+
+    //metodo para cancelar la solicitud del cliente
+    @POST("api/SolicitudAPI")
+    Call<String> EliminarSoliPermanente(@Query("Delete") int idSolicitud
+    );
 
 
 }

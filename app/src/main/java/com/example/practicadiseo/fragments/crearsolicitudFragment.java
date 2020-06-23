@@ -105,6 +105,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         prefsmaps = this.getActivity().getSharedPreferences("ubicacionmapa", Context.MODE_PRIVATE);
 
+        saveOnPreferences("","");
 
     }
 
@@ -173,7 +174,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                 setlatlongexist();
                 descripcionfinal= descripcion.getText().toString();
                 //se hace la validacion si se ha escojido la direccion
-                if(!latorigen.isEmpty() && !longorigen.isEmpty()){
+                if(!latorigen.isEmpty() && !longorigen.isEmpty() ){
                     //validacion si es que la imagen y la descripcion estan vacios
                     if(descripcionfinal.isEmpty()){
                         Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
@@ -193,7 +194,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                         crearsolicitud();
                     }
             }else{
-                    Toast.makeText(getContext(), "pruebaaa", Toast.LENGTH_LONG).show();
                     Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
                             "Seleccione la ubicacion donde se realizara el trabajo", Snackbar.LENGTH_LONG);
                     snackBar.show();
@@ -276,6 +276,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                         dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
                         dp.setTitleText("Solicitud Creada!");
                         dp.show();
+                        saveOnPreferences("","");
                         createNotificationChannel();
                         crearnotificacion();
                         //envio del usuario al menu pricipal
@@ -431,6 +432,17 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     }
 
 
+    private void saveOnPreferences(String latitud, String longitud) {
+        SharedPreferences.Editor editor = prefsmaps.edit();
+
+        //putDoublelatitud(prefsmaps.edit(),"latitud",latitud);
+        //putDoublelongirud(prefsmaps.edit(),"longitud",longitud);
+        editor.putString("Latitud",latitud.toString());
+        editor.putString("Longitud",longitud.toString());
+        //linea la cual guarda todos los valores en la pref antes de continuar
+        editor.commit();
+        editor.apply();
+    }
 
 
 
@@ -492,5 +504,8 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             calificacion.setText("Calificacion: No posee Calificacion");
         }
     }
+
+
+
 
 }
