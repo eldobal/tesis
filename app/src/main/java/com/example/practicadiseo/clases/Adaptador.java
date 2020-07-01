@@ -158,21 +158,20 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                            Call<Solicitud> call = tesisAPI.EstadoAtendiendo(listasolicitudes.get(i).getIdSolicitud());
-                            call.enqueue(new Callback<Solicitud>() {
+                            Call<String> call = tesisAPI.EstadoAtendiendo(listasolicitudes.get(i).getIdSolicitud());
+                            call.enqueue(new Callback<String>() {
                                 @Override
-                                public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
+                                public void onResponse(Call<String> call, Response<String> response) {
                                     if (!response.isSuccessful()) {
                                         Toast.makeText(vista.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                     } else {
                                         listasolicitudes.remove(i);
                                         refresh(listasolicitudes);
-
                                     }
                                 }
 
                                 @Override
-                                public void onFailure(Call<Solicitud> call, Throwable t) {
+                                public void onFailure(Call<String> call, Throwable t) {
                                     Toast.makeText(vista.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });

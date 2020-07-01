@@ -103,8 +103,6 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
         });
 
 
-
-
         return v;
     }
 
@@ -161,7 +159,7 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
                 if(latitudorigen!= 0.0 && longitudorigen!=0.0){
 
                     SweetAlertDialog dp =  new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
-                    dp.setTitleText("seguro que quieres usar esta ubicacion?");
+                    dp.setTitleText("Esta seguro que quieres usar esta ubicacion?");
                     dp.setContentText("latitud:"+latitudorigen+" longitud: "+longitudorigen);
                     dp.setConfirmText("Si!");
                     dp.setCancelText("No!");

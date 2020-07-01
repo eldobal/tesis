@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -273,14 +274,36 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                     } else {
                         pDialog.cancel();
                         SolicitudDb solicitud = response.body();
-                        dp=  new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE);
-                        dp.setTitleText("Solicitud Creada!");
-                        dp.show();
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        LayoutInflater inflater = getLayoutInflater();
+                        View viewsync = inflater.inflate(R.layout.alertdialogcrearsolicitud,null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog = builder.create();
+                        dialog.setCancelable(false);
+                        dialog.show();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+                        Button solicitudcreada = viewsync.findViewById(R.id.btncrearsolicitudexito);
+
+                        solicitudcreada.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                updateDetail();
+                            }
+                        });
+
+
+
+
+
+
                         saveOnPreferences("","");
                         createNotificationChannel();
                         crearnotificacion();
                         //envio del usuario al menu pricipal
-                        updateDetail();
+
                     }
                 }
                 @Override
