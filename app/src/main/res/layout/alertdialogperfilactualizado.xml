@@ -8,13 +8,16 @@
 
 
     <com.airbnb.lottie.LottieAnimationView
-        app:lottie_rawRes="@raw/info01"
+        android:id="@+id/dangerperfilactualizar"
+        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        app:lottie_rawRes="@raw/perfilexito"
         app:lottie_autoPlay="true"
         app:lottie_loop="false"
-        android:background="@drawable/round_async01">
-    </com.airbnb.lottie.LottieAnimationView>
+
+        ></com.airbnb.lottie.LottieAnimationView>
+
 
 
     <TextView
@@ -26,28 +29,33 @@
         android:textColor="@color/colordark"
         android:gravity="center"
         android:textSize="20dp"
-        android:text="">
+        android:text="Felicitaciones Ha podido actualizar su perfil satisfactoriamente! "
+        >
+
     </TextView>
+
+
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:gravity="center_horizontal"
+
         android:layout_height="wrap_content">
 
         <Button
             android:layout_margin="8dp"
+
             android:layout_marginLeft="80dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="14dp"
-            android:id="@+id/btnocultaralert2"
+            android:id="@+id/btnalertperfilexito"
             android:layout_width="175dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_ripple"
-            android:text="Entiendo">
+            android:text="cerrar este cuadro">
         </Button>
     </LinearLayout>
-
 
 
 

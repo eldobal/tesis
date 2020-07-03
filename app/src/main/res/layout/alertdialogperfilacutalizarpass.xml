@@ -8,13 +8,16 @@
 
 
     <com.airbnb.lottie.LottieAnimationView
-        app:lottie_rawRes="@raw/info01"
+        android:id="@+id/dangerperfilactualizar"
+        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        app:lottie_rawRes="@raw/warningpassperfil"
         app:lottie_autoPlay="true"
         app:lottie_loop="false"
-        android:background="@drawable/round_async01">
-    </com.airbnb.lottie.LottieAnimationView>
+        android:background="@drawable/round_async01"
+        ></com.airbnb.lottie.LottieAnimationView>
+
 
 
     <TextView
@@ -26,26 +29,50 @@
         android:textColor="@color/colordark"
         android:gravity="center"
         android:textSize="20dp"
-        android:text="">
+        android:text="Esta seguro de que desea Acutalizar contraseña. si desea continuar recuerde que debera recordar su contraseña"
+        >
+
     </TextView>
 
 
+
     <LinearLayout
+
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:gravity="center_horizontal"
-        android:layout_height="wrap_content">
+        android:layout_alignParentBottom="true">
 
         <Button
             android:layout_margin="8dp"
-            android:layout_marginLeft="80dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="14dp"
-            android:id="@+id/btnocultaralert2"
-            android:layout_width="175dp"
+            android:id="@+id/btnalertactualizarpass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_btnsync"
+            android:text="Actualizar">
+        </Button>
+
+
+        <Button
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/btnalertcancelarperfilpass"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_ripple"
-            android:text="Entiendo">
+            android:text="cancelar">
         </Button>
+
+
+
+
+
     </LinearLayout>
 
 

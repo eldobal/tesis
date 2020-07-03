@@ -91,74 +91,86 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
         final int posicion = i;
         card.setTag(i);
 
-        String textocomparar = "Solicitud "+notificacion.getId()+" fue cancelada";
 
-
-
-        if (notificacion.getMensaje().equals(textocomparar)){
-
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-            View viewsync = inflater.inflate(R.layout.alernotificacioncancelada,null);
-            builder.setView(viewsync);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-            TextView textoalertnotificacion= (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-
-            Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
-
-
-            textoalertnotificacion.setText("La notificacion con el id: "+notificacion.getId()+" ha sido cancelada por el cliente" +
-                    "lo cual significa que la solitud se ha eliminado ");
-
-            dismiss.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Retrofit retrofit = new Retrofit.Builder()
-                            .baseUrl("http://proyectotesis.ddns.net/")
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
-                    tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                    Call<String> call = tesisAPI.EliminarSoliPermanente(listanotificaciones.get(i).getIdSolicitud());
-                    call.enqueue(new Callback<String>() {
-                        @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
-                            if (!response.isSuccessful()) {
-                                Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
-                            } else {
-                                listanotificaciones.remove(i);
-                                refresh(listanotificaciones);
-                                dialog.dismiss();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<String> call, Throwable t) {
-                            Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                  dialog.dismiss();
-
-                }
-            });
-
-        }else {
 
             card.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    dp = new SweetAlertDialog(vista.getContext(), SweetAlertDialog.WARNING_TYPE);
-                    dp.setTitleText("Confirmar La solicitud?");
-                    dp.setContentText("si confirma esta solicitud el trbajador realizara el trabajo. so la cancela se eliminara esta solicitud");
-                    dp.setConfirmText("Confirmar!");
-                    dp.setCancelText("Cancelar!");
-                    dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    String textocomparar = "Solicitud " +listanotificaciones.get(i).getIdSolicitud()+ " fue cancelada";
+
+
+                    if (listanotificaciones.get(i).getMensaje().equals(textocomparar)) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                        View viewsync = inflater.inflate(R.layout.alernotificacioncancelada, null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+
+                        Button dismiss = viewsync.findViewById(R.id.btnocultaralert2);
+
+
+                        textoalertnotificacion.setText("La notificacion con el id: " + notificacion.getId() + " ha sido cancelada por el cliente" +
+                                "lo cual significa que la solitud se ha eliminado ");
+
+                        dismiss.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                                Retrofit retrofit = new Retrofit.Builder()
+                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .addConverterFactory(GsonConverterFactory.create())
+                                        .build();
+                                tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
+                                Call<String> call = tesisAPI.EliminarSoliPermanente(listanotificaciones.get(i).getIdSolicitud());
+                                call.enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+                                        if (!response.isSuccessful()) {
+                                            Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                        } else {
+                                            listanotificaciones.remove(i);
+                                            refresh(listanotificaciones);
+                                            dialog.dismiss();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+                                        Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                dialog.dismiss();
+
+                            }
+                        });
+
+                    }
+
+
+                    if (!listanotificaciones.get(i).getMensaje().equals(textocomparar)) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
+                    View viewsync = inflater.inflate(R.layout.alertdialogsolicitudesconfirmada, null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog3 = builder.create();
+                    dialog3.show();
+                    dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    Button btnconfirmar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
+                    Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
+                    Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
+
+                    //btn para aceptar la solicitud y confirmarla por completo
+                    btnconfirmar.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(SweetAlertDialog sDialog) {
+                        public void onClick(View view) {
+                            Calendar calendar = Calendar.getInstance();
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            final String Fechasolicitud = sdf.format(calendar.getTime());
                             Retrofit retrofit = new Retrofit.Builder()
                                     .baseUrl("http://proyectotesis.ddns.net/")
                                     .addConverterFactory(GsonConverterFactory.create())
@@ -169,58 +181,101 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
                                     if (!response.isSuccessful()) {
-                                        Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                        Toast.makeText(vista.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                     } else {
                                         listanotificaciones.remove(i);
                                         refresh(listanotificaciones);
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
+                                        View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado, null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog5 = builder.create();
+                                        dialog5.show();
+                                        dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                        texto.setText("Felicitaciones Ha confirmado la Solicitud satisfactoriamente!");
+                                        Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                        btncerraralert.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog5.dismiss();
+                                                dialog3.dismiss();
+                                            }
+                                        });
 
                                     }
                                 }
 
                                 @Override
                                 public void onFailure(Call<String> call, Throwable t) {
-                                    Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(vista.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
-                            sDialog.dismissWithAnimation();
                         }
-                    }).show();
-                    dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    });
+
+                    //btn para cancelar y eliminar la solicitud
+                    btncancelar.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(SweetAlertDialog sDialog) {
+                        public void onClick(View view) {
                             Retrofit retrofit = new Retrofit.Builder()
                                     .baseUrl("http://proyectotesis.ddns.net/")
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                            Call<String> call = tesisAPI.CancelarSolicitud(listanotificaciones.get(i).getIdSolicitud());
-                            call.enqueue(new Callback<String>() {
+                            Call<String> call2 = tesisAPI.CancelarSolicitud(listanotificaciones.get(i).getIdSolicitud());
+                            call2.enqueue(new Callback<String>() {
                                 @Override
-                                public void onResponse(Call<String> call, Response<String> response) {
-                                    if(!response.isSuccessful()){
-                                        Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
-                                    }
-                                    else {
+                                public void onResponse(Call<String> call2, Response<String> response) {
+                                    if (!response.isSuccessful()) {
+                                        Toast.makeText(vista.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                    } else {
                                         listanotificaciones.remove(i);
                                         refresh(listanotificaciones);
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
+                                        View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado, null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog4 = builder.create();
+                                        dialog4.show();
+                                        dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                        texto.setText("Felicitaciones Ha cancelado la solicitud satisfactoriamente!");
+                                        Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                        btncerraralert.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog4.dismiss();
+                                                dialog3.dismiss();
+                                            }
+                                        });
+
+
                                     }
                                 }
+
                                 @Override
-                                public void onFailure(Call<String> call, Throwable t) {
-                                    Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                                public void onFailure(Call<String> call2, Throwable t) {
+                                    Toast.makeText(vista.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
-                            sDialog.dismissWithAnimation();
                         }
-                    })
-                            .show();
+                    });
 
+                    //btn para cerrar el cuadro explicativo
+                    dismiss.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog3.dismiss();
+                        }
+                    });
+
+
+                    }
                 }
             });
-
-        }
-
-
 
 
 

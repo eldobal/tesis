@@ -1,8 +1,11 @@
 package com.example.practicadiseo.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -46,6 +50,7 @@ public class passperfilFragment extends Fragment {
     private boolean validado = false;
     Usuario usuario = new Usuario();
     NetworkInfo networkInfo;
+    AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
     public passperfilFragment() {
         // Required empty public constructor
     }
@@ -53,7 +58,6 @@ public class passperfilFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
         //validacion contraseñas con alto nivel de dificultad
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
         mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseñaperfil, regexPassword, R.string.err_contraseña);
@@ -61,14 +65,7 @@ public class passperfilFragment extends Fragment {
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        btncambiopass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mAwesomeValidation.validate()){
-                    validado=true;
-                }
-            }
-        });
+
 
 
     }
@@ -103,7 +100,7 @@ public class passperfilFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (networkInfo != null && networkInfo.isConnected()) {
-                    if (validado==true) {
+                    if (mAwesomeValidation.validate()){
                         String contraseñaactual1 = contraseñaactual.getText().toString();
                         //String  usuariocontraseña = usuario.getContrasena().toString();
                         String contraseñanueva = contraseña1.getText().toString();
@@ -176,7 +173,7 @@ public class passperfilFragment extends Fragment {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-            try {
+
                 //metodo para llamar a la funcion que queramos
                 //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
                 Call<Usuario> call = tesisAPI.UsuarioPass(RUT,Contrasena);
@@ -191,8 +188,31 @@ public class passperfilFragment extends Fragment {
                         else {
                             //respuesta del request
                             Usuario usuarios = response.body();
-                            Intent intent = new Intent(getActivity(), menuActivity.class);
-                            startActivity(intent);
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            LayoutInflater inflater = getLayoutInflater();
+                            View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
+                            builder.setView(viewsync);
+                            AlertDialog dialog = builder.create();
+                            dialog.setCancelable(false);
+                            dialog.show();
+
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                            texto.setText("Felicitaciones Ha podido actualizar su contraseña satisfactoriamente!");
+                            Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                            btncerraralert.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent = new Intent(getActivity(), menuActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+
+
+
                         }
                     }
                     //si falla el request a la pagina mostrara este error
@@ -201,8 +221,7 @@ public class passperfilFragment extends Fragment {
                         Toast.makeText(getContext(), "errorb :" + t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
-            }catch (Exception e){
-            }
+
     }
 
     private void setcredentiasexist() {

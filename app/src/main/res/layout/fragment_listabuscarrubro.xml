@@ -79,12 +79,14 @@
 
                             <com.airbnb.lottie.LottieAnimationView
                                 android:id="@+id/preloaderlistatrabajador"
-                                app:lottie_rawRes="@raw/preloaderlistatrabajadores"
+                                app:lottie_rawRes="@raw/loadinglistasolicitudes"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 app:lottie_autoPlay="true"
                                 app:lottie_loop="true"
                                 ></com.airbnb.lottie.LottieAnimationView>
+
+
 
                         </LinearLayout>
 

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/round_async_dialog"
+    android:orientation="vertical">
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        app:lottie_rawRes="@raw/warningpassperfil"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        android:background="@drawable/round_async01">
+
+    </com.airbnb.lottie.LottieAnimationView>
+
+
+    <TextView
+        android:id="@+id/txtalertnotificacion"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/colordark"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:text="Si confirma esta solicitud el trabajador realizara el trabajo. Si cancela la solicitud se le notificara al trabajador y se eliminara esta solicitud de la lista.">
+
+    </TextView>
+
+
+
+    <LinearLayout
+
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true">
+
+
+        <Button
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/btnconfirmarnotificacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_ripple"
+            android:text="Confirmar">
+        </Button>
+
+
+        <Button
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/btncancelarnotificacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_btnsync"
+            android:text="eliminar">
+        </Button>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_margin="8dp"
+
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/btnocultaralert"
+            android:layout_width="175dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccentllight"
+            android:text="cerrar este cuadro">
+        </Button>
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

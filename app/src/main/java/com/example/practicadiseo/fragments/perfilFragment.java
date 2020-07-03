@@ -1,8 +1,11 @@
 package com.example.practicadiseo.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -24,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.bumptech.glide.Glide;
 import com.example.practicadiseo.R;
@@ -57,6 +61,7 @@ public class perfilFragment extends Fragment {
     private ImageView fotoperfil;
     SharedPreferences prefs;
     SweetAlertDialog dp;
+    LottieAnimationView loadingdots2;
     private GoogleSignInClient googleSignInClient;
     private String rutperfil ="",contrasenaperfil="",rutaurl="";
     final static String rutaservidor= "http://proyectotesis.ddns.net";
@@ -95,9 +100,9 @@ public class perfilFragment extends Fragment {
        telefono = (EditText) v.findViewById(R.id.telefonoperfil);
        ciudad = (Spinner) v.findViewById(R.id.spinner);
        fotoperfil = (ImageView) v.findViewById(R.id.usericon);
-        editardatos = (Button) v.findViewById(R.id.actualizarperfil);
-        editarpass = (Button) v.findViewById(R.id.actualizarcontraseña);
-        
+       editardatos = (Button) v.findViewById(R.id.actualizarperfil);
+       editarpass = (Button) v.findViewById(R.id.actualizarcontraseña);
+       loadingdots2 =(LottieAnimationView) v.findViewById(R.id.loadindots2);
        prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
 
         if (networkInfo != null && networkInfo.isConnected()) {
@@ -160,102 +165,123 @@ public class perfilFragment extends Fragment {
         editardatos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    dp = new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE);
-                    dp.setTitleText("Estas Segur@ De Querer Cambiar Los Datos?");
-                    dp.setContentText("Podras Cambiar Tus Datos Personales!");
-                    dp.setConfirmText("Si,Deseo Actualizar!");
-                    dp.setCancelText("No,No Quiero");
-                    //si preciona el boton si se podran editar los edittext
-                    dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                        @Override
-                        public void onClick(final SweetAlertDialog sDialog) {
-                            //si vuelve a precionar el boton no podra editar los edittext y saldra un mensaje
-                            editardatos.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    //metodo para hacer request de cambio de datos por parte del usuario
-                                    if (mAwesomeValidation.validate()) {
 
-                                        if (networkInfo != null && networkInfo.isConnected()) {
-                                            actualizarperfil();
-                                            dp = new SweetAlertDialog(v.getContext(), SweetAlertDialog.SUCCESS_TYPE);
-                                            dp.setTitleText("Has Actualizado tu perfil !");
-                                            dp.setContentText("para volver a editar recargue el perfil!");
-                                            dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                                @Override
-                                                public void onClick(SweetAlertDialog sDialog) {
-                                                    sDialog.dismissWithAnimation();
-                                                    //metodo para cambiar de activity
-                                                    updateDetail();
-                                                }
-                                            })
-                                                    .show();
-                                            //parametros false
-                                            {
-                                                rut.setEnabled(false);
-                                                rut.setFocusable(false);
-                                                rut.setFocusableInTouchMode(false);
 
-                                                correo.setEnabled(false);
-                                                correo.setFocusable(false);
-                                                correo.setFocusableInTouchMode(false);
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizar, null);
+                builder.setView(viewsync);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                Button btnconfirmar = viewsync.findViewById(R.id.btnalertactualizar);
+                Button btncancelar = viewsync.findViewById(R.id.btnalertcancelarperfil);
 
-                                                nombre.setEnabled(false);
-                                                nombre.setFocusable(false);
-                                                nombre.setFocusableInTouchMode(false);
+                btnconfirmar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                                                apellido.setEnabled(false);
-                                                apellido.setFocusable(false);
-                                                apellido.setFocusableInTouchMode(false);
+                        editardatos.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //metodo para hacer request de cambio de datos por parte del usuario
+                                if (mAwesomeValidation.validate()) {
 
-                                                telefono.setEnabled(false);
-                                                telefono.setFocusable(false);
-                                                telefono.setFocusableInTouchMode(false);
+                                    if (networkInfo != null && networkInfo.isConnected()) {
+                                        actualizarperfil();
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                                        View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado, null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog3 = builder.create();
+                                        dialog3.show();
+                                        dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
 
-                                                ciudad.setEnabled(false);
-                                                ciudad.setFocusable(false);
-                                                ciudad.setFocusableInTouchMode(false);
+                                        btncerraralert.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog3.dismiss();
+                                                //metodo para cambiar de activity
+                                                showSelectedFragment(new perfilFragment());
                                             }
-                                        }else{
-                                            //no hay coneccion manejar excepcion
+                                        });
 
+                                        {
+                                            rut.setEnabled(false);
+                                            rut.setFocusable(false);
+                                            rut.setFocusableInTouchMode(false);
+
+                                            correo.setEnabled(false);
+                                            correo.setFocusable(false);
+                                            correo.setFocusableInTouchMode(false);
+
+                                            nombre.setEnabled(false);
+                                            nombre.setFocusable(false);
+                                            nombre.setFocusableInTouchMode(false);
+
+                                            apellido.setEnabled(false);
+                                            apellido.setFocusable(false);
+                                            apellido.setFocusableInTouchMode(false);
+
+                                            telefono.setEnabled(false);
+                                            telefono.setFocusable(false);
+                                            telefono.setFocusableInTouchMode(false);
+
+                                            ciudad.setEnabled(false);
+                                            ciudad.setFocusable(false);
+                                            ciudad.setFocusableInTouchMode(false);
                                         }
-
+                                    }else{
+                                        //no hay coneccion manejar excepcion
 
                                     }
+
+
                                 }
-                            });
-                            sDialog.dismissWithAnimation();
-                            {
-                                rut.setText(rut.getText());
-
-                                correo.setEnabled(true);
-                                correo.setFocusable(true);
-                                correo.setFocusableInTouchMode(true);
-                                correo.setText(correo.getText());
-
-                                nombre.setEnabled(true);
-                                nombre.setFocusable(true);
-                                nombre.setFocusableInTouchMode(true);
-                                nombre.setText(nombre.getText());
-
-                                apellido.setEnabled(true);
-                                apellido.setFocusable(true);
-                                apellido.setFocusableInTouchMode(true);
-                                apellido.setText(apellido.getText());
-
-                                telefono.setEnabled(true);
-                                telefono.setFocusable(true);
-                                telefono.setFocusableInTouchMode(true);
-                                telefono.setText(telefono.getText());
-
-                                ciudad.setEnabled(true);
-                                ciudad.setFocusable(true);
-                                ciudad.setFocusableInTouchMode(true);
                             }
+                        });
+
+                        dialog.dismiss();
+                        {
+                            rut.setText(rut.getText());
+
+                            correo.setEnabled(true);
+                            correo.setFocusable(true);
+                            correo.setFocusableInTouchMode(true);
+                            correo.setText(correo.getText());
+
+                            nombre.setEnabled(true);
+                            nombre.setFocusable(true);
+                            nombre.setFocusableInTouchMode(true);
+                            nombre.setText(nombre.getText());
+
+                            apellido.setEnabled(true);
+                            apellido.setFocusable(true);
+                            apellido.setFocusableInTouchMode(true);
+                            apellido.setText(apellido.getText());
+
+                            telefono.setEnabled(true);
+                            telefono.setFocusable(true);
+                            telefono.setFocusableInTouchMode(true);
+                            telefono.setText(telefono.getText());
+
+                            ciudad.setEnabled(true);
+                            ciudad.setFocusable(true);
+                            ciudad.setFocusableInTouchMode(true);
                         }
-                    })
-                            .show();
+
+
+                    }
+                });
+
+
+                btncancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+
 
             }
         });
@@ -264,20 +290,34 @@ public class perfilFragment extends Fragment {
         editarpass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               SweetAlertDialog dp2 =new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE);
-                dp2.setTitleText("Estas Segur@ De Querer Cambiar Tu Contraseña?");
-                dp2.setContentText("Ten Cuidado!");
-                dp2.setConfirmText("Si,Deseo Actualizar!");
-                dp2.setCancelText("No,No Quiero");
-                //si preciona el boton si se podran editar los edittext
-                dp2.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                View viewsync = inflater.inflate(R.layout.alertdialogperfilacutalizarpass, null);
+                builder.setView(viewsync);
+                AlertDialog dialog2 = builder.create();
+                dialog2.show();
+                dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                Button btnconfirmar = viewsync.findViewById(R.id.btnalertactualizarpass);
+                Button btncancelar = viewsync.findViewById(R.id.btnalertcancelarperfilpass);
+
+                btnconfirmar.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(SweetAlertDialog sDialog) {
+                    public void onClick(View view) {
                         showSelectedFragment(new passperfilFragment());
-                        sDialog.dismissWithAnimation();
+                        dialog2.dismiss();
                     }
-                })
-                        .show();
+                });
+
+
+                btncancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        dialog2.dismiss();
+                    }
+                });
+
             }
         });
         return v;
@@ -316,6 +356,8 @@ public class perfilFragment extends Fragment {
                        telefono.setText(usuarios.getFono().toString());
                        idCiudad = usuarios.getIdCiudad();
                        rutaurl = usuarios.getFoto();
+                        loadingdots2.setVisibility(View.INVISIBLE);
+                        loadingdots2.cancelAnimation();
                        Glide.with(getContext()).load(String.valueOf(rutaservidor+rutaurl)).into(fotoperfil);
 
                       boolean encontrado = false;

@@ -1,12 +1,16 @@
 package com.example.practicadiseo.clases;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -130,7 +134,11 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     ft.commit();
                 }
             });
-        }if(listasolicitudes.get(i).getEstado().equals("CONFIRMADA")){
+        }
+
+
+
+        if(listasolicitudes.get(i).getEstado().equals("CONFIRMADA")){
 
             detalle.setText("Confirmar");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
@@ -142,14 +150,23 @@ public class Adaptador extends BaseAdapter implements Serializable {
                 @Override
                 public void onClick(View view) {
 
-                    dp = new SweetAlertDialog(vista.getContext(), SweetAlertDialog.WARNING_TYPE);
-                    dp.setTitleText("Confirmar La solicitud?");
-                    dp.setContentText("si confirma esta solicitud el trbajador realizara el trabajo. so la cancela se eliminara esta solicitud");
-                    dp.setConfirmText("Confirmar!");
-                    dp.setCancelText("Cancelar!");
-                    dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
+                    View viewsync = inflater.inflate(R.layout.alertdialogsolicitudesconfirmada,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog3 = builder.create();
+                    dialog3.show();
+                    dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView textoalertnotificacion= (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    Button btnconfirmar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
+                    Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
+                    Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
+
+
+                    //btn para aceptar la solicitud y confirmarla por completo
+                    btnconfirmar.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(SweetAlertDialog sDialog) {
+                        public void onClick(View view) {
                             Calendar calendar = Calendar.getInstance();
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                             final String Fechasolicitud = sdf.format(calendar.getTime());
@@ -167,6 +184,26 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     } else {
                                         listasolicitudes.remove(i);
                                         refresh(listasolicitudes);
+
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
+                                        View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog5 = builder.create();
+                                        dialog5.show();
+                                        dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                        texto.setText("Felicitaciones Ha confirmado la Solicitud satisfactoriamente!");
+                                        Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                        btncerraralert.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog5.dismiss();
+                                                dialog3.dismiss();
+                                            }
+                                        });
+
                                     }
                                 }
 
@@ -175,12 +212,13 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     Toast.makeText(vista.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
-                            sDialog.dismissWithAnimation();
                         }
-                    }).show();
-                    dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    });
+
+                    //btn para cancelar y eliminar la solicitud
+                    btncancelar.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(SweetAlertDialog sDialog) {
+                        public void onClick(View view) {
                             Retrofit retrofit = new Retrofit.Builder()
                                     .baseUrl("http://proyectotesis.ddns.net/")
                                     .addConverterFactory(GsonConverterFactory.create())
@@ -196,6 +234,26 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     else {
                                         listasolicitudes.remove(i);
                                         refresh(listasolicitudes);
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
+                                        View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog4 = builder.create();
+                                        dialog4.show();
+                                        dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                        texto.setText("Felicitaciones Ha cancelado la solicitud satisfactoriamente!");
+                                        Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                        btncerraralert.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog4.dismiss();
+                                                dialog3.dismiss();
+                                            }
+                                        });
+
+
                                     }
                                 }
                                 @Override
@@ -203,12 +261,20 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     Toast.makeText(vista.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
-                            sDialog.dismissWithAnimation();
                         }
-                    })
-                            .show();
+                    });
+
+                    //btn para cerrar el cuadro explicativo
+                    dismiss.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            dialog3.dismiss();
+                        }
+                    });
+
                 }
             });
+
         }if(listasolicitudes.get(i).getEstado().equals("PENDIENTE")) {
             detalle.setText("Cancelar");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
@@ -219,14 +285,22 @@ public class Adaptador extends BaseAdapter implements Serializable {
             detalle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dp=   new SweetAlertDialog(vista.getContext(), SweetAlertDialog.WARNING_TYPE);
-                    dp.setTitleText("Desea Eliminar la Solicitud?");
-                    dp.setContentText("Esta Solicitud sera eliminada de tu lista");
-                    dp.setConfirmText("Si!");
-                    dp.setCancelText("No!");
-                    dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
+                    View viewsync = inflater.inflate(R.layout.alertdialogsolicitudespendiente,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView textoalertnotificacion= (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+
+                    Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
+                    Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
+
+
+
+                    btncancelar.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(SweetAlertDialog sDialog) {
+                        public void onClick(View view) {
                             Retrofit retrofit = new Retrofit.Builder()
                                     .baseUrl("http://proyectotesis.ddns.net/")
                                     .addConverterFactory(GsonConverterFactory.create())
@@ -240,9 +314,27 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                         Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                                     }
                                     else {
-
                                         listasolicitudes.remove(i);
                                         refresh(listasolicitudes);
+                                        dialog.dismiss();
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
+                                        View viewsync = inflater.inflate(R.layout.alerdialogsolicitudeliminada,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog2 = builder.create();
+                                        dialog2.show();
+                                        dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        Button dismiss = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                        dismiss.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog2.dismiss();
+                                            }
+                                        });
+
+
+
                                       /* solicitudeFragment solicitudeFragment = new solicitudeFragment();
                                         FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
                                         FragmentTransaction ft = fm.beginTransaction();
@@ -255,18 +347,25 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
-                            sDialog.dismissWithAnimation();
                         }
-                    })    .show();
-                 dp.setCancelClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    });
+
+                    dismiss.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(SweetAlertDialog sDialog) {
-                            sDialog.cancel();
+                        public void onClick(View view) {
+                            dialog.dismiss();
                         }
-                    })
-                            .show();
+                    });
+
+
+
                 }
             });
+
+
+
+
+
         }
         return vista;
     }

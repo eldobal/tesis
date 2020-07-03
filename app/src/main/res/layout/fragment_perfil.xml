@@ -16,19 +16,32 @@
         android:orientation="vertical"
        >
 
-
         <RelativeLayout
+            android:background="@color/colorPrimaryDark"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp">
 
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/loadindots2"
+                app:lottie_rawRes="@raw/loadinglistasolicitudes"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:layout_centerInParent="true"
+                android:layout_width="100dp"
+                android:layout_height="100dp">
+            </com.airbnb.lottie.LottieAnimationView>
+
+
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/usericon"
-                android:layout_width="75dp"
-                android:layout_height="75dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:background="@color/float_transparent"
                 android:layout_centerInParent="true"
-                android:src="@drawable/userprofile"></androidx.appcompat.widget.AppCompatImageView>
+                ></androidx.appcompat.widget.AppCompatImageView>
 
         </RelativeLayout>
 
