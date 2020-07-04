@@ -120,4 +120,16 @@ public interface tesisAPI {
     );
 
 
+
+    //metodo para confirmar si el pago esta correcto
+    @POST("api/SolicitudAPI")
+    Call<String> pagarCliente(@Query("RUT") String rut,
+                               @Query("Contrasena") String contrasena,
+                               @Query("idSolicitud") int idsolicitud,
+                               @Query("metodoPago") String metodopago,
+                              @Query("calificacion") int calificacion,
+                              @Query("comentario") String comentario
+    );
+
+
 }

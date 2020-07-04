@@ -60,8 +60,8 @@
 
                     <ImageView
                         android:id="@+id/imgperfilfilasolicitud"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
                         android:src="@drawable/userprofile"></ImageView>
                 </LinearLayout>
 
@@ -491,19 +491,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-
             android:layout_marginTop="20dp">
 
             <Button
-
-                android:id="@+id/btnvolver"
-                android:layout_width="220dp"
+                android:visibility="gone"
+                android:id="@+id/btnpagarsolicitud"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:background="@drawable/botonripple"
-                android:text="Actualizar" />
+                android:background="@drawable/bg_btnsync"
+                android:text="pagar solicitud" />
 
 
         </RelativeLayout>*/

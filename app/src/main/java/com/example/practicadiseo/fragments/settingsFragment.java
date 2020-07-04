@@ -29,9 +29,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class settingsFragment extends Fragment {
     private GoogleSignInClient googleSignInClient;
     SweetAlertDialog dp;
@@ -42,15 +39,13 @@ public class settingsFragment extends Fragment {
 
 
     public settingsFragment() {
-
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
+        // Inflate the layout for this fragmen
         //prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         View v= inflater.inflate(R.layout.fragment_settings, container, false);
         asycprefs = getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
@@ -97,6 +92,7 @@ public class settingsFragment extends Fragment {
                             AlertDialog dialog2 = builder.create();
                             dialog2.setCancelable(false);
                             dialog2.show();
+                            //hacer las esquinas redondas
                             dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                             Button btnsalir = viewsync.findViewById(R.id.btncancelarnotificacion);
@@ -291,6 +287,5 @@ public class settingsFragment extends Fragment {
     public  void removesharedpreferenced(){
         prefs.edit().clear().apply();
     }
-
 
 }

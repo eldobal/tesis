@@ -149,8 +149,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
             detalle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-
+                    //alertdialog personalizado
                     AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                     View viewsync = inflater.inflate(R.layout.alertdialogsolicitudesconfirmada,null);
                     builder.setView(viewsync);
@@ -161,8 +160,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     Button btnconfirmar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
                     Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
                     Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
-
-
                     //btn para aceptar la solicitud y confirmarla por completo
                     btnconfirmar.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -184,8 +181,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     } else {
                                         listasolicitudes.remove(i);
                                         refresh(listasolicitudes);
-
-
+                                        //alertdialog personalizado
                                         AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                                         View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
                                         builder.setView(viewsync);
@@ -234,7 +230,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     else {
                                         listasolicitudes.remove(i);
                                         refresh(listasolicitudes);
-
+                                        //alertdialog personalizado
                                         AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                                         View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
                                         builder.setView(viewsync);
@@ -285,6 +281,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
             detalle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //alertdialog personalizado
                     AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                     View viewsync = inflater.inflate(R.layout.alertdialogsolicitudespendiente,null);
                     builder.setView(viewsync);
@@ -295,8 +292,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
                     Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
                     Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
-
-
 
                     btncancelar.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -362,11 +357,38 @@ public class Adaptador extends BaseAdapter implements Serializable {
                 }
             });
 
+        }if(listasolicitudes.get(i).getEstado().equals("FINALIZANDO")){
 
-
+            detalle.setText("FINALIZANDO");
+            detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            //boton sobre el detalle de una solicitud individual
+            detalle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Solicitud ut;
+                    ut = listasolicitudes.get(posicion);
+                    Bundle bundle = new Bundle();
+                    //id de la solicitud para que se pueda buscar en el detalle
+                    bundle.putInt("idsolicitud", idsolicitud);
+                    DetalleSolicitudFragment detalleSolicitudFragment = new DetalleSolicitudFragment();
+                    detalleSolicitudFragment.setArguments(bundle);
+                    FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.container, detalleSolicitudFragment);
+                    ft.commit();
+                }
+            });
 
 
         }
+
+
+
+
         return vista;
     }
 }

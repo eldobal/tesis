@@ -234,8 +234,7 @@ public class solicitudeFragment extends Fragment  {
                         for (int i = 0; i < Solicitudes.size(); i++) {
                                 Solicitud soli = new Solicitud();
                                 soli = Solicitudes.get(i);
-
-                                if (soli.getEstado().equals("PENDIENTE") || soli.getEstado().equals("ATENDIENDO") || soli.getEstado().equals("CONFIRMADA")  ) {
+                                if (soli.getEstado().equals("PENDIENTE") || soli.getEstado().equals("ATENDIENDO") || soli.getEstado().equals("CONFIRMADA") ||soli.getEstado().equals("FINALIZANDO") ) {
                                     listasolicitudactivas.add(soli);
                                 }else{
 
