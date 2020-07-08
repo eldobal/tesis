@@ -55,7 +55,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
 
     SwipeRefreshLayout refreshLayout;
 
-    String rut="";
+    String rut="",contrasena="";
     ArrayList<Solicitud> listasolicitudesterminadas = new ArrayList<Solicitud>();
     ArrayList<Solicitud> listasolicitudactivas = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudescomparar = new ArrayList<Solicitud>();
@@ -72,7 +72,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
         setcredentiasexist();
         //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
        // iniciarfragmentsolitudes();
-        iniciarfragmentnotificaciones();
+      //  iniciarfragmentnotificaciones();
         perfilFragment perfilFragment =new perfilFragment();
         solicitudeFragment solicitudeFragment=new solicitudeFragment();
         listanotificacionesFragment listanotificacionesFragment = new listanotificacionesFragment();
@@ -162,7 +162,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-        Call<List<Notificacion>> call = tesisAPI.getNotificacion(rut);
+        Call<List<Notificacion>> call = tesisAPI.getNotificacion(rut,contrasena);
         call.enqueue(new Callback<List<Notificacion>>() {
             @Override
             public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
@@ -293,13 +293,13 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
         editor.commit();
         editor.apply();
     }
-
+    //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexist() {
-       String rutc = getuserrutprefs();
-
-        if (!TextUtils.isEmpty(rutc)) {
-            rut=rutc;
-          //  txtpass.setText(contraseña);
+        String rut2= getuserrutprefs();
+        String contraseña = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rut2) && !TextUtils.isEmpty(contraseña)) {
+            rut=rut.toString();
+            contrasena=contraseña.toString();
         }
     }
 
@@ -307,9 +307,12 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
         return prefs.getString("Rut", "");
     }
 
+    private int getuseridciudadprefs() {
+        return prefs.getInt("idCiudad", 0);
+    }
+
     private String getusercontraseñaprefs() {
         return prefs.getString("ContraseNa", "");
     }
-
 
 }

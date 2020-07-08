@@ -2,9 +2,11 @@ package com.example.practicadiseo.clases;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,8 @@ public class Adaptador extends BaseAdapter implements Serializable {
     Context contexto;
     ArrayList<Solicitud> listasolicitudes;
     ArrayList<Solicitud> lista;
+    SharedPreferences prefs;
+    String rutusuario="",contrasena="";
 
     Solicitud soli = new Solicitud();
 
@@ -80,6 +84,9 @@ public class Adaptador extends BaseAdapter implements Serializable {
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
 
+        prefs = contexto.getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        setcredentiasexist();
+
         //declaracion de la vista de cada item de la solicitud
         final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
         TextView numerosolicitud = (TextView) vista.findViewById(R.id.txtfilanumerosolicitud);
@@ -109,7 +116,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
         final int posicion = i;
         detalle.setTag(i);
 
-        if(listasolicitudes.get(i).getEstado().equals("ATENDIENDO")) {
+        if(listasolicitudes.get(i).getEstado().equals("ATENDIENDO") ) {
 
             detalle.setText("Detalle");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
@@ -135,8 +142,58 @@ public class Adaptador extends BaseAdapter implements Serializable {
                 }
             });
         }
+        if(listasolicitudes.get(i).getEstado().equals("FINALIZADO") ) {
 
+            detalle.setText("Detalle");
+            detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
+            detalle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Solicitud ut;
+                    ut = listasolicitudes.get(posicion);
+                    Bundle bundle = new Bundle();
+                    //id de la solicitud para que se pueda buscar en el detalle
+                    bundle.putInt("idsolicitud", idsolicitud);
+                    DetalleSolicitudFragment detalleSolicitudFragment = new DetalleSolicitudFragment();
+                    detalleSolicitudFragment.setArguments(bundle);
+                    FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.container, detalleSolicitudFragment);
+                    ft.commit();
+                }
+            });
+        }
 
+        if(listasolicitudes.get(i).getEstado().equals("COMPLETADA Y PAGADA")  ) {
+
+            detalle.setText("Detalle");
+            detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
+            //boton sobre el detalle de una solicitud individual
+            detalle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Solicitud ut;
+                    ut = listasolicitudes.get(posicion);
+                    Bundle bundle = new Bundle();
+                    //id de la solicitud para que se pueda buscar en el detalle
+                    bundle.putInt("idsolicitud", idsolicitud);
+                    DetalleSolicitudFragment detalleSolicitudFragment = new DetalleSolicitudFragment();
+                    detalleSolicitudFragment.setArguments(bundle);
+                    FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.replace(R.id.container, detalleSolicitudFragment);
+                    ft.commit();
+                }
+            });
+        }
 
         if(listasolicitudes.get(i).getEstado().equals("CONFIRMADA")){
 
@@ -157,6 +214,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     dialog3.show();
                     dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     TextView textoalertnotificacion= (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    textoalertnotificacion.setText("Si confirma esta solicitud el trabajador realizara el trabajo. Si cancela la solicitud se le notificara al trabajador y se eliminara esta solicitud de la lista.(PRECIO ESTIMADO "+listasolicitudes.get(i).getPrecio()+")");
                     Button btnconfirmar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
                     Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
                     Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
@@ -172,20 +230,19 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                            Call<String> call = tesisAPI.EstadoAtendiendo(listasolicitudes.get(i).getIdSolicitud());
+                            Call<String> call = tesisAPI.EstadoAtendiendo(listasolicitudes.get(i).getIdSolicitud(),rutusuario,contrasena);
                             call.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
                                     if (!response.isSuccessful()) {
                                         Toast.makeText(vista.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                     } else {
-                                        listasolicitudes.remove(i);
-                                        refresh(listasolicitudes);
                                         //alertdialog personalizado
                                         AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                                         View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
                                         builder.setView(viewsync);
                                         AlertDialog dialog5 = builder.create();
+                                        dialog5.setCancelable(false);
                                         dialog5.show();
                                         dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                                         TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
@@ -197,6 +254,8 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                             public void onClick(View view) {
                                                 dialog5.dismiss();
                                                 dialog3.dismiss();
+                                                listasolicitudes.remove(i);
+                                                refresh(listasolicitudes);
                                             }
                                         });
 
@@ -220,7 +279,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                            Call<String> call2 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud());
+                            Call<String> call2 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud(),rutusuario,contrasena);
                             call2.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call2, Response<String> response) {
@@ -301,7 +360,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                            Call<String> call3 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud());
+                            Call<String> call3 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud(),rutusuario,contrasena);
                             call3.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call3, Response<String> response) {
@@ -391,4 +450,28 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
         return vista;
     }
+
+
+    //metodo para traer el rut del usuario hacia la variable local
+    private void setcredentiasexist() {
+        String rut = getuserrutprefs();
+        String contraseña = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
+            rutusuario=rut.toString();
+            contrasena=contraseña.toString();
+        }
+    }
+
+    private String getuserrutprefs() {
+        return prefs.getString("Rut", "");
+    }
+
+    private int getuseridciudadprefs() {
+        return prefs.getInt("idCiudad", 0);
+    }
+
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
+    }
+
 }

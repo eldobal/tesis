@@ -51,7 +51,7 @@ public class listanotificacionesFragment extends Fragment {
     LottieAnimationView animationnotification ;
     ArrayList<Notificacion> arraylistanotificaciones= new ArrayList<Notificacion>();;
     Adaptadornotificaciones ads ,adsnoti;
-    private String rutusuario;
+    private String rutusuario="",contrasena="";
     int azynctiempo =0;
 
     public listanotificacionesFragment() {
@@ -83,7 +83,7 @@ public class listanotificacionesFragment extends Fragment {
         listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
         animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
 
-        if (rutusuario.isEmpty()){
+        if (rutusuario.isEmpty() || contrasena.isEmpty()){
             //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
             Intent intent = new Intent(getContext(), login2Activity.class);
             startActivity(intent);
@@ -105,12 +105,10 @@ public class listanotificacionesFragment extends Fragment {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        try {
+
                             //Ejecuta tu AsyncTask!
                             reiniciarfragmentnotificacionesASYNC(rutusuario);
-                        } catch (Exception e) {
-                            Log.e("error", e.getMessage());
-                        }
+
                     }
                 });
             }
@@ -141,7 +139,7 @@ public class listanotificacionesFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-        Call<List<Notificacion>> call = tesisAPI.getNotificacion(rutusuario);
+        Call<List<Notificacion>> call = tesisAPI.getNotificacion(rutusuario,contrasena);
         call.enqueue(new Callback<List<Notificacion>>() {
             @Override
             public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
@@ -179,17 +177,26 @@ public class listanotificacionesFragment extends Fragment {
             }
         });
     }
-
     //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexist() {
         String rut = getuserrutprefs();
-        if (!TextUtils.isEmpty(rut)) {
+        String contraseña = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
             rutusuario=rut.toString();
+            contrasena=contraseña.toString();
         }
     }
 
     private String getuserrutprefs() {
         return prefs.getString("Rut", "");
+    }
+
+    private int getuseridciudadprefs() {
+        return prefs.getInt("idCiudad", 0);
+    }
+
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
     }
 
 

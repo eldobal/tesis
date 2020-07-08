@@ -1,9 +1,12 @@
 package com.example.practicadiseo.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -157,21 +160,33 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
                 //colocar aleta con sweet alert dialog
 
                 if(latitudorigen!= 0.0 && longitudorigen!=0.0){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alertdialogmapacrearsolicitud,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog = builder.create();
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    Button btnaceptar = viewsync.findViewById(R.id.btnutilizaresta);
+                    Button btndismiss = viewsync.findViewById(R.id.btnutilizarotra);
 
-                    SweetAlertDialog dp =  new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE);
-                    dp.setTitleText("Esta seguro que quieres usar esta ubicacion?");
-                    dp.setContentText("latitud:"+latitudorigen+" longitud: "+longitudorigen);
-                    dp.setConfirmText("Si!");
-                    dp.setCancelText("No!");
-                    dp.setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                    btndismiss.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(SweetAlertDialog sDialog) {
+                        public void onClick(View view) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    btnaceptar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
                             saveOnPreferences(latitudorigen,longitudorigen);
                             getActivity().onBackPressed();
-                            sDialog.dismissWithAnimation();
+                           dialog.dismiss();
                         }
-                    })
-                            .show();
+                    });
+
 
                 }else {
                     Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),

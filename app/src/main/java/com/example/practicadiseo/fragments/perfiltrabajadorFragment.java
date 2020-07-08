@@ -1,7 +1,11 @@
 package com.example.practicadiseo.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -9,6 +13,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +25,8 @@ import android.widget.Toast;
 import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.example.practicadiseo.R;
+import com.example.practicadiseo.activitys.menuActivity;
+import com.example.practicadiseo.activitys.register2Activity;
 import com.example.practicadiseo.clases.UsuarioTrabajador;
 import com.example.practicadiseo.fragments.crearsolicitudFragment;
 import com.example.practicadiseo.interfaces.tesisAPI;
@@ -44,8 +51,10 @@ public class perfiltrabajadorFragment extends Fragment {
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     String urlfoto="";
     NetworkInfo networkInfo;
-    SharedPreferences prefsmaps;
+    SharedPreferences prefsmaps,prefs;
     UsuarioTrabajador trabajador =new UsuarioTrabajador();
+
+    private String rutusuario="",contrasena="";
     public perfiltrabajadorFragment() {
         // Required empty public constructor
     }
@@ -58,6 +67,8 @@ public class perfiltrabajadorFragment extends Fragment {
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
         Bundle args = getArguments();
+        prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        setcredentiasexist();
         if (args == null) {
             // No hay datos, manejar excepción
         }else{
@@ -76,7 +87,7 @@ public class perfiltrabajadorFragment extends Fragment {
         loadingdots2 =(LottieAnimationView) v.findViewById(R.id.loadindots2);
 
 
-        if(ruttrabajador.isEmpty()){
+        if(ruttrabajador.isEmpty()||rutusuario.isEmpty() ||contrasena.isEmpty()){
             //enviar mensaje de error y reenviar al usuario hacia alguna pantalla de comprovacion
         }else{
             if (networkInfo != null && networkInfo.isConnected()) {
@@ -125,12 +136,36 @@ public class perfiltrabajadorFragment extends Fragment {
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
             //metodo para llamar a la funcion que queramos
             //llamar a la funcion de get usuario la cual se le envia los datos (rut)
-            Call<UsuarioTrabajador> call = tesisAPI.getUsuarioTrabajador(ruttrabajador);
+            Call<UsuarioTrabajador> call = tesisAPI.getUsuarioTrabajador(ruttrabajador,rutusuario,contrasena);
             call.enqueue(new Callback<UsuarioTrabajador>() {
                 @Override
                 public void onResponse( Call<UsuarioTrabajador>call, Response<UsuarioTrabajador> response) {
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        LayoutInflater inflater = getLayoutInflater();
+                        View viewsync = inflater.inflate(R.layout.alertdialogusuarioexistente,null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog = builder.create();
+                        dialog.setCancelable(false);
+                        dialog.show();
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        TextView  texto=(TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                        texto.setText("Ya exist una solicitud Sin completar con este trabajador. revise su lista de solicitudes.");
+                        Button btnusuarioexiste = viewsync.findViewById(R.id.btnusuarioexiste);
+
+                        btnusuarioexiste.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(getActivity(), menuActivity.class);
+                                startActivity(intent);
+                                dialog.dismiss();
+                            }
+                        });
+
+
                         Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
@@ -186,7 +221,27 @@ public class perfiltrabajadorFragment extends Fragment {
        }
    }
 
+    //metodo para traer el rut del usuario hacia la variable local
+    private void setcredentiasexist() {
+        String rut = getuserrutprefs();
+        String contraseña = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
+            rutusuario=rut.toString();
+            contrasena=contraseña.toString();
+        }
+    }
 
+    private String getuserrutprefs() {
+        return prefs.getString("Rut", "");
+    }
+
+    private int getuseridciudadprefs() {
+        return prefs.getInt("idCiudad", 0);
+    }
+
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
+    }
 
 
 

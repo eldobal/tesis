@@ -86,8 +86,9 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     private PendingIntent pendingIntent;
     private final static String CHANNEL_ID = "NOTIFICACION";
     private final static int NOTIFICACION_ID = 0;
-    String latorigen="",longorigen="";
+    String latorigen="",longorigen="",contrasena="",rutusuario="";
 
+    AlertDialog dialog;
     public crearsolicitudFragment() {
         // Required empty public constructor
     }
@@ -116,7 +117,8 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_crearsolicitud, container, false);
-
+        //se verifica si existe el rut de usuario y su contraseña
+        setcredentiasexist();
         rut =(TextView) v.findViewById(R.id.txtrutcrearsolicitudtrabajador);
         nombre =(TextView) v.findViewById(R.id.txtnombrecrearsolicitudtrabajador);
         estado =(TextView) v.findViewById(R.id.txtestadocrearsolicitudtrabajador);
@@ -142,82 +144,91 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             rutafoto = args.getString("imgperfiltrabajador");
         }
 
-        rut.setText("Rut: "+ruttrabajador);
-        nombre.setText(nombretrabajador);
-        estado.setText("Estado: "+estadotrabajador);
-        //se setean las estrellas dependiendo de la calificacion
-       setestrellas(calificaciontrabajador);
+        if(!rutcliente.isEmpty() && !contrasena.isEmpty()){
+            rut.setText("Rut: "+ruttrabajador);
+            nombre.setText(nombretrabajador);
+            estado.setText("Estado: "+estadotrabajador);
+            //se setean las estrellas dependiendo de la calificacion
+            setestrellas(calificaciontrabajador);
 
-        Glide.with(getContext()).load(String.valueOf(rutaservidor+rutafoto)).into(imgperfil);
-        //se verifica si existe el rut de usuario
-        setcredentiasexist();
-
-        descripcionfinal= descripcion.getText().toString();
-        //formato del calendario el cual toma la fecha actual.
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        Fechasolicitud = sdf.format(calendar.getTime());
+            Glide.with(getContext()).load(String.valueOf(rutaservidor+rutafoto)).into(imgperfil);
 
 
-        if(!imagenstring.isEmpty()){
-            Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                    "La imagen se encuentra en el imagenstring ", Snackbar.LENGTH_LONG);
-            snackBar.show();
-            StringToBitMap(imagenstring);
+            descripcionfinal= descripcion.getText().toString();
+            //formato del calendario el cual toma la fecha actual.
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Fechasolicitud = sdf.format(calendar.getTime());
 
+
+            if(!imagenstring.isEmpty()){
+                Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                        "La imagen se encuentra en el imagenstring ", Snackbar.LENGTH_LONG);
+                snackBar.show();
+                StringToBitMap(imagenstring);
+
+            }
+
+
+
+            btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setlatlongexist();
+                    descripcionfinal= descripcion.getText().toString();
+                    //se hace la validacion si se ha escojido la direccion
+                    if(!latorigen.isEmpty() && !longorigen.isEmpty() ){
+                        //validacion si es que la imagen y la descripcion estan vacios
+                        if(descripcionfinal.isEmpty()){
+                            Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    "Ingrese una descripcion / cargue una foto", Snackbar.LENGTH_LONG);
+                            snackBar.show();
+                        }else{
+                            btncrearsolicitud.setClickable(false);
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            LayoutInflater inflater = getLayoutInflater();
+                            View viewsync = inflater.inflate(R.layout.alerdialogloading,null);
+                            builder.setView(viewsync);
+                            dialog = builder.create();
+                            dialog.setCancelable(false);
+                            dialog.show();
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+
+                            //metodo para crear la solicitud con los parametros
+                            crearsolicitud();
+                        }
+                    }else{
+                        Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                "Seleccione la ubicacion donde se realizara el trabajo", Snackbar.LENGTH_LONG);
+                        snackBar.show();
+                    }
+
+
+                }
+            });
+
+            //metodo el cual carga el fragment de mapa
+            btnmapa.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showSelectedFragment(new mapaFragment());
+                }
+            });
+
+            //metodo para cargar la foto
+            cargar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    llamarintent();
+                }
+            });
+
+        }else{
+            updateDetail();
         }
 
-
-
-        btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setlatlongexist();
-                descripcionfinal= descripcion.getText().toString();
-                //se hace la validacion si se ha escojido la direccion
-                if(!latorigen.isEmpty() && !longorigen.isEmpty() ){
-                    //validacion si es que la imagen y la descripcion estan vacios
-                    if(descripcionfinal.isEmpty()){
-                        Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                "Ingrese una descripcion / cargue una foto", Snackbar.LENGTH_LONG);
-                        snackBar.show();
-                    }else{
-                        btncrearsolicitud.setClickable(false);
-                        pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
-                        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-                        pDialog.setTitleText("Loading");
-                        pDialog.setCancelable(false);
-                        pDialog.show();
-
-
-
-                        //metodo para crear la solicitud con los parametros
-                        crearsolicitud();
-                    }
-            }else{
-                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                            "Seleccione la ubicacion donde se realizara el trabajo", Snackbar.LENGTH_LONG);
-                    snackBar.show();
-                }
-
-            }
-        });
-
-        //metodo el cual carga el fragment de mapa
-        btnmapa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSelectedFragment(new mapaFragment());
-            }
-        });
-
-        //metodo para cargar la foto
-        cargar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                llamarintent();
-            }
-        });
 
         return v;
     }
@@ -265,16 +276,19 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
             //falta pasar el bitmap de la imagen sacada en el post hacia el web api
-            Call<SolicitudDb> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,latorigen,longorigen,imagenstring);
+            Call<SolicitudDb> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,latorigen,longorigen,contrasena,imagenstring);
             call1.enqueue(new Callback<SolicitudDb>() {
                 @Override
                 public void onResponse(Call<SolicitudDb> call1, Response<SolicitudDb> response) {
                     if (!response.isSuccessful()) {
+                        dialog.dismiss();
+                        updateDetail();
+                        //alert informativo
                         Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                     } else {
-                        pDialog.cancel();
+                        dialog.dismiss();
                         SolicitudDb solicitud = response.body();
-
+                        saveOnPreferences("","");
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         LayoutInflater inflater = getLayoutInflater();
                         View viewsync = inflater.inflate(R.layout.alertdialogcrearsolicitud,null);
@@ -290,25 +304,21 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                         solicitudcreada.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                createNotificationChannel();
+                                crearnotificacion();
                                 updateDetail();
                             }
                         });
 
 
 
-
-
-
-                        saveOnPreferences("","");
-                        createNotificationChannel();
-                        crearnotificacion();
-                        //envio del usuario al menu pricipal
-
                     }
                 }
                 @Override
                 public void onFailure(Call<SolicitudDb> call1, Throwable t) {
                     Toast.makeText(getContext(), "EL ERROR ESTA ACA: "+t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
+                    updateDetail();
                 }
             });
     }
@@ -317,16 +327,12 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     private void llamarintent() {
         //se crea un alertdialog para que
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
         LayoutInflater inflater = getLayoutInflater();
-
         View view = inflater.inflate(R.layout.alertdialog01,null);
         builder.setView(view);
-
-
         AlertDialog dialog = builder.create();
         dialog.show();
-
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         Button btntomarfoto = view.findViewById(R.id.alertbtntomarfoto);
         Button btncargarfoto = view.findViewById(R.id.alertbtncargarfoto);
         Button btncancelar = view.findViewById(R.id.alertbtncancelar);
@@ -469,11 +475,13 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
 
 
 
-
+    //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexist() {
-        String rutq = getuserrutprefs();
-        if (!TextUtils.isEmpty(rutq)) {
-            rutcliente=rutq.toString();
+        String rut = getuserrutprefs();
+        String contraseña = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
+            rutcliente=rut.toString();
+            contrasena=contraseña.toString();
         }
     }
 
@@ -481,6 +489,13 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         return prefs.getString("Rut", "");
     }
 
+    private int getuseridciudadprefs() {
+        return prefs.getInt("idCiudad", 0);
+    }
+
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
+    }
 
     public void updateDetail() {
         Intent intent = new Intent(getActivity(), menuActivity.class);

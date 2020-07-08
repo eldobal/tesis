@@ -49,7 +49,7 @@ public class passperfilFragment extends Fragment {
     private Button btncambiopass;
     private boolean validado = false;
     Usuario usuario = new Usuario();
-    NetworkInfo networkInfo;
+    NetworkInfo networkInfo ;
     AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
     public passperfilFragment() {
         // Required empty public constructor
@@ -62,9 +62,6 @@ public class passperfilFragment extends Fragment {
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
         mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseñaperfil, regexPassword, R.string.err_contraseña);
         mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseña2perfil, regexPassword, R.string.err_contraseña2);
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        networkInfo = connectivityManager.getActiveNetworkInfo();
-
 
 
 
@@ -75,6 +72,8 @@ public class passperfilFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_passperfil, container, false);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
         contraseñaactual = (EditText) v.findViewById(R.id.passactual);
         contraseña1 = (EditText) v.findViewById(R.id.cambiocontraseñaperfil);
         contraseña2 = (EditText) v.findViewById(R.id.cambiocontraseña2perfil);
@@ -106,8 +105,11 @@ public class passperfilFragment extends Fragment {
                         String contraseñanueva = contraseña1.getText().toString();
                         String contraseñanueva2 = contraseña2.getText().toString();
                         if (contraseñaactual1.equals(contraseñaactualcomparar) && (contraseñanueva.equals(contraseñanueva2))) {
-                            actualizarperfil();
-                            saveOnPreferences(contraseñanueva2);
+
+                            actualizarperfil(contraseñanueva2);
+
+                        }else{
+                            Toast.makeText(getContext(), "las contraseñas no coinciden", Toast.LENGTH_LONG).show();
                         }
                     }else{
                         Toast.makeText(getContext(), "error al validar la contraseña", Toast.LENGTH_LONG).show();
@@ -165,7 +167,7 @@ public class passperfilFragment extends Fragment {
     }
 
 
-    private void actualizarperfil() {
+    private void actualizarperfil(String contrasenanueva) {
             String RUT = rutperfil;
             String Contrasena = contraseña2.getText().toString();
             Retrofit retrofit = new Retrofit.Builder()
@@ -176,19 +178,19 @@ public class passperfilFragment extends Fragment {
 
                 //metodo para llamar a la funcion que queramos
                 //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
-                Call<Usuario> call = tesisAPI.UsuarioPass(RUT,Contrasena);
+                Call<Usuario> call = tesisAPI.UsuarioPass(RUT,contrasenanueva,contrasenaperfil);
                 call.enqueue(new Callback<Usuario>() {
                     @Override
                     public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                         //si esta malo se ejecuta este trozo
                         if (!response.isSuccessful()) {
-                            Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "error on response passperfil :" + response.code(), Toast.LENGTH_LONG).show();
                         }
                         //de lo contrario se ejecuta esta parte
                         else {
                             //respuesta del request
                             Usuario usuarios = response.body();
-
+                            saveOnPreferences(contrasenanueva);
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                             LayoutInflater inflater = getLayoutInflater();
                             View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);

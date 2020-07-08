@@ -98,11 +98,12 @@ public class DetalleSolicitudFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-        Call<Solicitud> call = tesisAPI.getSolicitudCliente(idsolicitud);
+        Call<Solicitud> call = tesisAPI.getSolicitudCliente(idsolicitud,rutperfil,contrasenaperfil);
         call.enqueue(new Callback<Solicitud>() {
             @Override
             public void onResponse(Call<Solicitud> call, Response<Solicitud> response) {
                 if(!response.isSuccessful()){
+                    //falta hacer un alert
                     Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                 }
                 else {

@@ -2,25 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/round_async_dialog"
     android:orientation="vertical">
 
 
     <com.airbnb.lottie.LottieAnimationView
-        app:lottie_rawRes="@raw/warningpassperfil"
+        android:id="@+id/dangerperfilactualizar"
+        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        app:lottie_rawRes="@raw/ubicacionalert"
         app:lottie_autoPlay="true"
         app:lottie_loop="false"
-        android:background="@drawable/round_async01">
+        android:background="@drawable/round_async01"
+        ></com.airbnb.lottie.LottieAnimationView>
 
-    </com.airbnb.lottie.LottieAnimationView>
 
 
     <TextView
-        android:id="@+id/txtalertnotificacion"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -28,7 +28,22 @@
         android:textColor="@color/colordark"
         android:gravity="center"
         android:textSize="20dp"
-        android:text="">
+        android:text="¿Esta Segur@ de querer usar esta ubicacion para la Solicitud?"
+        >
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/txtalertnotificacion"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/colordark"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:text="Recuerde que esta ubicacion NO podra modificarla mas adelante. Asegurese que la ubicacion seleccionada sera la que quiere utilizar."
+        >
 
     </TextView>
 
@@ -40,55 +55,37 @@
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true">
 
-
         <Button
             android:layout_margin="8dp"
             android:layout_weight="1"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="14dp"
-            android:id="@+id/btnconfirmarnotificacion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_ripple"
-            android:text="Confirmar">
-        </Button>
-
-
-        <Button
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="14dp"
-            android:id="@+id/btncancelarnotificacion"
+            android:id="@+id/btnutilizaresta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_btnsync"
-            android:text="eliminar">
+            android:text="Utilizar Esta">
         </Button>
 
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:gravity="center_horizontal"
-
-        android:layout_height="wrap_content">
 
         <Button
             android:layout_margin="8dp"
-
-            android:layout_marginLeft="80dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="14dp"
-            android:id="@+id/btnocultaralert"
-            android:layout_width="175dp"
+            android:id="@+id/btnutilizarotra"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccentllight"
-            android:text="cerrar este cuadro">
+            android:background="@drawable/bg_ripple"
+            android:text="Utilizar Otra">
         </Button>
+
+
+
+
+
     </LinearLayout>
 
 

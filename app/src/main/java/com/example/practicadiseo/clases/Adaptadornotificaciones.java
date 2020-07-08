@@ -2,8 +2,10 @@ package com.example.practicadiseo.clases;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,8 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
     private static LayoutInflater inflater = null;
     Context contexto;
     ArrayList<Notificacion> listanotificaciones;
+    SharedPreferences prefs;
+    String rutusuario="",contrasena="";
 
 
     Notificacion notificacion = new Notificacion();
@@ -77,6 +81,8 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
     public View getView(int i, View view, ViewGroup viewGroup) {
         final View vista = inflater.inflate(R.layout.elementonotificacion, null);
 
+        prefs = contexto.getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        setcredentiasexist();
         //datos del elemento en el cual se cargaran los trabajadores
         //  TextView cliente = (TextView) vista.findViewById(R.id.txtclientesolicituddetalle);
         CardView card = (CardView) vista.findViewById(R.id.cardnotificacion);
@@ -107,34 +113,29 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         AlertDialog dialog = builder.create();
                         dialog.show();
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
                         TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-
                         Button dismiss = viewsync.findViewById(R.id.btnocultaralert2);
-
-
                         textoalertnotificacion.setText("La notificacion con el id: " + notificacion.getId() + " ha sido cancelada por el cliente" +
                                 "lo cual significa que la solitud se ha eliminado ");
 
                         dismiss.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-
                                 Retrofit retrofit = new Retrofit.Builder()
                                         .baseUrl("http://proyectotesis.ddns.net/")
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                                Call<String> call = tesisAPI.EliminarSoliPermanente(listanotificaciones.get(i).getIdSolicitud());
+                                Call<String> call = tesisAPI.EliminarSoliPermanente(listanotificaciones.get(i).getIdSolicitud(),rutusuario,contrasena);
                                 call.enqueue(new Callback<String>() {
                                     @Override
                                     public void onResponse(Call<String> call, Response<String> response) {
                                         if (!response.isSuccessful()) {
                                             Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                         } else {
+                                            dialog.dismiss();
                                             listanotificaciones.remove(i);
                                             refresh(listanotificaciones);
-                                            dialog.dismiss();
                                         }
                                     }
 
@@ -143,7 +144,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                         Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
-                                dialog.dismiss();
 
                             }
                         });
@@ -152,7 +152,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
 
 
                     if (!listanotificaciones.get(i).getMensaje().equals(textocomparar)) {
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                     View viewsync = inflater.inflate(R.layout.alertdialogsolicitudesconfirmada, null);
                     builder.setView(viewsync);
@@ -176,7 +175,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                            Call<String> call = tesisAPI.EstadoAtendiendo(listanotificaciones.get(i).getIdSolicitud());
+                            Call<String> call = tesisAPI.EstadoAtendiendo(listanotificaciones.get(i).getIdSolicitud(),rutusuario,contrasena);
                             call.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
@@ -224,7 +223,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                            Call<String> call2 = tesisAPI.CancelarSolicitud(listanotificaciones.get(i).getIdSolicitud());
+                            Call<String> call2 = tesisAPI.CancelarSolicitud(listanotificaciones.get(i).getIdSolicitud(),rutusuario,contrasena);
                             call2.enqueue(new Callback<String>() {
                                 @Override
                                 public void onResponse(Call<String> call2, Response<String> response) {
@@ -282,6 +281,26 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
 
         return vista;
     }
+    //metodo para traer el rut del usuario hacia la variable local
+    private void setcredentiasexist() {
+        String rut = getuserrutprefs();
+        String contraseña = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
+            rutusuario=rut.toString();
+            contrasena=contraseña.toString();
+        }
+    }
 
+    private String getuserrutprefs() {
+        return prefs.getString("Rut", "");
+    }
+
+    private int getuseridciudadprefs() {
+        return prefs.getInt("idCiudad", 0);
+    }
+
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
+    }
 
 }

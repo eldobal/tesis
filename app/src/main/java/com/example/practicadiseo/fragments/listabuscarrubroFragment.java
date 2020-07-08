@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,8 @@ public class listabuscarrubroFragment extends Fragment {
     SwipeRefreshLayout refreshLayouttrabajadores;
     ArrayList<UsuarioTrabajador> listatrabajadoresporrubo = new ArrayList<UsuarioTrabajador>();
 
+    String rutusuario="",contrasena="";
+
     public listabuscarrubroFragment() {
         // Required empty public constructor
     }
@@ -66,6 +69,7 @@ public class listabuscarrubroFragment extends Fragment {
         notfound.setVisibility(View.INVISIBLE);
         //se comprueba y trae el id de la ciudad del cliente
         setcredentiasexist();
+        setcredentiasexistusuario();
         lista = (ListView) v.findViewById(R.id.listadoperfilestrabajadores);
         //instanciacion del refresh para la lista de los trabajadores
         refreshLayouttrabajadores = v.findViewById(R.id.refreshtrabajadores);
@@ -78,25 +82,29 @@ public class listabuscarrubroFragment extends Fragment {
         }
         int idrubro = datosRecuperados.getInt("idRubro");
 
-        //carga de los trabajdores por el rubro y por la ciudad en la cual se encuentra el usuario
-        cargartrabajadores(idrubro,idciudad);
+        if(!rutusuario.isEmpty() || !contrasena.isEmpty()){
 
-        //refresh para recargar la lista de los trabajadores
-        refreshLayouttrabajadores.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new CountDownTimer(1000,1000){
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                    }
-                    @Override
-                    public void onFinish() {
-                        cargartrabajadores(idrubro,idciudad);
-                    }
-                }.start();
-            }
-        });
+            //carga de los trabajdores por el rubro y por la ciudad en la cual se encuentra el usuario
+            cargartrabajadores(idrubro,idciudad);
 
+            //refresh para recargar la lista de los trabajadores
+            refreshLayouttrabajadores.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new CountDownTimer(1000,1000){
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                        }
+                        @Override
+                        public void onFinish() {
+                            cargartrabajadores(idrubro,idciudad);
+                        }
+                    }.start();
+                }
+            });
+
+
+        }else{updateDetail();}
 
         return  v;
     }
@@ -107,7 +115,7 @@ public class listabuscarrubroFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-        Call<List<UsuarioTrabajador>> call = tesisAPI.getRubroTrabajador(idrubro,idciudad);
+        Call<List<UsuarioTrabajador>> call = tesisAPI.getRubroTrabajador(idrubro,idciudad,rutusuario,contrasena);
         call.enqueue(new Callback<List<UsuarioTrabajador>>() {
             @Override
             public void onResponse(Call<List<UsuarioTrabajador>> call, Response<List<UsuarioTrabajador>> response) {
@@ -170,6 +178,7 @@ public class listabuscarrubroFragment extends Fragment {
         idciudad=ciudadid;
     }
 
+
     private void showSelectedFragment(Fragment fragment){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
                 .replace(R.id.container,fragment)
@@ -194,6 +203,19 @@ public class listabuscarrubroFragment extends Fragment {
     private String getusercontraseñaprefs() {
         return prefs.getString("ContraseNa", "");
     }
+
+
+    //metodo para traer el rut del usuario hacia la variable local
+    private void setcredentiasexistusuario() {
+        String rut = getuserrutprefs();
+        String contraseña = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
+            rutusuario=rut.toString();
+            contrasena=contraseña.toString();
+        }
+    }
+
+
 
 
 }

@@ -55,7 +55,7 @@ public class solicitudeFragment extends Fragment  {
     private ListView lista,listaactivas;
     private ImageButton btnVolver;
     private SharedPreferences prefs,asycprefs;
-    private String rutusuario;
+    private String rutusuario,contrasena;
     int azynctiempo =0;
     ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
@@ -95,26 +95,26 @@ public class solicitudeFragment extends Fragment  {
         View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
+        setcredentiasexist();
+        settiempoasyncexist();
         ads = new Adaptador(getContext(), listasolicitudactivas);
         ads2 = new Adaptador(getContext(), listasolicitudesterminadas);
-        settiempoasyncexist();
-        setcredentiasexist();
 
 
 
-        reiniciarfragment(rutusuario);
-        reiniciarfragmentterminadas(rutusuario);
+        //reiniciarfragment(rutusuario,contrasena);
+        //reiniciarfragmentterminadas(rutusuario,contrasena);
         listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
         lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
 
         //declaracion de los swiperefresh para intanciarlos
-        refreshLayout = v.findViewById(R.id.refresh);
-        refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
+       // refreshLayout = v.findViewById(R.id.refresh);
+       // refreshLayoutterminadas = v.findViewById(R.id.refreshterminadas);
 
         //comprueba si es que existe coneccion
         if (NetworkInfo != null && NetworkInfo.isConnected()) {
 
-            if (rutusuario.isEmpty()){
+            if (rutusuario.isEmpty() || contrasena.isEmpty()){
                 //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
                 Intent intent = new Intent(getContext(), login2Activity.class);
                 startActivity(intent);
@@ -123,47 +123,33 @@ public class solicitudeFragment extends Fragment  {
                 final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
                 //se instancia el adaptadador en el cual se instanciara la lista de trbajadres para setearlas en el apdaptador
                 if (listasolicitudactivas.size() != 0) {
-
                     //se setea el adaptador a la lista del fragments
-
                 }
                 if (listasolicitudesterminadas.size() != 0) {
-
                     //se setea el adaptador a la lista del fragments
-
                 }
+
+
+                final Handler handler = new Handler();
+                Timer timer = new Timer();
+
+                TimerTask task = new TimerTask() {
+                    @Override
+                    public void run() {
+                        handler.post(new Runnable() {
+                            public void run() {
+                                    //Ejecuta tu AsyncTask!
+                                    reiniciarfragment(rutusuario, contrasena);
+                                    reiniciarfragmentterminadas(rutusuario, contrasena);
+                            }
+                        });
+                    }
+                };
+                timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
+
 
             }
-
-
-            final Handler handler = new Handler();
-            Timer timer = new Timer();
-
-            TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-                    handler.post(new Runnable() {
-                        public void run() {
-
-                            if (isAdded() && isVisible() && getUserVisibleHint()) {
-                                try {
-                                    //Ejecuta tu AsyncTask!
-                                    reiniciarfragment(rutusuario);
-                                    reiniciarfragmentterminadas(rutusuario);
-                                } catch (Exception e) {
-                                    Log.e("error", e.getMessage());
-                                }
-                            }
-
-                        }
-                    });
-                }
-            };
-            timer.schedule(task, 3000, azynctiempo);  //ejecutar en intervalo definido por el programador
-
-
-
-
+/*
             refreshLayoutterminadas.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
@@ -173,7 +159,7 @@ public class solicitudeFragment extends Fragment  {
                         }
                         @Override
                         public void onFinish() {
-                            reiniciarfragmentterminadas(rutusuario);
+                            reiniciarfragmentterminadas(rutusuario,contrasena);
                         }
                     }.start();
                 }
@@ -189,12 +175,12 @@ public class solicitudeFragment extends Fragment  {
                         }
                         @Override
                         public void onFinish() {
-                            reiniciarfragment(rutusuario);
+                            reiniciarfragment(rutusuario,contrasena);
                         }
                     }.start();
                 }
             });
-
+*/
         }else{
             //manejar excepcion
 
@@ -203,18 +189,18 @@ public class solicitudeFragment extends Fragment  {
         return v;
     }
 
-    private void reiniciarfragment(String rut) {
+    private void reiniciarfragment(String rut,String contrasena) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-        Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut);
+        Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut,contrasena);
         call.enqueue(new Callback<List<Solicitud>>() {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "error/onresponce/solicitude reiniciar :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     List<Solicitud> solicituds = response.body();
                     Solicitudes.clear();
@@ -228,6 +214,7 @@ public class solicitudeFragment extends Fragment  {
                         Solicitud1.setApellido(solicitud.getApellido());
                         Solicitud1.setEstado(solicitud.getEstado());
                         Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
+                        Solicitud1.setPrecio(solicitud.getPrecio());
                         Solicitudes.add(Solicitud1);
                     }
                     listasolicitudactivas.clear();
@@ -246,30 +233,30 @@ public class solicitudeFragment extends Fragment  {
                          ads.refresh(listasolicitudactivas);
                             listaactivas.setAdapter(ads);
                         }
-                    refreshLayout.setRefreshing(false);
+                 //   refreshLayout.setRefreshing(false);
                 }
             }
             @Override
             public void onFailure(Call<List<Solicitud>> call, Throwable t) {
-                Toast.makeText(getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "error/onfailure/solicitude :" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
     }
 
 
-    private void reiniciarfragmentterminadas(String rut) {
+    private void reiniciarfragmentterminadas(String rut,String contrasena) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://proyectotesis.ddns.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-        Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut);
+        Call<List<Solicitud>> call = tesisAPI.getSolicitudes(rut,contrasena);
         call.enqueue(new Callback<List<Solicitud>>() {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "error/onresponce/solicitudeterminadas:" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     List<Solicitud> solicituds = response.body();
                     Solicitudesterminadas.clear();
@@ -288,7 +275,7 @@ public class solicitudeFragment extends Fragment  {
                     for (int i = 0; i < Solicitudesterminadas.size(); i++) {
                         Solicitud soli = new Solicitud();
                         soli = Solicitudesterminadas.get(i);
-                        if (soli.getEstado().equals("COMPLETADA Y PAGADA") || soli.getEstado().equals("COMPLETADA Y NO PAGADA") ) {
+                        if (soli.getEstado().equals("COMPLETADA Y PAGADA") || soli.getEstado().equals("COMPLETADA Y NO PAGADA")  || soli.getEstado().equals("FINALIZADO")) {
                             listasolicitudterminadasinterna.add(soli);
                          } else {
 
@@ -300,12 +287,12 @@ public class solicitudeFragment extends Fragment  {
                         ads2.refresh(listasolicitudterminadasinterna);
                         lista.setAdapter(ads2);
                     }
-                    refreshLayoutterminadas.setRefreshing(false);
+               //     refreshLayoutterminadas.setRefreshing(false);
                 }
             }
             @Override
             public void onFailure(Call<List<Solicitud>> call, Throwable t) {
-                Toast.makeText(getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "error/onfailure/solicitudeterminadas :" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -323,16 +310,25 @@ public class solicitudeFragment extends Fragment  {
     //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexist() {
         String rut = getuserrutprefs();
-        if (!TextUtils.isEmpty(rut)) {
+        String contraseña = getusercontraseñaprefs();
+        if (!TextUtils.isEmpty(rut) && !TextUtils.isEmpty(contraseña)) {
             rutusuario=rut.toString();
+            contrasena=contraseña.toString();
         }
     }
+
 
     private String getuserrutprefs() {
         return prefs.getString("Rut", "");
     }
 
+    private int getuseridciudadprefs() {
+        return prefs.getInt("idCiudad", 0);
+    }
 
+    private String getusercontraseñaprefs() {
+        return prefs.getString("ContraseNa", "");
+    }
 
     private void settiempoasyncexist() {
         int tiempoasync = gettiempoasync();

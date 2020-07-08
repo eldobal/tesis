@@ -2,18 +2,23 @@ package com.example.practicadiseo.activitys;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -134,12 +139,61 @@ public class register2Activity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                                         if (!response.isSuccessful()) {
-                                            Toast.makeText(getApplicationContext(), "error code " + response.code(), Toast.LENGTH_LONG).show();
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(register2Activity.this);
+                                            LayoutInflater inflater = getLayoutInflater();
+                                            View viewsync = inflater.inflate(R.layout.alertdialogusuarioexistente,null);
+                                            builder.setView(viewsync);
+                                            AlertDialog dialog = builder.create();
+                                            dialog.setCancelable(false);
+                                            dialog.show();
+                                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                                            Button btnusuarioexiste = viewsync.findViewById(R.id.btnusuarioexiste);
+
+                                            btnusuarioexiste.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    txtrut.setText("");
+                                                    txtapellidos.setText("");
+                                                    txtemail.setText("");
+                                                    txtcontraseña.setText("");
+                                                    txtcontraseña2.setText("");
+                                                    txttelefono.setText("");
+                                                    dialog.dismiss();
+                                                }
+                                            });
+
+                                           // Toast.makeText(getApplicationContext(), "error code " + response.code(), Toast.LENGTH_LONG).show();
                                         } else {
                                             Usuario usuarioresponce = response.body();
-                                            //usar sweetalert dialog para genera aviso
-                                            Intent intent = new Intent(register2Activity.this, login2Activity.class);
-                                            startActivity(intent);
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(register2Activity.this);
+                                            LayoutInflater inflater = getLayoutInflater();
+                                            View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
+                                            builder.setView(viewsync);
+                                            AlertDialog dialog2 = builder.create();
+                                            dialog2.setCancelable(false);
+                                            dialog2.show();
+                                            dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                            texto.setText("Felicidades ha creado de forma exitosa su perfil. sera redigido al login para que pueda iniciar sesion");
+                                            Button btnusuarioexiste = viewsync.findViewById(R.id.btnusuarioexiste);
+
+                                            btnusuarioexiste.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View view) {
+                                                    txtrut.setText("");
+                                                    txtapellidos.setText("");
+                                                    txtemail.setText("");
+                                                    txtcontraseña.setText("");
+                                                    txtcontraseña2.setText("");
+                                                    txttelefono.setText("");
+                                                    dialog2.dismiss();
+                                                    Intent intent = new Intent(register2Activity.this, login2Activity.class);
+                                                    startActivity(intent);
+                                                }
+                                            });
+
                                         }
                                     }
 

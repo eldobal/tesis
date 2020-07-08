@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -43,6 +44,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -188,22 +190,7 @@ public class perfilFragment extends Fragment {
 
                                     if (networkInfo != null && networkInfo.isConnected()) {
                                         actualizarperfil();
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                                        View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado, null);
-                                        builder.setView(viewsync);
-                                        AlertDialog dialog3 = builder.create();
-                                        dialog3.show();
-                                        dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                        Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
 
-                                        btncerraralert.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                dialog3.dismiss();
-                                                //metodo para cambiar de activity
-                                                showSelectedFragment(new perfilFragment());
-                                            }
-                                        });
 
                                         {
                                             rut.setEnabled(false);
@@ -343,7 +330,7 @@ public class perfilFragment extends Fragment {
                 public void onResponse( Call<Usuario>call, Response<Usuario> response) {
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
-                        Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "error cargardatos:"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {
@@ -373,7 +360,7 @@ public class perfilFragment extends Fragment {
                 //si falla el request a la pagina mostrara este error
                 @Override
                 public void onFailure(Call<Usuario> call, Throwable t) {
-                    Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "errorcargardatoscargardatos :"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
     }
@@ -395,7 +382,7 @@ public class perfilFragment extends Fragment {
                 public void onResponse( Call<List<Ciudad>>call, Response<List<Ciudad>>response) {
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
-                        Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "errorspinner :"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {
@@ -416,13 +403,14 @@ public class perfilFragment extends Fragment {
                         ciudad.setAdapter(a);
 
 
+
                     }
                 }
 
                 //si falla el request a la pagina mostrara este error
                 @Override
                 public void onFailure(Call<List<Ciudad>> call, Throwable t) {
-                    Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "errorerrorspinner :"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         }catch (Exception e){
@@ -446,18 +434,59 @@ public class perfilFragment extends Fragment {
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
             //metodo para llamar a la funcion que queramos
             //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
-            Call<Usuario> call = tesisAPI.ActualizarUsuario(RUT,Nombre,Apellido,Correo,Fono,idCiudad);
+            Call<Usuario> call = tesisAPI.ActualizarUsuario(RUT,Nombre,Apellido,Correo,Fono,idCiudad,contrasenaperfil);
             call.enqueue(new Callback<Usuario>() {
                 @Override
                 public void onResponse( Call<Usuario>call, Response<Usuario> response) {
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        View viewsync = getActivity().getLayoutInflater().inflate(R.layout.alertdialogusuarioexistente, null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog4 = builder.create();
+                        dialog4.setCancelable(false);
+                        dialog4.show();
+                        dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                        TextView texto =(TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                        texto.setText("Ha ocurrido un error al actualizar su perfil.");
+                        Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                        btncerraralert.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                showSelectedFragment(new perfilFragment());
+                                dialog4.dismiss();
+                                //metodo para cambiar de activity
+
+                            }
+                        });
                         Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {
                         //respuesta del request
                         Usuario usuarios = response.body();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        View viewsync = getActivity().getLayoutInflater().inflate(R.layout.alertdialogperfilactualizado, null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog3 = builder.create();
+                        dialog3.setCancelable(false);
+                        dialog3.show();
+                        dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+
+                        btncerraralert.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                showSelectedFragment(new perfilFragment());
+                                dialog3.dismiss();
+                                //metodo para cambiar de activity
+
+                            }
+                        });
+
+
                     }
                 }
                 //si falla el request a la pagina mostrara este error
