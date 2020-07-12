@@ -62,9 +62,6 @@ public class passperfilFragment extends Fragment {
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
         mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseñaperfil, regexPassword, R.string.err_contraseña);
         mAwesomeValidation.addValidation(getActivity(), R.id.cambiocontraseña2perfil, regexPassword, R.string.err_contraseña2);
-
-
-
     }
 
     @Override
@@ -78,11 +75,7 @@ public class passperfilFragment extends Fragment {
         contraseña1 = (EditText) v.findViewById(R.id.cambiocontraseñaperfil);
         contraseña2 = (EditText) v.findViewById(R.id.cambiocontraseña2perfil);
         btncambiopass = (Button) v.findViewById(R.id.btncambiocontrasena);
-        Usuario usuario = new Usuario();
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
-
-
-
         //se comprueba que exita el rut y la contraseña
         setcredentiasexist();
 
@@ -94,7 +87,6 @@ public class passperfilFragment extends Fragment {
 
         }
 
-
         btncambiopass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,9 +97,7 @@ public class passperfilFragment extends Fragment {
                         String contraseñanueva = contraseña1.getText().toString();
                         String contraseñanueva2 = contraseña2.getText().toString();
                         if (contraseñaactual1.equals(contraseñaactualcomparar) && (contraseñanueva.equals(contraseñanueva2))) {
-
                             actualizarperfil(contraseñanueva2);
-
                         }else{
                             Toast.makeText(getContext(), "las contraseñas no coinciden", Toast.LENGTH_LONG).show();
                         }
@@ -134,7 +124,6 @@ public class passperfilFragment extends Fragment {
         editor.apply();
     }
 
-
     private void cargardatosperfil() {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://proyectotesis.ddns.net/")
@@ -149,6 +138,26 @@ public class passperfilFragment extends Fragment {
                 public void onResponse( Call<Usuario>call, Response<Usuario> response) {
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
+                        //alert informativo
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        LayoutInflater inflater = getLayoutInflater();
+                        View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog2 = builder.create();
+                        dialog2.setCancelable(false);
+                        dialog2.show();
+                        dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                        texto.setText("Ha ocurrido un error con la respuesta al tratar de cargar los datos. intente en un momento nuevamente.");
+                        Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog2.dismiss();
+                            }
+                        });
+
                         Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
@@ -161,11 +170,29 @@ public class passperfilFragment extends Fragment {
                 //si falla el request a la pagina mostrara este error
                 @Override
                 public void onFailure(Call<Usuario> call, Throwable t) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog4 = builder.create();
+                    dialog4.setCancelable(false);
+                    dialog4.show();
+                    dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                    texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog4.dismiss();
+                        }
+                    });
+
                     Toast.makeText(getContext(), "errorc :"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
     }
-
 
     private void actualizarperfil(String contrasenanueva) {
             String RUT = rutperfil;
@@ -175,15 +202,32 @@ public class passperfilFragment extends Fragment {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-
-                //metodo para llamar a la funcion que queramos
-                //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
                 Call<Usuario> call = tesisAPI.UsuarioPass(RUT,contrasenanueva,contrasenaperfil);
                 call.enqueue(new Callback<Usuario>() {
                     @Override
                     public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                         //si esta malo se ejecuta este trozo
                         if (!response.isSuccessful()) {
+                            //alert informativo
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            LayoutInflater inflater = getLayoutInflater();
+                            View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                            builder.setView(viewsync);
+                            AlertDialog dialog5 = builder.create();
+                            dialog5.setCancelable(false);
+                            dialog5.show();
+                            dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                            texto.setText("Ha ocurrido un error con la respuesta al tratar de crear la solicitu. intente en un momento nuevamente.");
+                            Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                            btncerrar.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog5.dismiss();
+                                }
+                            });
+
                             Toast.makeText(getContext(), "error on response passperfil :" + response.code(), Toast.LENGTH_LONG).show();
                         }
                         //de lo contrario se ejecuta esta parte
@@ -198,9 +242,7 @@ public class passperfilFragment extends Fragment {
                             AlertDialog dialog = builder.create();
                             dialog.setCancelable(false);
                             dialog.show();
-
                             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
                             TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                             texto.setText("Felicitaciones Ha podido actualizar su contraseña satisfactoriamente!");
                             Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
@@ -213,13 +255,31 @@ public class passperfilFragment extends Fragment {
                                 }
                             });
 
-
-
                         }
                     }
                     //si falla el request a la pagina mostrara este error
                     @Override
                     public void onFailure(Call<Usuario> call, Throwable t) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        LayoutInflater inflater = getLayoutInflater();
+                        View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog3 = builder.create();
+                        dialog3.setCancelable(false);
+                        dialog3.show();
+                        dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                        texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                        Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog3.dismiss();
+                            }
+                        });
+
+
                         Toast.makeText(getContext(), "errorb :" + t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });

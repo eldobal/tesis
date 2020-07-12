@@ -1,8 +1,11 @@
 package com.example.practicadiseo.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -18,7 +21,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -83,6 +88,9 @@ public class listanotificacionesFragment extends Fragment {
         listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
         animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
 
+
+
+
         if (rutusuario.isEmpty() || contrasena.isEmpty()){
             //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
             Intent intent = new Intent(getContext(), login2Activity.class);
@@ -105,10 +113,8 @@ public class listanotificacionesFragment extends Fragment {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-
                             //Ejecuta tu AsyncTask!
                             reiniciarfragmentnotificacionesASYNC(rutusuario);
-
                     }
                 });
             }
@@ -144,6 +150,29 @@ public class listanotificacionesFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
                 if (!response.isSuccessful()) {
+                    //alert de que la respuesta fue incorrecta
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog2 = builder.create();
+                    dialog2.setCancelable(false);
+                    dialog2.show();
+                    dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    texto.setText("Ha ocurrido un error con la respuesta al traer las notificaciones intente en un momento nuevamente.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog2.dismiss();
+                        }
+                    });
+
+
                     Toast.makeText(getActivity(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     arraylistanotificaciones.clear();
@@ -173,6 +202,26 @@ public class listanotificacionesFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<List<Notificacion>> call, Throwable t) {
+                //alert que hay un error con el servidor
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                builder.setView(viewsync);
+                AlertDialog dialog = builder.create();
+                dialog.setCancelable(false);
+                dialog.show();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
                 Toast.makeText(getActivity(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

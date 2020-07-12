@@ -8,6 +8,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -18,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -34,6 +37,8 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 
+import java.util.zip.Inflater;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -42,8 +47,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class login2Activity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-
-    //codigo para utilizar la api de google
     public static final int  Signincode = 777;
     private GoogleSignInClient googleSignInClient;
     SweetAlertDialog dp;
@@ -52,8 +55,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     private EditText txtrut,txtpass;
     private Button btnlogin,btnregister;
     private String usuarioconectado="",contraseñausuarioconectado="";
-    int idciudad=0;
-    int azynctiempo =0;
+    int idciudad=0,azynctiempo =0;
     private SignInButton signInButton;
 
     public login2Activity() {
@@ -110,10 +112,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                 switch (v.getId()){
                     case R.id.Signbutton:
                     singIn();
-                    break;
-                }
-            }
-            });
+                    break; }}});
         } else {
                 // No hay conexión a Internet en este momento
                 Toast.makeText(this, "Revise su coneecion antes de iniciar session ", Toast.LENGTH_LONG).show();
@@ -141,7 +140,6 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
                     tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                    //metodo para llamar a la funcion que queramos
                     Call<Usuario> call = tesisAPI.getLogin(rut,contrasena);
                     call.enqueue(new Callback<Usuario>() {
                         @Override
@@ -176,6 +174,24 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                         //si falla el request a la pagina mostrara este error
                         @Override
                         public void onFailure(Call<Usuario> call, Throwable t) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(login2Activity.this);
+                            LayoutInflater inflater = getLayoutInflater();
+                            View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                            builder.setView(viewsync);
+                            AlertDialog dialog = builder.create();
+                            dialog.setCancelable(false);
+                            dialog.show();
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                            texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo. Muchas gracias!");
+                            Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                            btncerrar.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
                             Toast.makeText(getApplicationContext(), " Error al Iniciar Sesion", Toast.LENGTH_LONG).show();
                         }
                     });

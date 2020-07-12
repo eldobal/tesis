@@ -1,8 +1,11 @@
 package com.example.practicadiseo.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -20,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -200,7 +204,28 @@ public class solicitudeFragment extends Fragment  {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
                 if (!response.isSuccessful()) {
+                    //alert informativo
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog2 = builder.create();
+                    dialog2.setCancelable(false);
+                    dialog2.show();
+                    dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    texto.setText("Ha ocurrido un error con la respuesta al tratar de traer las listas de solicitudes pendientes. intente en un momento nuevamente.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog2.dismiss();
+                        }
+                    });
+
                     Toast.makeText(getContext(), "error/onresponce/solicitude reiniciar :" + response.code(), Toast.LENGTH_LONG).show();
+
                 } else {
                     List<Solicitud> solicituds = response.body();
                     Solicitudes.clear();
@@ -239,6 +264,27 @@ public class solicitudeFragment extends Fragment  {
             @Override
             public void onFailure(Call<List<Solicitud>> call, Throwable t) {
                 Toast.makeText(getContext(), "error/onfailure/solicitude :" + t.getMessage(), Toast.LENGTH_LONG).show();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                builder.setView(viewsync);
+                AlertDialog dialog = builder.create();
+                dialog.setCancelable(false);
+                dialog.show();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+
             }
         });
 
@@ -256,7 +302,28 @@ public class solicitudeFragment extends Fragment  {
             @Override
             public void onResponse(Call<List<Solicitud>> call, Response<List<Solicitud>> response) {
                 if (!response.isSuccessful()) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog3 = builder.create();
+                    dialog3.setCancelable(false);
+                    dialog3.show();
+                    dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    texto.setText("Ha ocurrido un error con la respuesta al tratar de traer las listas de solicitudes terminas. intente en un momento nuevamente.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog3.dismiss();
+                        }
+                    });
+
                     Toast.makeText(getContext(), "error/onresponce/solicitudeterminadas:" + response.code(), Toast.LENGTH_LONG).show();
+
                 } else {
                     List<Solicitud> solicituds = response.body();
                     Solicitudesterminadas.clear();
@@ -292,6 +359,25 @@ public class solicitudeFragment extends Fragment  {
             }
             @Override
             public void onFailure(Call<List<Solicitud>> call, Throwable t) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                builder.setView(viewsync);
+                AlertDialog dialog4 = builder.create();
+                dialog4.setCancelable(false);
+                dialog4.show();
+                dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog4.dismiss();
+                    }
+                });
+
                 Toast.makeText(getContext(), "error/onfailure/solicitudeterminadas :" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

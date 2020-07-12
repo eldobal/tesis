@@ -1,8 +1,11 @@
 package com.example.practicadiseo.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +16,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -120,6 +124,26 @@ public class listabuscarrubroFragment extends Fragment {
             @Override
             public void onResponse(Call<List<UsuarioTrabajador>> call, Response<List<UsuarioTrabajador>> response) {
                 if (!response.isSuccessful()) {
+                    //alert de que la respuesta fue incorrecta
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog2 = builder.create();
+                    dialog2.setCancelable(false);
+                    dialog2.show();
+                    dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                    texto.setText("Ha ocurrido un error con la respuesta al traer la lista de solicitudes. intente en un momento nuevamente.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog2.dismiss();
+                        }
+                    });
+
                     Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     List<UsuarioTrabajador> trabajadores = response.body();
@@ -163,6 +187,24 @@ public class listabuscarrubroFragment extends Fragment {
             @Override
             public void onFailure(Call<List<UsuarioTrabajador>> call, Throwable t) {
                 txtnotfound.setText("No Se Han Encontrado Trabajadores para este Rubro");
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                builder.setView(viewsync);
+                AlertDialog dialog = builder.create();
+                dialog.setCancelable(false);
+                dialog.show();
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
                 preloaderlista.setVisibility(View.INVISIBLE);
                 notfound.setVisibility(View.VISIBLE);
                 notfound.playAnimation();
@@ -203,7 +245,6 @@ public class listabuscarrubroFragment extends Fragment {
     private String getusercontraseñaprefs() {
         return prefs.getString("ContraseNa", "");
     }
-
 
     //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexistusuario() {

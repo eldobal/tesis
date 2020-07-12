@@ -124,7 +124,6 @@ public class perfiltrabajadorFragment extends Fragment {
             }
         });
 
-
         return  v;
     }
 
@@ -142,7 +141,6 @@ public class perfiltrabajadorFragment extends Fragment {
                 public void onResponse( Call<UsuarioTrabajador>call, Response<UsuarioTrabajador> response) {
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
-
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         LayoutInflater inflater = getLayoutInflater();
                         View viewsync = inflater.inflate(R.layout.alertdialogusuarioexistente,null);
@@ -151,7 +149,6 @@ public class perfiltrabajadorFragment extends Fragment {
                         dialog.setCancelable(false);
                         dialog.show();
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
                         TextView  texto=(TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                         texto.setText("Ya exist una solicitud Sin completar con este trabajador. revise su lista de solicitudes.");
                         Button btnusuarioexiste = viewsync.findViewById(R.id.btnusuarioexiste);
@@ -189,6 +186,26 @@ public class perfiltrabajadorFragment extends Fragment {
                 @Override
                 public void onFailure(Call<UsuarioTrabajador> call, Throwable t) {
                     Toast.makeText(getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog2 = builder.create();
+                    dialog2.setCancelable(false);
+                    dialog2.show();
+                    dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                    texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog2.dismiss();
+                        }
+                    });
+
                 }
             });
 }

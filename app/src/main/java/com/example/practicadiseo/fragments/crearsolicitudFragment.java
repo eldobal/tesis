@@ -150,9 +150,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             estado.setText("Estado: "+estadotrabajador);
             //se setean las estrellas dependiendo de la calificacion
             setestrellas(calificaciontrabajador);
-
             Glide.with(getContext()).load(String.valueOf(rutaservidor+rutafoto)).into(imgperfil);
-
 
             descripcionfinal= descripcion.getText().toString();
             //formato del calendario el cual toma la fecha actual.
@@ -170,7 +168,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             }
 
 
-
             btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -185,7 +182,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                             snackBar.show();
                         }else{
                             btncrearsolicitud.setClickable(false);
-
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                             LayoutInflater inflater = getLayoutInflater();
                             View viewsync = inflater.inflate(R.layout.alerdialogloading,null);
@@ -194,8 +190,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                             dialog.setCancelable(false);
                             dialog.show();
                             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-
                             //metodo para crear la solicitud con los parametros
                             crearsolicitud();
                         }
@@ -204,7 +198,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                                 "Seleccione la ubicacion donde se realizara el trabajo", Snackbar.LENGTH_LONG);
                         snackBar.show();
                     }
-
 
                 }
             });
@@ -245,7 +238,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         }
     }
 
-
     //metodo para crear la notificacion personalizada
     private void crearnotificacion() {
         //se instancia el builder para crear la notificacion
@@ -267,7 +259,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         notificationManagerCompat.notify(NOTIFICACION_ID, builder.build());
     }
 
-
     private void crearsolicitud(){
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("http://proyectotesis.ddns.net/")
@@ -281,9 +272,28 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                 @Override
                 public void onResponse(Call<SolicitudDb> call1, Response<SolicitudDb> response) {
                     if (!response.isSuccessful()) {
-                        dialog.dismiss();
-                        updateDetail();
                         //alert informativo
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        LayoutInflater inflater = getLayoutInflater();
+                        View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                        builder.setView(viewsync);
+                        AlertDialog dialog2 = builder.create();
+                        dialog2.setCancelable(false);
+                        dialog2.show();
+                        dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                        texto.setText("Ha ocurrido un error con la respuesta al tratar de crear la solicitu. intente en un momento nuevamente.");
+                        Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                                updateDetail();
+                                dialog2.dismiss();
+                            }
+                        });
+
                         Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                     } else {
                         dialog.dismiss();
@@ -293,12 +303,10 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                         LayoutInflater inflater = getLayoutInflater();
                         View viewsync = inflater.inflate(R.layout.alertdialogcrearsolicitud,null);
                         builder.setView(viewsync);
-                        AlertDialog dialog = builder.create();
-                        dialog.setCancelable(false);
-                        dialog.show();
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-
+                        AlertDialog dialog3 = builder.create();
+                        dialog3.setCancelable(false);
+                        dialog3.show();
+                        dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         Button solicitudcreada = viewsync.findViewById(R.id.btncrearsolicitudexito);
 
                         solicitudcreada.setOnClickListener(new View.OnClickListener() {
@@ -307,15 +315,33 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                                 createNotificationChannel();
                                 crearnotificacion();
                                 updateDetail();
+                                dialog3.dismiss();
                             }
                         });
-
-
 
                     }
                 }
                 @Override
                 public void onFailure(Call<SolicitudDb> call1, Throwable t) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    LayoutInflater inflater = getLayoutInflater();
+                    View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                    builder.setView(viewsync);
+                    AlertDialog dialog4 = builder.create();
+                    dialog4.setCancelable(false);
+                    dialog4.show();
+                    dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                    texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                    Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog4.dismiss();
+                        }
+                    });
+
                     Toast.makeText(getContext(), "EL ERROR ESTA ACA: "+t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                     updateDetail();
@@ -323,20 +349,18 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             });
     }
 
-
     private void llamarintent() {
         //se crea un alertdialog para que
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.alertdialog01,null);
         builder.setView(view);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        AlertDialog dialog5 = builder.create();
+        dialog5.show();
+        dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         Button btntomarfoto = view.findViewById(R.id.alertbtntomarfoto);
         Button btncargarfoto = view.findViewById(R.id.alertbtncargarfoto);
         Button btncancelar = view.findViewById(R.id.alertbtncancelar);
-
 
         btncargarfoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -344,7 +368,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                 Intent intent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType("image/");
                 startActivityForResult(intent.createChooser(intent,"Seleccione la Aplicacion"),10);
-                dialog.dismiss();
+                dialog5.dismiss();
             }
         });
 
@@ -355,14 +379,14 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
-                dialog.dismiss();
+                dialog5.dismiss();
             }
         });
 
         btncancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog.dismiss();
+                dialog5.dismiss();
             }
         });
 
@@ -416,12 +440,9 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                 e.printStackTrace();
             }
         }
-
         //se carga y convierte la foto la cual es usuario cargo/tomo desde su celular
         imagenstring = convertirimgstring(bitmap);
-
     }
-
 
     private void showSelectedFragment(Fragment fragment){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
@@ -430,7 +451,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                 .addToBackStack(null)
                 .commit();
     }
-
 
     //Metodo en el cual se recive un bitmap lo comprime y lo transforma en base64
     private String convertirimgstring(Bitmap bitmap){
@@ -446,8 +466,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         }
     }
 
-
-
     public Bitmap StringToBitMap(String encodedString) {
         try {
             byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
@@ -460,7 +478,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         }
     }
 
-
     private void saveOnPreferences(String latitud, String longitud) {
         SharedPreferences.Editor editor = prefsmaps.edit();
 
@@ -472,8 +489,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         editor.commit();
         editor.apply();
     }
-
-
 
     //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexist() {
@@ -511,7 +526,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         }
     }
 
-
     private String getlatitud() {
         return prefsmaps.getString("Latitud", "");
     }
@@ -519,8 +533,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     private String getlongitud() {
         return prefsmaps.getString("Longitud", "");
     }
-
-
 
     private void  setestrellas(String calificaciona) {
         if(calificaciona.equals("5")){
@@ -542,8 +554,6 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             calificacion.setText("Calificacion: No posee Calificacion");
         }
     }
-
-
 
 
 }
