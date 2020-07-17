@@ -116,34 +116,28 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                     }
                     //se muestra el fragment de la lista de solicitudes
                     if(menuItem.getItemId()==R.id.menu_solicitud){
-                           showSelectedFragment(new solicitudeFragment());
-                       /* Bundle bundle = new Bundle();
-                        bundle.putSerializable("arraylistaspendientes", listasolicitudactivas);
-                        bundle.putSerializable("arraylistasterminadas", listasolicitudesterminadas);
-                        solicitudeFragment.setArguments(bundle);
+
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, solicitudeFragment, "solicitudtag")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                 //permite regresar hacia atras entre los fragments
                                 .addToBackStack(null)
                                 .commit();
-                        */
+
                     }
                     //se muestra el fragment de configuracion y setting
                     if(menuItem.getItemId()== R.id.menu_settings){
                         showSelectedFragment(new settingsFragment());
                     }
                     if(menuItem.getItemId()== R.id.menu_notificaciones){
-                        showSelectedFragment(new listanotificacionesFragment());
-                 /*      Bundle bundle2 = new Bundle();
-                        bundle2.putSerializable("arraynotificaciones", listanotificaciones);
-                        listanotificacionesFragment.setArguments(bundle2);
+                      //  showSelectedFragment(new listanotificacionesFragment());
+
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, listanotificacionesFragment, "notificacionestag")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                 //permite regresar hacia atras entre los fragments
                                 .addToBackStack(null)
                                 .commit();
 
-*/
+
                     }
 
                     return true;

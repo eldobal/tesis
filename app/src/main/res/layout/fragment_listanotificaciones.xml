@@ -66,6 +66,7 @@
               app:lottie_rawRes="@raw/nonotifications"
               app:lottie_autoPlay="false"
               app:lottie_loop="false"
+              android:visibility="gone"
               android:layout_height="match_parent">
 
           </com.airbnb.lottie.LottieAnimationView>

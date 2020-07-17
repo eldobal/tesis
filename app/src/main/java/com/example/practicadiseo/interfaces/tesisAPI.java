@@ -154,5 +154,13 @@ public interface tesisAPI {
                               @Query("comentario") String comentario
     );
 
+    //metodo para cancelar la solicitud del cliente
+    @POST("api/SolicitudAPI")
+    Call<String> borrarNotificacion(@Query("RUT") String rutusuario,
+                                        @Query("Contrasena") String contrasena,
+                                    @Query("Notificacion") int idnotificacion
+
+    );
+
 
 }

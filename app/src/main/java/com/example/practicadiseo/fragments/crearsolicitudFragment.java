@@ -323,7 +323,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                 }
                 @Override
                 public void onFailure(Call<SolicitudDb> call1, Throwable t) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                       AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     LayoutInflater inflater = getLayoutInflater();
                     View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
                     builder.setView(viewsync);

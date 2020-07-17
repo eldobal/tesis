@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -30,6 +31,7 @@ import java.util.Calendar;
 import com.bumptech.glide.Glide;
 import com.example.practicadiseo.fragments.DetalleSolicitudFragment;
 import com.example.practicadiseo.R;
+import com.example.practicadiseo.fragments.solicitudeFragment;
 import com.example.practicadiseo.interfaces.tesisAPI;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
@@ -116,8 +118,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
         final int posicion = i;
         detalle.setTag(i);
 
-        if(listasolicitudes.get(i).getEstado().equals("ATENDIENDO") ) {
-
+        if(listasolicitudes.get(i).getEstado().equals("ATENDIENDO")) {
             detalle.setText("Detalle");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
             numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
@@ -137,12 +138,14 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     detalleSolicitudFragment.setArguments(bundle);
                     FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
+                    ft.addToBackStack(null);
                     ft.replace(R.id.container, detalleSolicitudFragment);
                     ft.commit();
                 }
             });
         }
-        if(listasolicitudes.get(i).getEstado().equals("FINALIZADO") ) {
+
+        if(listasolicitudes.get(i).getEstado().equals("FINALIZADO")) {
 
             detalle.setText("Detalle");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
@@ -162,13 +165,14 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     detalleSolicitudFragment.setArguments(bundle);
                     FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
+                    ft.addToBackStack(null);
                     ft.replace(R.id.container, detalleSolicitudFragment);
                     ft.commit();
                 }
             });
         }
 
-        if(listasolicitudes.get(i).getEstado().equals("COMPLETADA Y PAGADA")  ) {
+        if(listasolicitudes.get(i).getEstado().equals("COMPLETADA Y PAGADA") || listasolicitudes.get(i).getEstado().equals("COMPLETADA Y NO PAGADA") ) {
 
             detalle.setText("Detalle");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
@@ -189,6 +193,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     detalleSolicitudFragment.setArguments(bundle);
                     FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
                     FragmentTransaction ft = fm.beginTransaction();
+                    ft.addToBackStack(null);
                     ft.replace(R.id.container, detalleSolicitudFragment);
                     ft.commit();
                 }
@@ -196,7 +201,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
         }
 
         if(listasolicitudes.get(i).getEstado().equals("CONFIRMADA")){
-
             detalle.setText("Confirmar");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
             numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
@@ -207,6 +211,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                 @Override
                 public void onClick(View view) {
                     //alertdialog personalizado
+                    int preciosoli = listasolicitudes.get(i).getPrecio();
                     AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                     View viewsync = inflater.inflate(R.layout.alertdialogsolicitudesconfirmada,null);
                     builder.setView(viewsync);
@@ -214,7 +219,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     dialog3.show();
                     dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     TextView textoalertnotificacion= (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-                    textoalertnotificacion.setText("Si confirma esta solicitud el trabajador realizara el trabajo. Si cancela la solicitud se le notificara al trabajador y se eliminara esta solicitud de la lista.(PRECIO ESTIMADO "+listasolicitudes.get(i).getPrecio()+")");
+                    textoalertnotificacion.setText("Si confirma esta solicitud el trabajador realizara el trabajo. Si cancela la solicitud se le notificara al trabajador y se eliminara esta solicitud de la lista.(PRECIO ESTIMADO: $"+preciosoli+")");
                     Button btnconfirmar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
                     Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
                     Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
@@ -235,6 +240,26 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                 @Override
                                 public void onResponse(Call<String> call, Response<String> response) {
                                     if (!response.isSuccessful()) {
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                        View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog6 = builder.create();
+                                        dialog6.setCancelable(false);
+                                        dialog6.show();
+                                        dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                        texto.setText("Ha ocurrido un error con la respuesta al tratar de eliminar esta notificacion. intente en un momento nuevamente.");
+                                        Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+
+                                                dialog3.dismiss();
+                                                dialog6.dismiss();
+                                            }
+                                        });
+
                                         Toast.makeText(vista.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                     } else {
                                         //alertdialog personalizado
@@ -252,6 +277,11 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                         btncerraralert.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View view) {
+                                                solicitudeFragment soli = new solicitudeFragment();
+                                                FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
+                                                FragmentTransaction ft = fm.beginTransaction();
+                                                ft.replace(R.id.container, soli);
+                                                ft.commit();
                                                 dialog5.dismiss();
                                                 dialog3.dismiss();
                                                 listasolicitudes.remove(i);
@@ -264,6 +294,25 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
                                 @Override
                                 public void onFailure(Call<String> call, Throwable t) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                    View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                                    builder.setView(viewsync);
+                                    AlertDialog dialog7 = builder.create();
+                                    dialog7.setCancelable(false);
+                                    dialog7.show();
+                                    dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                                    texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                                    Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog3.dismiss();
+                                            dialog7.dismiss();
+                                        }
+                                    });
+
                                     Toast.makeText(vista.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -284,6 +333,26 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                 @Override
                                 public void onResponse(Call<String> call2, Response<String> response) {
                                     if(!response.isSuccessful()){
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                        View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog8 = builder.create();
+                                        dialog8.setCancelable(false);
+                                        dialog8.show();
+                                        dialog8.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                        texto.setText("Ha ocurrido un error con la respuesta al tratar de eliminar esta notificacion. intente en un momento nuevamente.");
+                                        Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                dialog3.dismiss();
+                                                dialog8.dismiss();
+                                            }
+                                        });
+
+
                                         Toast.makeText(vista.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                                     }
                                     else {
@@ -308,11 +377,29 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                             }
                                         });
 
-
                                     }
                                 }
                                 @Override
                                 public void onFailure(Call<String> call2, Throwable t) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                    View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                                    builder.setView(viewsync);
+                                    AlertDialog dialog9 = builder.create();
+                                    dialog9.setCancelable(false);
+                                    dialog9.show();
+                                    dialog9.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                                    texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                                    Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog3.dismiss();
+                                            dialog9.dismiss();
+                                        }
+                                    });
+
                                     Toast.makeText(vista.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -330,7 +417,9 @@ public class Adaptador extends BaseAdapter implements Serializable {
                 }
             });
 
-        }if(listasolicitudes.get(i).getEstado().equals("PENDIENTE")) {
+        }
+
+        if(listasolicitudes.get(i).getEstado().equals("PENDIENTE")) {
             detalle.setText("Cancelar");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
             numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
@@ -348,7 +437,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     dialog.show();
                     dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                     TextView textoalertnotificacion= (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-
                     Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
                     Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
 
@@ -365,13 +453,30 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                 @Override
                                 public void onResponse(Call<String> call3, Response<String> response) {
                                     if(!response.isSuccessful()){
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                        View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                                        builder.setView(viewsync);
+                                        AlertDialog dialog10= builder.create();
+                                        dialog10.setCancelable(false);
+                                        dialog10.show();
+                                        dialog10.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                        texto.setText("Ha ocurrido un error con la respuesta al tratar de eliminar esta notificacion. intente en un momento nuevamente.");
+                                        Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                        btncerrar.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                dialog.dismiss();
+                                                dialog10.dismiss();
+                                            }
+                                        });
                                         Toast.makeText(v.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                                     }
                                     else {
                                         listasolicitudes.remove(i);
                                         refresh(listasolicitudes);
                                         dialog.dismiss();
-
                                         AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                                         View viewsync = inflater.inflate(R.layout.alerdialogsolicitudeliminada,null);
                                         builder.setView(viewsync);
@@ -386,18 +491,28 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                                 dialog2.dismiss();
                                             }
                                         });
-
-
-
-                                      /* solicitudeFragment solicitudeFragment = new solicitudeFragment();
-                                        FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
-                                        FragmentTransaction ft = fm.beginTransaction();
-                                        ft.replace(R.id.container, solicitudeFragment);
-                                        ft.commit();*/
                                     }
                                 }
                                 @Override
                                 public void onFailure(Call<String> call3, Throwable t) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+                                    View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                                    builder.setView(viewsync);
+                                    AlertDialog dialog11 = builder.create();
+                                    dialog11.setCancelable(false);
+                                    dialog11.show();
+                                    dialog11.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                                    texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                                    Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+
+                                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog.dismiss();
+                                            dialog11.dismiss();
+                                        }
+                                    });
                                     Toast.makeText(v.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -411,13 +526,12 @@ public class Adaptador extends BaseAdapter implements Serializable {
                         }
                     });
 
-
-
                 }
             });
 
-        }if(listasolicitudes.get(i).getEstado().equals("FINALIZANDO")){
+        }
 
+        if(listasolicitudes.get(i).getEstado().equals("FINALIZANDO")){
             detalle.setText("FINALIZANDO");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
             numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
@@ -441,15 +555,13 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     ft.commit();
                 }
             });
-
-
         }
-
 
 
 
         return vista;
     }
+
 
 
     //metodo para traer el rut del usuario hacia la variable local

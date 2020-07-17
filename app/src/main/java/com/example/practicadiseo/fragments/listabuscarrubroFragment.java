@@ -16,8 +16,12 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,11 +52,11 @@ public class listabuscarrubroFragment extends Fragment {
     private TextView txtnotfound;
     private SharedPreferences prefs;
     LottieAnimationView preloaderlista,notfound;
-    int idciudad =0,numeroultimo=0;
+    int idciudad =0,numeroultimo=0,filtro=0;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     SwipeRefreshLayout refreshLayouttrabajadores;
     ArrayList<UsuarioTrabajador> listatrabajadoresporrubo = new ArrayList<UsuarioTrabajador>();
-
+    Spinner spinnerordenar ;
     String rutusuario="",contrasena="";
 
     public listabuscarrubroFragment() {
@@ -70,6 +74,7 @@ public class listabuscarrubroFragment extends Fragment {
         notfound=(LottieAnimationView) v.findViewById(R.id.notfoundtrabajador);
         txtnotfound =(TextView) v.findViewById(R.id.txtnotfound);
         txtnotfound.setText("");
+        spinnerordenar =(Spinner) v.findViewById(R.id.spinnerordenar);
         notfound.setVisibility(View.INVISIBLE);
         //se comprueba y trae el id de la ciudad del cliente
         setcredentiasexist();
@@ -78,6 +83,12 @@ public class listabuscarrubroFragment extends Fragment {
         //instanciacion del refresh para la lista de los trabajadores
         refreshLayouttrabajadores = v.findViewById(R.id.refreshtrabajadores);
         final View vista = inflater.inflate(R.layout.elementoperfiltrabajador, null);
+
+        String[] datos = new String[] {"Por Defecto","1 Estrella", "2 Estrellas", "3 Estrellas", "4 Estrellas", "5 Estrellas"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_item, datos);
+
+        spinnerordenar.setAdapter(adapter);
 
         Bundle datosRecuperados = getArguments();
         if (datosRecuperados == null) {
@@ -107,10 +118,231 @@ public class listabuscarrubroFragment extends Fragment {
                 }
             });
 
+            spinnerordenar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    switch(position) {
+                        case 0:
+                            filtro=0;
+                            ordenarlista(0);
+                            break;
+                        case 1:
+                            filtro=1;
+                            ordenarlista(1);
+                            break;
+                        case 2:
+                            filtro=2;
+                            ordenarlista(2);
+                            break;
+                        case 3:
+                            filtro=3;
+                            ordenarlista(3);
+                            break;
+                        case 4:
+                            filtro=4;
+                            ordenarlista(4);
+                            break;
+                        case 5:
+                            filtro=5;
+                            ordenarlista(5);
+                            break;
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
         }else{updateDetail();}
 
         return  v;
+    }
+    //metodo que filtra la lista de trabajadores por estrellas
+    private void ordenarlista(int orden) {
+        ArrayList<UsuarioTrabajador> listaordenada = new ArrayList<UsuarioTrabajador>();
+        if(orden ==0){
+            Adaptadortrabajadores ad = new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
+            lista.setAdapter(ad);
+        }
+        if(orden ==1){
+            listaordenada.clear();
+            for (int i = 0; i <listatrabajadoresporrubo.size() ; i++) {
+
+                if(listatrabajadoresporrubo.get(i).getCalificacion().equals("1")){
+                    listaordenada.add(listatrabajadoresporrubo.get(i));
+                }
+            }
+            if(listaordenada.size() != 0) {
+                Adaptadortrabajadores ad= new Adaptadortrabajadores(getContext(), listaordenada);
+                ad.refresh(listaordenada);
+                lista.setAdapter(ad);
+            }else{
+                Adaptadortrabajadores ad= new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
+                lista.setAdapter(ad);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alertdialogfiltroestrellas,null);
+                builder.setView(viewsync);
+                AlertDialog dialog7 = builder.create();
+                dialog7.setCancelable(false);
+                dialog7.show();
+                dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                texto.setText("No se Han encontrado trabajadores con esta cantidad de estrellas. se mostrarà la lista por defecto");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog7.dismiss();
+                    }
+                });
+            }
+        }
+        if(orden ==2){
+            listaordenada.clear();
+            for (int i = 0; i <listatrabajadoresporrubo.size() ; i++) {
+                if(listatrabajadoresporrubo.get(i).getCalificacion().equals("2")){
+                    listaordenada.add(listatrabajadoresporrubo.get(i));
+                }
+            }
+            if(listaordenada.size() != 0) {
+                Adaptadortrabajadores ad= new Adaptadortrabajadores(getContext(), listaordenada);
+                ad.refresh(listaordenada);
+                lista.setAdapter(ad);
+            }else{
+                Adaptadortrabajadores ad= new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
+                lista.setAdapter(ad);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alertdialogfiltroestrellas,null);
+                builder.setView(viewsync);
+                AlertDialog dialog6 = builder.create();
+                dialog6.setCancelable(false);
+                dialog6.show();
+                dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                texto.setText("No se Han encontrado trabajadores con esta cantidad de estrellas. se mostrarà la lista por defecto");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog6.dismiss();
+                    }
+                });
+            }
+        }
+        if(orden ==3){
+            listaordenada.clear();
+            for (int i = 0; i <listatrabajadoresporrubo.size() ; i++) {
+                if(listatrabajadoresporrubo.get(i).getCalificacion().equals("3")){
+                    listaordenada.add(listatrabajadoresporrubo.get(i));
+                }
+            }
+            if(listaordenada.size() != 0) {
+                Adaptadortrabajadores ad= new Adaptadortrabajadores(getContext(), listaordenada);
+                ad.refresh(listaordenada);
+                lista.setAdapter(ad);
+            }else{
+                Adaptadortrabajadores ad= new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
+                lista.setAdapter(ad);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alertdialogfiltroestrellas,null);
+                builder.setView(viewsync);
+                AlertDialog dialog5 = builder.create();
+                dialog5.show();
+                dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                texto.setText("No se Han encontrado trabajadores con esta cantidad de estrellas. se mostrarà la lista por defecto");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog5.dismiss();
+                    }
+                });
+            }
+        }
+        if(orden ==4){
+            listaordenada.clear();
+            for (int i = 0; i <listatrabajadoresporrubo.size() ; i++) {
+                if(listatrabajadoresporrubo.get(i).getCalificacion().equals("4")){
+                    listaordenada.add(listatrabajadoresporrubo.get(i));
+                }
+            }
+            if(listaordenada.size() != 0) {
+                Adaptadortrabajadores ad= new Adaptadortrabajadores(getContext(), listaordenada);
+                ad.refresh(listaordenada);
+                lista.setAdapter(ad);
+            }else{
+                Adaptadortrabajadores ad= new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
+                lista.setAdapter(ad);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alertdialogfiltroestrellas,null);
+                builder.setView(viewsync);
+                AlertDialog dialog4 = builder.create();
+                dialog4.show();
+                dialog4.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                texto.setText("No se Han encontrado trabajadores con esta cantidad de estrellas. se mostrarà la lista por defecto");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog4.dismiss();
+                    }
+                });
+            }
+
+        }
+        if(orden ==5){
+            listaordenada.clear();
+            for (int i = 0; i <listatrabajadoresporrubo.size() ; i++) {
+                if(listatrabajadoresporrubo.get(i).getCalificacion().equals("5")){
+                    listaordenada.add(listatrabajadoresporrubo.get(i));
+                }
+            }
+
+            if(listaordenada.size() != 0) {
+                Adaptadortrabajadores ad = new Adaptadortrabajadores(getContext(), listaordenada);
+                ad.refresh(listaordenada);
+                lista.setAdapter(ad);
+            }else{
+                Adaptadortrabajadores ad = new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
+                lista.setAdapter(ad);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View viewsync = inflater.inflate(R.layout.alertdialogfiltroestrellas,null);
+                builder.setView(viewsync);
+                AlertDialog dialog3 = builder.create();
+                dialog3.show();
+                dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                texto.setText("No se Han encontrado trabajadores con esta cantidad de estrellas. se mostrarà la lista por defecto");
+                Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                btncerrar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog3.dismiss();
+                    }
+                });
+            }
+        }
+
+
     }
 
     private void cargartrabajadores(int idrubro, int idciudad) {
@@ -162,15 +394,17 @@ public class listabuscarrubroFragment extends Fragment {
                         listatrabajadoresporrubo.add(trabajador1);
                     }
                     if (listatrabajadoresporrubo.size() > 0) {
+
                         txtnotfound.setText("");
                         notfound.setVisibility(View.INVISIBLE);
                         notfound.pauseAnimation();
-
-                        
                         preloaderlista.setVisibility(View.INVISIBLE);
                         preloaderlista.pauseAnimation();
-                        Adaptadortrabajadores ad = new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
-                        lista.setAdapter(ad);
+                        ordenarlista(filtro);
+                        //Adaptadortrabajadores ad = new Adaptadortrabajadores(getContext(), listatrabajadoresporrubo);
+                        //lista.setAdapter(ad);
+
+                        spinnerordenar.setVisibility(View.VISIBLE);
 
                     } else if(listatrabajadoresporrubo.size() == 0){
                         preloaderlista.setVisibility(View.INVISIBLE);
@@ -220,7 +454,6 @@ public class listabuscarrubroFragment extends Fragment {
         idciudad=ciudadid;
     }
 
-
     private void showSelectedFragment(Fragment fragment){
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
                 .replace(R.id.container,fragment)
@@ -255,8 +488,5 @@ public class listabuscarrubroFragment extends Fragment {
             contrasena=contraseña.toString();
         }
     }
-
-
-
 
 }

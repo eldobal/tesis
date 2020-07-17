@@ -9,7 +9,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.TextUtils;
@@ -264,7 +266,6 @@ public class DetalleSolicitudFragment extends Fragment {
                                         }
                                         //de lo contrario se ejecuta esta parte
                                         else {
-                                            //respuesta del request
                                             String respusta = response.body();
                                             if(respusta.equals("Confirmado")){
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -280,11 +281,11 @@ public class DetalleSolicitudFragment extends Fragment {
                                                 btncerraralert.setOnClickListener(new View.OnClickListener() {
                                                     @Override
                                                     public void onClick(View view) {
-                                                        Bundle bundle = new Bundle();
-                                                        solicitudeFragment solicitudeFragment = new solicitudeFragment();
-                                                        solicitudeFragment.setArguments(bundle);
-                                                        getFragmentManager().beginTransaction().replace(R.id.container,solicitudeFragment)
+                                                        solicitudeFragment solicitudesFragment = new solicitudeFragment();
+                                                        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, solicitudesFragment, "solicitudtag")
                                                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                                                //permite regresar hacia atras entre los fragments
+                                                                //.addToBackStack(null)
                                                                 .commit();
                                                         dialog3.dismiss();
                                                         dialog2.dismiss();
@@ -338,6 +339,13 @@ public class DetalleSolicitudFragment extends Fragment {
         return v;
     }
 
+    private void showSelectedFragment(Fragment fragment){
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container,fragment)
+                .replace(R.id.container,fragment)
+                //permite regresar hacia atras entre los fragments
+                .addToBackStack(null)
+                .commit();
+    }
 
     private void setcredentiasexist() {
         String rutq = getuserrutprefs();

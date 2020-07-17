@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
@@ -44,6 +45,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.airbnb.lottie.L.TAG;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -73,6 +76,11 @@ public class listanotificacionesFragment extends Fragment {
         //refreshnotificaciones =(SwipeRefreshLayout) getActivity().findViewById(R.id.refreshnotificaciones);
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+        ConnectivityManager connectivityManager2 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+
+
     }
 
     @Override
@@ -83,7 +91,7 @@ public class listanotificacionesFragment extends Fragment {
         //prefs que contienen datos del usuario
         setcredentiasexist();
         settiempoasyncexist();
-        reiniciarfragmentnotificacionesASYNC(rutusuario);
+      //  reiniciarfragmentnotificacionesASYNC(rutusuario);
 
         listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
         animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
@@ -104,22 +112,28 @@ public class listanotificacionesFragment extends Fragment {
                 //se setea el adaptador a la lista del fragments
                 listanotificaciones.setAdapter(adsnoti);
             }
-        }
 
-        final Handler handler = new Handler();
-        Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    public void run() {
-                            //Ejecuta tu AsyncTask!
-                            reiniciarfragmentnotificacionesASYNC(rutusuario);
-                    }
-                });
-            }
-        };
-        timer.schedule(task, 5000, azynctiempo);  //ejecutar en intervalo definido por el programador
+
+            listanotificacionesFragment test = (listanotificacionesFragment) getActivity().getSupportFragmentManager().findFragmentByTag("notificacionestag");
+
+            final Handler handler = new Handler();
+            Timer timer = new Timer();
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            if(test != null && test.isVisible() && NetworkInfo.isConnected() && NetworkInfo !=null) {
+                                //Ejecuta tu AsyncTask!
+                                reiniciarfragmentnotificacionesASYNC(rutusuario);
+                            }
+                        }
+                    });
+                }
+            };
+            timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
+
+        }
 
        /* refreshnotificaciones.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
