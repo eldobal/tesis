@@ -2,12 +2,15 @@ package com.example.practicadiseo.activitys;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -24,6 +27,7 @@ import com.example.practicadiseo.R;
 import com.example.practicadiseo.clases.Solicitud;
 import com.example.practicadiseo.fragments.listanotificacionesFragment;
 import com.example.practicadiseo.fragments.mapaFragment;
+import com.example.practicadiseo.fragments.onepayFragment;
 import com.example.practicadiseo.fragments.perfilFragment;
 import com.example.practicadiseo.fragments.settingsFragment;
 import com.example.practicadiseo.fragments.solicitudeFragment;
@@ -52,7 +56,6 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
     SweetAlertDialog dp;
     private SharedPreferences prefs;
     int contador=0;
-
     SwipeRefreshLayout refreshLayout;
 
     String rut="",contrasena="";
@@ -73,6 +76,42 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
         //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
        // iniciarfragmentsolitudes();
       //  iniciarfragmentnotificaciones();
+
+        if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        1);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        1);
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+
+        }
+
         perfilFragment perfilFragment =new perfilFragment();
         solicitudeFragment solicitudeFragment=new solicitudeFragment();
         listanotificacionesFragment listanotificacionesFragment = new listanotificacionesFragment();
@@ -108,7 +147,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     //se muestra el fragment de peril
                     if(menuItem.getItemId()== R.id.menu_profile){
-                        showSelectedFragment(new perfilFragment());
+                        showSelectedFragment(new onepayFragment());
                     }
                     //se muestra el fragment de rubros
                     if(menuItem.getItemId()== R.id.menu_home){

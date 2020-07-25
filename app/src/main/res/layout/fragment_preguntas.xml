@@ -146,7 +146,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Telefono Contacto"
+                                android:text="Como puedo cambiar mi contraseña?"
                                 android:textAlignment="center"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:textSize="16dp">
@@ -163,14 +163,14 @@
                             android:layout_height="wrap_content">
 
                             <TextView
+                                android:inputType="textMultiLine"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Contacto"
+                                android:text="tiene que dirigirse a el icono en la barra inferior con forma de persona y devera selecionar la opcion llamada CAMBIAR CONTRASEÑA lo cual lo llevara al apartado correspondiente "
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="20dp"></TextView>
-
+                                android:textColor="@color/colordark"
+                                android:textSize="18dp"></TextView>
                         </LinearLayout>
 
                         <LinearLayout

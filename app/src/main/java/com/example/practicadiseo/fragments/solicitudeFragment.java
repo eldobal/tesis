@@ -89,13 +89,9 @@ public class solicitudeFragment extends Fragment  {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo = connectivityManager.getActiveNetworkInfo();
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
@@ -106,9 +102,39 @@ public class solicitudeFragment extends Fragment  {
         listasolicitudterminadasinterna = new ArrayList<Solicitud>();
         listasolicitudactivasinterna = new ArrayList<Solicitud>();
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo = connectivityManager.getActiveNetworkInfo();
 
+        solicitudeFragment test = (solicitudeFragment) getActivity().getSupportFragmentManager().findFragmentByTag("solicitudtag");
+
+        final Handler handler = new Handler();
+        Timer timer = new Timer();
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        if(test != null && test.isVisible() && NetworkInfo.isConnected()) {
+                            //Ejecuta tu AsyncTask!
+                            // reiniciarfragment(rutusuario, contrasena);
+                            reiniciarfragmentterminadas(rutusuario, contrasena);
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_solicitudes, container, false);
+
+
+
+        listasolicitudactivas.clear();
+        listasolicitudesterminadas.clear();
         ads = new Adaptador(getContext(), listasolicitudactivas);
         ads2 = new Adaptador(getContext(), listasolicitudesterminadas);
         loadinglista = (LottieAnimationView) v.findViewById(R.id.idanimacionlistasolicitud);
@@ -117,9 +143,6 @@ public class solicitudeFragment extends Fragment  {
         listaactivavacia = (LottieAnimationView) v.findViewById(R.id.idanimacionlistavacia2);
         spinneractivas =(Spinner) v.findViewById(R.id.spinnerordenar);
         spinnerterminadas =(Spinner) v.findViewById(R.id.spinnerordenarterminadas);
-
-        //reiniciarfragment(rutusuario,contrasena);
-        //reiniciarfragmentterminadas(rutusuario,contrasena);
         listaactivas = (ListView) v.findViewById(R.id.solicitudactual);
         lista = (ListView) v.findViewById(R.id.listadosolicitudescliente);
 
@@ -156,29 +179,7 @@ public class solicitudeFragment extends Fragment  {
                 //if (Solicitudes.size() > 0) {
                 final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
 
-
-                solicitudeFragment test = (solicitudeFragment) getActivity().getSupportFragmentManager().findFragmentByTag("solicitudtag");
-
-                final Handler handler = new Handler();
-                Timer timer = new Timer();
-
-                TimerTask task = new TimerTask() {
-                    @Override
-                    public void run() {
-                        handler.post(new Runnable() {
-                            public void run() {
-                                if(test != null && test.isVisible() && NetworkInfo.isConnected()) {
-                                    //Ejecuta tu AsyncTask!
-                                   // reiniciarfragment(rutusuario, contrasena);
-                                    reiniciarfragmentterminadas(rutusuario, contrasena);
-                                }
-                            }
-                        });
-                    }
-                };
-                timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
-
-
+                reiniciarfragmentterminadas(rutusuario, contrasena);
 
                 spinneractivas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -795,6 +796,7 @@ public class solicitudeFragment extends Fragment  {
                         Solicitud1.setIdSolicitud(solicitud.getIdSolicitud());
                         Solicitud1.setFechaS(solicitud.getFechaS());
                         Solicitud1.setNombre(solicitud.getNombre());
+                        Solicitud1.setDescripcionP(solicitud.getDescripcionP());
                         Solicitud1.setApellido(solicitud.getApellido());
                         Solicitud1.setEstado(solicitud.getEstado());
                         Solicitud1.setPrecio(solicitud.getPrecio());

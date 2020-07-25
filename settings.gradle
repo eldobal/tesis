@@ -1,2 +1,3 @@
+include ':onepay-release'
 rootProject.name='practicadiseño'
 include ':app'

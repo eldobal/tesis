@@ -48,11 +48,11 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="14dp"
-            android:id="@+id/btnalertactualizar"
+            android:id="@+id/btnalertcancelarperfil"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_btnsync"
-            android:text="Actualizar">
+            android:background="@drawable/bg_ripple"
+            android:text="cancelar">
         </Button>
 
 
@@ -62,21 +62,15 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:layout_marginTop="14dp"
-            android:id="@+id/btnalertcancelarperfil"
+            android:id="@+id/btnalertactualizar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_ripple"
-            android:text="cancelar">
+            android:background="@drawable/bg_btnsync"
+            android:text="Actualizar">
         </Button>
 
 
-
-
-
     </LinearLayout>
-
-
-
 
 
 </LinearLayout>

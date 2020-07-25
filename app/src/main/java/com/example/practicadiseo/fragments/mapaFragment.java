@@ -44,13 +44,16 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class mapaFragment extends Fragment implements OnMapReadyCallback {
 
     GoogleMap map;
-     SearchView searchView;
+    SearchView searchView;
     SupportMapFragment mapFragment;
-    boolean actualposition= true;
+    boolean actualposition = true;
     double longitudorigen, latitudorigen;
     SharedPreferences prefsmaps;
     SweetAlertDialog dp;
+    int REQUESTCODE = 111;
+    int REQUESTCODEFINE = 1554;
     Button btnconfirmarubicacion;
+
     public mapaFragment() {
         // Required empty public constructor
     }
@@ -61,40 +64,40 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_mapa, container, false);
         prefsmaps = this.getActivity().getSharedPreferences("ubicacionmapa", Context.MODE_PRIVATE);
-        searchView=(SearchView) v.findViewById(R.id.searchlocation);
-        btnconfirmarubicacion=(Button) v.findViewById(R.id.btnconfirmarubicacion);
-        mapFragment= (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
+        searchView = (SearchView) v.findViewById(R.id.searchlocation);
+        btnconfirmarubicacion = (Button) v.findViewById(R.id.btnconfirmarubicacion);
+        mapFragment = (SupportMapFragment) this.getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+      //  solicitarpermisos();
 
-
-       searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 map.clear();
                 String location = searchView.getQuery().toString();
                 List<Address> addresslist = null;
 
-                if(location != null || !location.equals("")){
+                if (location != null || !location.equals("")) {
                     Geocoder geocoder = new Geocoder(mapaFragment.this.getActivity());
                     try {
-                        addresslist= geocoder.getFromLocationName(location,1);
+                        addresslist = geocoder.getFromLocationName(location, 1);
 
-                    }catch (IOException e){
+                    } catch (IOException e) {
                         Toast.makeText(getActivity(), "Revise su DIRECCION ", Toast.LENGTH_LONG).show();
                     }
-                    }
-                    if(addresslist.size() !=0 ){
-                        Address address = addresslist.get(0);
-                        LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
-                        map.addMarker(new MarkerOptions().position(latLng).title(location));
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,17));
+                }
+                if (addresslist.size() != 0) {
+                    Address address = addresslist.get(0);
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                    map.addMarker(new MarkerOptions().position(latLng).title(location));
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
 
-                    }else{
-                        Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
-                                "Ingrese Una direccion valida", Snackbar.LENGTH_LONG);
-                        snackBar.show();
-                    }
+                } else {
+                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                            "Ingrese Una direccion valida", Snackbar.LENGTH_LONG);
+                    snackBar.show();
+                }
 
                 return false;
             }
@@ -109,44 +112,39 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
         return v;
     }
 
+    private void solicitarpermisos() {
+
+        int permisolocation = ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if(permisolocation != PackageManager.PERMISSION_GRANTED){
+
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUESTCODE);
+
+        }
+
+
+    }
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+
+
+        int permisolocation = ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if(permisolocation != PackageManager.PERMISSION_GRANTED){
+
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUESTCODE);
+
+        }
+
 
         map = googleMap;
 
 
-        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(),Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            }else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                        1);
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-            } else {
-                // No explanation needed; request the permission
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        1);
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-
-        }
-
         map.getUiSettings().setZoomControlsEnabled(true);
+
         map.setMyLocationEnabled(true);
 
 
@@ -154,7 +152,6 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 //colocar aleta con sweet alert dialog
-
                 if(latitudorigen!= 0.0 && longitudorigen!=0.0){
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     LayoutInflater inflater = getLayoutInflater();

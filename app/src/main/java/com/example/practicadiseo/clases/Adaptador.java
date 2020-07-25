@@ -88,7 +88,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
 
         prefs = contexto.getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
-
         //declaracion de la vista de cada item de la solicitud
         final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
         TextView numerosolicitud = (TextView) vista.findViewById(R.id.txtfilanumerosolicitud);
@@ -99,9 +98,10 @@ public class Adaptador extends BaseAdapter implements Serializable {
         ImageView fototrabajador = (ImageView) vista.findViewById(R.id.imgperfilfilasolicitud);
         final Button detalle = (Button) vista.findViewById(R.id.btndetallesolicitud);
 
-
-
         int idsolicitud = listasolicitudes.get(i).getIdSolicitud();
+
+        String descripcionsoli = listasolicitudes.get(i).getDescripcionP();
+
         numerosolicitud.setText("N Solicitud: "+String.valueOf(listasolicitudes.get(i).getIdSolicitud()));
         fechasolicitud.setText("Fecha: "+listasolicitudes.get(i).getFechaS());
         estadosolicitud.setText(listasolicitudes.get(i).getEstado());
@@ -146,13 +146,12 @@ public class Adaptador extends BaseAdapter implements Serializable {
         }
 
         if(listasolicitudes.get(i).getEstado().equals("FINALIZADO")) {
-
             detalle.setText("Detalle");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
-            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
-            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
-            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
-            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colorAccent));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colorAccent));
             detalle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -173,13 +172,12 @@ public class Adaptador extends BaseAdapter implements Serializable {
         }
 
         if(listasolicitudes.get(i).getEstado().equals("COMPLETADA Y PAGADA") || listasolicitudes.get(i).getEstado().equals("COMPLETADA Y NO PAGADA") ) {
-
             detalle.setText("Detalle");
             detalle.setBackgroundDrawable(ContextCompat.getDrawable(vista.getContext(), R.drawable.bg_ripplecancelar) );
-            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
-            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
-            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
-            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colorPrimary));
+            numerosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            fechasolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            estadosolicitud.setTextColor(vista.getResources().getColor(R.color.colordark));
+            nombretrabajador.setTextColor(vista.getResources().getColor(R.color.colordark));
             //boton sobre el detalle de una solicitud individual
             detalle.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -223,6 +221,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                     Button btnconfirmar = viewsync.findViewById(R.id.btnconfirmarnotificacion);
                     Button btncancelar = viewsync.findViewById(R.id.btncancelarnotificacion);
                     Button dismiss = viewsync.findViewById(R.id.btnocultaralert);
+
                     //btn para aceptar la solicitud y confirmarla por completo
                     btnconfirmar.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -254,7 +253,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                         btncerrar.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
-
                                                 dialog3.dismiss();
                                                 dialog6.dismiss();
                                             }
@@ -280,7 +278,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                                 solicitudeFragment soli = new solicitudeFragment();
                                                 FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
                                                 FragmentTransaction ft = fm.beginTransaction();
-                                                ft.replace(R.id.container, soli);
+                                                ft.replace(R.id.container, soli,"solicitudtag");
                                                 ft.commit();
                                                 dialog5.dismiss();
                                                 dialog3.dismiss();
@@ -414,7 +412,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                         }
                     });
 
-                }
+            }
             });
 
         }

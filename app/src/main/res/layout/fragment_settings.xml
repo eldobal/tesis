@@ -7,10 +7,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.settingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
-
 
        <RelativeLayout
            android:layout_width="match_parent"
@@ -20,21 +16,15 @@
            <ScrollView
                android:layout_width="match_parent"
                android:scrollbarThumbVertical="@drawable/colorsroll"
-
                android:layout_marginBottom="65dp"
                android:layout_height="match_parent">
 
                <RelativeLayout
-
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"
                    android:layout_marginLeft="20dp"
                    android:layout_marginRight="20dp"
-                   android:layout_marginBottom="70dp"
-
-                   >
-
-
+                   android:layout_marginBottom="70dp">
 
 
                    <com.airbnb.lottie.LottieAnimationView
@@ -46,22 +36,15 @@
                        app:lottie_autoPlay="true"
                        app:lottie_loop="true"
                        android:layout_alignParentTop="true"
-                       android:layout_centerHorizontal="true"
-
-                       >
-
-
+                       android:layout_centerHorizontal="true">
                    </com.airbnb.lottie.LottieAnimationView>
-
 
 
                    <RelativeLayout
                        android:id="@+id/cardcontacto"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
-                       android:layout_below="@id/usericon"
-                       >
-
+                       android:layout_below="@id/usericon">
 
                        <androidx.cardview.widget.CardView
                            android:id="@+id/cardtecnicoinformatico"
@@ -76,13 +59,11 @@
                            app:cardElevation="6dp">
 
                            <LinearLayout
-
                                android:layout_width="match_parent"
                                android:layout_height="match_parent"
                                android:gravity="center"
                                android:orientation="vertical"
                                android:padding="16dp">
-
 
                                <LinearLayout
                                    android:id="@+id/contacto"
@@ -103,7 +84,6 @@
                                <LinearLayout
                                    android:id="@+id/txtemailcontato"
                                    android:layout_width="match_parent"
-
                                    android:layout_height="wrap_content"
                                    android:layout_below="@id/contacto"
                                    android:layout_marginTop="20dp">
@@ -116,7 +96,6 @@
                                        android:layout_height="wrap_content"
                                        android:text="Email Contacto"
                                        android:gravity="center_horizontal">
-
                                    </TextView>
 
 
@@ -233,13 +212,9 @@
 
                    </RelativeLayout>
 
-
-
                </RelativeLayout>
 
            </ScrollView>
-
-
 
 
 
@@ -257,8 +232,6 @@
 
 
        </RelativeLayout>
-
-
 
 
 

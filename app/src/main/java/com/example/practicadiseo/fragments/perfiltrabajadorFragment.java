@@ -180,6 +180,8 @@ public class perfiltrabajadorFragment extends Fragment {
                         loadingdots2.setVisibility(View.INVISIBLE);
                         loadingdots2.cancelAnimation();
                         Glide.with(getContext()).load(String.valueOf(rutaservidor+usuarios.getFoto())).into(foto);
+
+                        btncrearsolicitud.setVisibility(View.VISIBLE);
                     }
                 }
                 //si falla el request a la pagina mostrara este error

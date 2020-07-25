@@ -10,6 +10,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -51,7 +52,8 @@ public class DetalleSolicitudFragment extends Fragment {
     private ImageView imgperfiltrabajador,imgclientesacada;
     SharedPreferences prefs;
     private Button btnpagarsolicitud;
-    private int idsolicitud=0;
+    private int idsolicitud=0,montosolicitud=0;
+    private CardView carddiagnostico,cardsolucion;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     private String rutperfil ="",contrasenaperfil="", metodopago="";
     public DetalleSolicitudFragment() {
@@ -90,6 +92,9 @@ public class DetalleSolicitudFragment extends Fragment {
             //falta validacion sobre el id
         }
         btnpagarsolicitud = (Button) v.findViewById(R.id.btnpagarsolicitud);
+        carddiagnostico = (CardView) v.findViewById(R.id.carddiagnosticodetalle);
+        cardsolucion = (CardView) v.findViewById(R.id.cardsolucionsolicitud);
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://proyectotesis.ddns.net/")
@@ -125,12 +130,35 @@ public class DetalleSolicitudFragment extends Fragment {
                 }
                 else {
                     Solicitud solicituds = response.body();
-
                     if(solicituds.getEstado().equals("FINALIZANDO")){
                         btnpagarsolicitud.setVisibility(View.VISIBLE);
                     }else{
                         btnpagarsolicitud.setVisibility(View.GONE);
                     }
+                    //cuando la solicitud este en estado atendiendo no se mostraran la solucion y el diagnosticos.
+                    if(solicituds.getEstado().equals("ATENDIENDO")){
+                        carddiagnostico.setVisibility(View.GONE);
+                        cardsolucion.setVisibility(View.GONE);
+                    }
+                    //estados en los cuales se muestran la solucion y el diagnostico
+                    if(solicituds.getEstado().equals("FINALIZANDO") || solicituds.getEstado().equals("FINALIZADO") || solicituds.getEstado().equals("COMPLETADA Y PAGADA") || solicituds.getEstado().equals("COMPLETADA Y NO PAGADA") )
+                    {
+                        carddiagnostico.setVisibility(View.GONE);
+                        cardsolucion.setVisibility(View.VISIBLE);
+
+
+                       String solucion = solicituds.getSolucion();
+
+                        if(solucion == null){
+
+                            soluciondetallesolicitud.setText("El trabajador con el Rut : "+solicituds.getRUT()+" no ha dejado ninguna solucion u observacion.");
+
+                        }else{
+                            soluciondetallesolicitud.setText(solicituds.getSolucion());
+                        }
+
+                    }
+
                     numerosolicitud.setText("N Solicitud: "+solicituds.getIdSolicitud());
                     fechasolicitud.setText("Creada: "+solicituds.getFechaS());
                     fechadetallesolicitud.setText("Atendida: "+solicituds.getFechaA());
@@ -140,10 +168,11 @@ public class DetalleSolicitudFragment extends Fragment {
                         precio.setText("Precio Final: "+solicituds.getPrecio());
                     }
                     precio.setText("Precio aprox: "+solicituds.getPrecio());
+                    montosolicitud = solicituds.getPrecio();
                     estadosolicitud.setText("Estado : "+solicituds.getEstado());
                     descripciondetallesolicitud.setText(solicituds.getDescripcionP());
                     diagnosticodetallesolicitud.setText(solicituds.getDiagnostico());
-                    soluciondetallesolicitud.setText(solicituds.getSolucion());
+
                     //carga de la foto del trabajor
                     Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getFotoT())).into(imgperfiltrabajador);
                     //carga de foto cargada por el usuario
@@ -193,7 +222,7 @@ public class DetalleSolicitudFragment extends Fragment {
                 texto.setText("Ingrece el metodo con el cual usted realizara el pago. califique al trabajador por el servicio realizado y si desea comente brevemente que le parecio");
                 final RadioGroup group= (RadioGroup) viewsync.findViewById(R.id.radiogroup);
                 RadioButton radioButtonefectivo = (RadioButton) viewsync.findViewById(R.id.radioButtonefectivo);
-                RadioButton radioButtononline = (RadioButton) viewsync.findViewById(R.id.radioButtonefectivo);
+                RadioButton radioButtononline = (RadioButton) viewsync.findViewById(R.id.radioButtononline);
                 RatingBar ratingBar = (RatingBar) viewsync.findViewById(R.id.ratingbarcalificacion);
                 EditText comentariocalidicacion = (EditText) viewsync.findViewById(R.id.edittextcomentariocalificacion);
                 Button btndismiss = (Button) viewsync.findViewById(R.id.btncerraralert);
@@ -229,45 +258,49 @@ public class DetalleSolicitudFragment extends Fragment {
                             Toast.makeText(v.getContext(), "seleccione una opcion por favor.", Toast.LENGTH_LONG).show();
                         }else{
                             if(ratingBar.getRating() != 0 ){
-                                int calificacion = Math.round(ratingBar.getRating());
-                                String comentario = descripciondetallesolicitud.getText().toString();
-                                //se llama al metodo que confirma el pago por parte del cliente
-                                Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl("http://proyectotesis.ddns.net/")
-                                        .addConverterFactory(GsonConverterFactory.create())
-                                        .build();
-                                tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                                Call<String> call = tesisAPI.pagarCliente(rutperfil,contrasenaperfil,idsolicitud,metodopago,calificacion,comentario);
-                                call.enqueue(new Callback<String>() {
-                                    @Override
-                                    public void onResponse( Call<String>call, Response<String> response) {
-                                        //si esta malo se ejecuta este trozo
-                                        if(!response.isSuccessful()){
-                                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                            LayoutInflater inflater = getLayoutInflater();
-                                            View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
-                                            builder.setView(viewsync);
-                                            AlertDialog dialog5 = builder.create();
-                                            dialog5.setCancelable(false);
-                                            dialog5.show();
-                                            dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                            TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-                                            texto.setText("Ha ocurrido un error al momento de pagar. intente en un momento nuevamente.");
-                                            Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
 
-                                            btncerrar.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    dialog5.dismiss();
-                                                }
-                                            });
+                                if(radioButtonefectivo.isChecked() == true){
+                                    //todo el codigo que e ejectuta cuando la trnasaccion se realiza en enfectivo
 
-                                            Toast.makeText(getContext(), "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
-                                        }
-                                        //de lo contrario se ejecuta esta parte
-                                        else {
-                                            String respusta = response.body();
-                                            if(respusta.equals("Confirmado")){
+                                    int calificacion = Math.round(ratingBar.getRating());
+                                    String comentario = descripciondetallesolicitud.getText().toString();
+                                    //se llama al metodo que confirma el pago por parte del cliente
+                                    Retrofit retrofit = new Retrofit.Builder()
+                                            .baseUrl("http://proyectotesis.ddns.net/")
+                                            .addConverterFactory(GsonConverterFactory.create())
+                                            .build();
+                                    tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
+                                    Call<String> call = tesisAPI.pagarCliente(rutperfil,contrasenaperfil,idsolicitud,metodopago,calificacion,comentario);
+                                    call.enqueue(new Callback<String>() {
+                                        @Override
+                                        public void onResponse( Call<String>call, Response<String> response) {
+                                            //si esta malo se ejecuta este trozo
+                                            if(!response.isSuccessful()){
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                                LayoutInflater inflater = getLayoutInflater();
+                                                View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
+                                                builder.setView(viewsync);
+                                                AlertDialog dialog5 = builder.create();
+                                                dialog5.setCancelable(false);
+                                                dialog5.show();
+                                                dialog5.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                                TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                                texto.setText("Ha ocurrido un error al momento de pagar. intente en un momento nuevamente.");
+                                                Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
+
+                                                btncerrar.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        dialog5.dismiss();
+                                                    }
+                                                });
+
+                                                Toast.makeText(getContext(), "error/detalle/finalizar/onresponse :"+response.code(), Toast.LENGTH_LONG).show();
+                                            }
+                                            //de lo contrario se ejecuta esta parte
+                                            else {
+                                                String respusta = response.body();
+
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                                 View viewsync2 = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
                                                 builder.setView(viewsync2);
@@ -292,36 +325,57 @@ public class DetalleSolicitudFragment extends Fragment {
                                                     }
                                                 });
                                             }
-
-
                                         }
-                                    }
 
-                                    //si falla el request a la pagina mostrara este error
-                                    @Override
-                                    public void onFailure(Call<String> call, Throwable t) {
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                        LayoutInflater inflater = getLayoutInflater();
-                                        View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
-                                        builder.setView(viewsync);
-                                        AlertDialog dialog6 = builder.create();
-                                        dialog6.setCancelable(false);
-                                        dialog6.show();
-                                        dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                        TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
-                                        texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
-                                        Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+                                        //si falla el request a la pagina mostrara este error
+                                        @Override
+                                        public void onFailure(Call<String> call, Throwable t) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                            LayoutInflater inflater = getLayoutInflater();
+                                            View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
+                                            builder.setView(viewsync);
+                                            AlertDialog dialog6 = builder.create();
+                                            dialog6.setCancelable(false);
+                                            dialog6.show();
+                                            dialog6.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                            TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
+                                            texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
+                                            Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
 
-                                        btncerrar.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                dialog6.dismiss();
-                                            }
-                                        });
+                                            btncerrar.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    dialog6.dismiss();
+                                                }
+                                            });
 
-                                        Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
-                                    }
-                                });
+                                            Toast.makeText(getContext(), "error/detalle/finalizar/onfailure:"+t.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+
+                                }if(radioButtononline.isChecked() ==true){
+
+                                    /*
+
+                                    //todo el codigo que se ejecuta cuando se pagara con webpay
+                                    Bundle bundle = new Bundle();
+                                    //id de la solicitud para que se pueda buscar en el detalle
+                                    bundle.putString("rutusuario",rutperfil);
+                                    bundle.putInt("monto",montosolicitud);
+                                    bundle.putInt("idsolicitud", idsolicitud);
+                                    onepayFragment onepayFragment = new onepayFragment();
+                                    onepayFragment.setArguments(bundle);
+
+                                    getFragmentManager().beginTransaction().replace(R.id.container,onepayFragment)
+                                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                            .commit();
+
+                                    dialog2.dismiss();
+
+                                    */
+
+                                }
+
 
                             }else{
                                 Toast.makeText(v.getContext(), "seleccione una calificacion valida.", Toast.LENGTH_LONG).show();

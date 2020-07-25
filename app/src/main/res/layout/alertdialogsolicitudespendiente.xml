@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/round_async_dialog"
-    android:layout_marginLeft="30dp"
-    android:layout_marginRight="30dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:orientation="vertical">
 
     <com.airbnb.lottie.LottieAnimationView
@@ -47,6 +47,18 @@
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true">
 
+        <Button
+            android:layout_margin="8dp"
+            android:layout_marginLeft="80dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/btnocultaralert"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccentllight"
+            android:text="cerrar este cuadro">
+        </Button>
+
 
         <Button
             android:layout_margin="8dp"
@@ -61,17 +73,7 @@
             android:text="eliminar">
         </Button>
 
-        <Button
-            android:layout_margin="8dp"
-            android:layout_marginLeft="80dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="14dp"
-            android:id="@+id/btnocultaralert"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorAccentllight"
-            android:text="cerrar este cuadro">
-        </Button>
+
 
     </LinearLayout>
 

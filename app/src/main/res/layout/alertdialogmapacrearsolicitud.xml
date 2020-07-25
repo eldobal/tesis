@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/round_async_dialog"
+    android:layout_margin="6dp"
     android:orientation="vertical">
 
 
@@ -50,23 +51,9 @@
 
 
     <LinearLayout
-
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true">
-
-        <Button
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginTop="14dp"
-            android:id="@+id/btnutilizaresta"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_btnsync"
-            android:text="Utilizar Esta">
-        </Button>
 
 
         <Button
@@ -83,12 +70,21 @@
         </Button>
 
 
-
+        <Button
+            android:layout_margin="8dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="14dp"
+            android:id="@+id/btnutilizaresta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_btnsync"
+            android:text="Utilizar Esta">
+        </Button>
 
 
     </LinearLayout>
-
-
 
 
 

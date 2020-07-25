@@ -24,6 +24,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -33,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -77,9 +81,10 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     ImageView fotosacada,imgperfil;
     EditText descripcion;
     private int idrubro=0;
+    private RelativeLayout relativeLayoutfoto;
     Button btnfoto,btncrearsolicitud,cargar,btnmapa;
     private String ruttrabajador="",rutcliente="",nombretrabajador="",estadotrabajador="",calificaciontrabajador="",descripcionfinal="",rutafoto="",imagenstring="",Fechasolicitud="";
-    private TextView rut,nombre,estado,calificacion;
+    private TextView rut,nombre,estado,calificacion,textomapaseleccionado;
     //declaracion de la ruta estatica del servidor
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     int idestadosolicitud=0;
@@ -123,13 +128,14 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         nombre =(TextView) v.findViewById(R.id.txtnombrecrearsolicitudtrabajador);
         estado =(TextView) v.findViewById(R.id.txtestadocrearsolicitudtrabajador);
         calificacion =(TextView) v.findViewById(R.id.txtcalificacioncrearsolicitudtrabajador);
+        textomapaseleccionado =(TextView) v.findViewById(R.id.txtseleccionado);
         imgperfil=(ImageView) v.findViewById(R.id.imgperfil);
         cargar = (Button) v.findViewById(R.id.btncargarfoto);
         btncrearsolicitud = (Button) v.findViewById(R.id.btncrearsolicitud);
         btnmapa=(Button) v.findViewById(R.id.btnmapa);
         fotosacada = (ImageView) v.findViewById(R.id.fotocrearsolicitud);
         descripcion =(EditText) v.findViewById(R.id.txtdescripcioncrearsolicitud);
-
+        relativeLayoutfoto = (RelativeLayout) v.findViewById(R.id.relativefoto);
 
         Bundle args = getArguments();
         if (args == null) {
@@ -157,7 +163,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             Fechasolicitud = sdf.format(calendar.getTime());
-
+            setlatlongexist();
 
             if(!imagenstring.isEmpty()){
                 Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
@@ -167,6 +173,34 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
 
             }
 
+
+
+
+            final Handler handler = new Handler();
+            Timer timer = new Timer();
+
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            if(latorigen.isEmpty() && latorigen.isEmpty()){
+                                //Ejecuta tu AsyncTask!
+                                // reiniciarfragment(rutusuario, contrasena);
+                                setlatlongexist();
+                            }
+                        }
+                    });
+                }
+            };
+            timer.schedule(task, 0, 1000);  //ejecutar en intervalo definido por el programador
+
+
+
+            if(!latorigen.isEmpty() && !latorigen.isEmpty()){
+                textomapaseleccionado.setVisibility(View.VISIBLE);
+                textomapaseleccionado.setText("La Ubicacion ha sido Seleccionada");
+            }
 
             btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -181,17 +215,26 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                                     "Ingrese una descripcion / cargue una foto", Snackbar.LENGTH_LONG);
                             snackBar.show();
                         }else{
-                            btncrearsolicitud.setClickable(false);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            LayoutInflater inflater = getLayoutInflater();
-                            View viewsync = inflater.inflate(R.layout.alerdialogloading,null);
-                            builder.setView(viewsync);
-                            dialog = builder.create();
-                            dialog.setCancelable(false);
-                            dialog.show();
-                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            //metodo para crear la solicitud con los parametros
-                            crearsolicitud();
+                            //se verifica que la descripcion tenga una extencion de 300 caracteres maximos
+                            if(descripcionfinal.length() < 300){
+
+                                btncrearsolicitud.setClickable(false);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                LayoutInflater inflater = getLayoutInflater();
+                                View viewsync = inflater.inflate(R.layout.alerdialogloading,null);
+                                builder.setView(viewsync);
+                                dialog = builder.create();
+                                dialog.setCancelable(false);
+                                dialog.show();
+                                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                //metodo para crear la solicitud con los parametros
+                                crearsolicitud();
+
+                            }else{  Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    "La descripcion no debe tener mas de 300 caracteristicas", Snackbar.LENGTH_LONG);
+                                snackBar.show();
+                            }
+
                         }
                     }else{
                         Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
@@ -429,6 +472,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             Bundle extras = data.getExtras();
             bitmap = (Bitmap) extras.get("data");
             fotosacada.setImageBitmap(bitmap);
+            relativeLayoutfoto.setVisibility(View.VISIBLE);
         }
         //si la opcion es cargar la foto desde el dispocitivo
                 if(requestCode == 10){
@@ -436,6 +480,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),path);
                 fotosacada.setImageBitmap(bitmap);
+                relativeLayoutfoto.setVisibility(View.VISIBLE);
             }catch (IOException e){
                 e.printStackTrace();
             }
