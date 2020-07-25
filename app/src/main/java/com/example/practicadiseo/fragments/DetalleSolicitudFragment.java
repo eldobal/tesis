@@ -261,7 +261,6 @@ public class DetalleSolicitudFragment extends Fragment {
 
                                 if(radioButtonefectivo.isChecked() == true){
                                     //todo el codigo que e ejectuta cuando la trnasaccion se realiza en enfectivo
-
                                     int calificacion = Math.round(ratingBar.getRating());
                                     String comentario = descripciondetallesolicitud.getText().toString();
                                     //se llama al metodo que confirma el pago por parte del cliente
@@ -354,9 +353,6 @@ public class DetalleSolicitudFragment extends Fragment {
                                     });
 
                                 }if(radioButtononline.isChecked() ==true){
-
-                                    /*
-
                                     //todo el codigo que se ejecuta cuando se pagara con webpay
                                     Bundle bundle = new Bundle();
                                     //id de la solicitud para que se pueda buscar en el detalle
@@ -371,9 +367,6 @@ public class DetalleSolicitudFragment extends Fragment {
                                             .commit();
 
                                     dialog2.dismiss();
-
-                                    */
-
                                 }
 
 
