@@ -8,11 +8,11 @@
 
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/dangerperfilactualizar"
+        android:id="@+id/idanimacionpagowebpay"
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        app:lottie_rawRes="@raw/webpaypago"
+        app:lottie_rawRes="@raw/pagocorrecto"
         app:lottie_autoPlay="true"
         app:lottie_loop="false"
 

@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.SurfaceControl;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -25,7 +26,11 @@ import android.widget.Toast;
 import cl.ionix.tbk_ewallet_sdk_android.OnePay;
 import cl.ionix.tbk_ewallet_sdk_android.callback.OnePayCallback;
 
+import com.airbnb.lottie.L;
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.practicadiseo.R;
+import com.example.practicadiseo.activitys.menuActivity;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -37,11 +42,15 @@ import java.util.TimerTask;
  * Use the {@link onepayFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class onepayFragment extends Fragment {
+public class onepayFragment extends Fragment  {
     WebView webView;
     NetworkInfo NetworkInfo;
     String rutusuario="";
     int monto=0,idsolicitud=0;
+    NetworkInfo activeNetwork;
+    ConnectivityManager cm ;
+    TimerTask task;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -60,8 +69,8 @@ public class onepayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo = connectivityManager.getActiveNetworkInfo();
+       // ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+       // NetworkInfo = connectivityManager.getActiveNetworkInfo();
     }
 
     @Override
@@ -86,7 +95,18 @@ public class onepayFragment extends Fragment {
         webView = (WebView) v.findViewById(R.id.webview);
         //este codigo habilia javascript
         WebSettings webSettings = webView.getSettings();
+        webSettings = webView.getSettings(); webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true); webSettings.setLoadWithOverviewMode(true);
+        webSettings.setUseWideViewPort(true); webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false); webSettings.setSupportZoom(true);
+        webSettings.setDefaultTextEncodingName("utf-8");
         webSettings.setJavaScriptEnabled(true);
+        webView.getSettings().setPluginState(WebSettings.PluginState.ON);
+        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+
+
+
         //url del backend webpay
         String url="http://proyectotesis.ddns.net/datos/WebPay";
         String postData= null;
@@ -102,55 +122,104 @@ public class onepayFragment extends Fragment {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        webView.postUrl(url,postData.getBytes());
+
+        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) {
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+
+                webView.postUrl(url, postData.getBytes());
+
+            } else {
+
+            }
+        }
 
         //url la cual estara alojado el backend con la implementacion de transbank
         String urltrasaccionfinalizada ="http://proyectotesis.ddns.net/Datos/Final";
+        String urltransaccionerror  ="http://proyectotesis.ddns.net/Datos/Error";
 
         //metodo en el cual el timer pregunta frecuentemente si la urlactual es igual a la urffinalizada
         final Handler handler = new Handler();
         Timer timer = new Timer();
-        TimerTask task = new TimerTask() {
+         task = new TimerTask() {
             @Override
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        //se captura la url donde se encuentra el usuario en el webview
-                        String webUrlactual = webView.getUrl();
-                        if(urltrasaccionfinalizada.equals(webUrlactual) && NetworkInfo.isConnected()) {
-                            //Ejecuta tu AsyncTask!
-                            //alert dialog con el mensaje de que se ha pagado correctamente
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            LayoutInflater inflater = getLayoutInflater();
-                            View viewsync = inflater.inflate(R.layout.alertdialogwebpaypago,null);
-                            builder.setView(viewsync);
-                            AlertDialog dialog7 = builder.create();
-                            dialog7.setCancelable(false);
-                            dialog7.show();
-                            dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
-
-                            btncerrar.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    dialog7.dismiss();
-                                    //salir de esta pantalla
-                                    getActivity().finish();
-                                    HomeFragment homeFragment = new HomeFragment();
-                                    getFragmentManager().beginTransaction().replace(R.id.container,homeFragment)
-                                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                                            .commit();
-
+                        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                        activeNetwork = cm.getActiveNetworkInfo();
+                        if (activeNetwork != null) {
+                            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                                //se captura la url donde se encuentra el usuario en el webview
+                                String webUrlactual = webView.getUrl();
+                                Toast.makeText(getContext(), webUrlactual, Toast.LENGTH_SHORT).show();
+                                if (urltrasaccionfinalizada.equals(webUrlactual)) {
+                                    task.cancel();
+                                    //alert dialog con el mensaje de que se ha pagado correctamente
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    LayoutInflater inflater = getLayoutInflater();
+                                    View viewsync = inflater.inflate(R.layout.alertdialogwebpaypago, null);
+                                    builder.setView(viewsync);
+                                    AlertDialog dialog7 = builder.create();
+                                    dialog7.setCancelable(false);
+                                    dialog7.show();
+                                    dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    Button btncerrar = (Button) viewsync.findViewById(R.id.btnalertperfilexito);
+                                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog7.dismiss();
+                                            //salir de esta pantalla
+                                            HomeFragment homeFragment = new HomeFragment();
+                                            getFragmentManager().beginTransaction().replace(R.id.container, homeFragment)
+                                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                                    .commit();
+                                        }
+                                    });
                                 }
-                            });
+                                if(urltransaccionerror.equals(webUrlactual)){
+                                    task.cancel();
+                                    //alert dialog con el mensaje de que se ha pagado correctamente
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                    LayoutInflater inflater = getLayoutInflater();
+                                    View viewsync = inflater.inflate(R.layout.alertdialogwebpaypago, null);
+                                    builder.setView(viewsync);
+                                    AlertDialog dialog8 = builder.create();
+                                    dialog8.setCancelable(false);
+                                    dialog8.show();
+                                    dialog8.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                    LottieAnimationView lottieAnimationView = (LottieAnimationView) viewsync.findViewById(R.id.idanimacionpagowebpay);
+                                    lottieAnimationView.setAnimation(R.raw.pagoincorrecto);
+                                    TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                                    texto.setText("Lamentablemente el pago ha sido rechazado. por fabor intentelo nuevamente!. en caso de que el problema persista por fabor pagar en efectivo o comunicarse con la linea de atencion");
+                                    Button btncerrar = (Button) viewsync.findViewById(R.id.btnalertperfilexito);
+                                    btncerrar.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog8.dismiss();
+                                            solicitudeFragment solicitudeFragment = new solicitudeFragment();
+                                            getFragmentManager().beginTransaction().replace(R.id.container, solicitudeFragment,"solicitudtag")
+                                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                                    .commit();
+                                        }
+                                    });
+                                }
+                            } else {
+                                Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                                snackBar.show();
+                            }
                         }
                     }
                 });
             }
         };
-        timer.schedule(task, 0, 2000);  //ejecutar en intervalo definido por el programador
+        timer.schedule(task, 0, 500);  //ejecutar en intervalo definido por el programador
 
 
         return  v;
     }
+
+
 }

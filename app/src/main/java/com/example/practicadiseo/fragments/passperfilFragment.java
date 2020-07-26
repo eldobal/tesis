@@ -27,6 +27,7 @@ import com.example.practicadiseo.R;
 import com.example.practicadiseo.activitys.menuActivity;
 import com.example.practicadiseo.clases.Usuario;
 import com.example.practicadiseo.interfaces.tesisAPI;
+import com.google.android.material.snackbar.Snackbar;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
@@ -49,7 +50,9 @@ public class passperfilFragment extends Fragment {
     private Button btncambiopass;
     private boolean validado = false;
     Usuario usuario = new Usuario();
-    NetworkInfo networkInfo ;
+    NetworkInfo activeNetwork;
+    ConnectivityManager cm ;
+
     AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
     public passperfilFragment() {
         // Required empty public constructor
@@ -69,8 +72,8 @@ public class passperfilFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_passperfil, container, false);
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        networkInfo = connectivityManager.getActiveNetworkInfo();
+       // ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+       // networkInfo = connectivityManager.getActiveNetworkInfo();
         contraseñaactual = (EditText) v.findViewById(R.id.passactual);
         contraseña1 = (EditText) v.findViewById(R.id.cambiocontraseñaperfil);
         contraseña2 = (EditText) v.findViewById(R.id.cambiocontraseña2perfil);
@@ -79,36 +82,46 @@ public class passperfilFragment extends Fragment {
         //se comprueba que exita el rut y la contraseña
         setcredentiasexist();
 
-        if (networkInfo != null && networkInfo.isConnected()) {
-            //metodo el cual traera los datos del usuario y se comparara la contraseña acutal y la que se trae
-            cargardatosperfil();
-        }else{
-            //no hay coneccion manejar excepcion
+        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) {
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
 
+                 cargardatosperfil();
+
+            } else {
+                Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                        "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                snackBar.show();
+            }
         }
 
         btncambiopass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (networkInfo != null && networkInfo.isConnected()) {
-                    if (mAwesomeValidation.validate()){
-                        String contraseñaactual1 = contraseñaactual.getText().toString();
-                        //String  usuariocontraseña = usuario.getContrasena().toString();
-                        String contraseñanueva = contraseña1.getText().toString();
-                        String contraseñanueva2 = contraseña2.getText().toString();
-                        if (contraseñaactual1.equals(contraseñaactualcomparar) && (contraseñanueva.equals(contraseñanueva2))) {
-                            actualizarperfil(contraseñanueva2);
-                        }else{
-                            Toast.makeText(getContext(), "las contraseñas no coinciden", Toast.LENGTH_LONG).show();
+                    cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                    activeNetwork = cm.getActiveNetworkInfo();
+                    if (activeNetwork != null) {
+                        if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                            if (mAwesomeValidation.validate()){
+                                String contraseñaactual1 = contraseñaactual.getText().toString();
+                                //String  usuariocontraseña = usuario.getContrasena().toString();
+                                String contraseñanueva = contraseña1.getText().toString();
+                                String contraseñanueva2 = contraseña2.getText().toString();
+                                if (contraseñaactual1.equals(contraseñaactualcomparar) && (contraseñanueva.equals(contraseñanueva2))) {
+                                    actualizarperfil(contraseñanueva2);
+                                }else{
+                                    Toast.makeText(getContext(), "las contraseñas no coinciden", Toast.LENGTH_LONG).show();
+                                }
+                            }else{
+                                Toast.makeText(getContext(), "error al validar la contraseña", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                    "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                            snackBar.show();
                         }
-                    }else{
-                        Toast.makeText(getContext(), "error al validar la contraseña", Toast.LENGTH_LONG).show();
                     }
-                }else{
-                    //no hay coneccion manejar excepcion
-
-                }
-
             }
         });
 

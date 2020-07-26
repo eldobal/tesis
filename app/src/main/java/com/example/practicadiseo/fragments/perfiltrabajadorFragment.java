@@ -30,6 +30,7 @@ import com.example.practicadiseo.activitys.register2Activity;
 import com.example.practicadiseo.clases.UsuarioTrabajador;
 import com.example.practicadiseo.fragments.crearsolicitudFragment;
 import com.example.practicadiseo.interfaces.tesisAPI;
+import com.google.android.material.snackbar.Snackbar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,7 +51,8 @@ public class perfiltrabajadorFragment extends Fragment {
     private ImageView foto;
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     String urlfoto="";
-    NetworkInfo networkInfo;
+    NetworkInfo activeNetwork;
+    ConnectivityManager cm ;
     SharedPreferences prefsmaps,prefs;
     UsuarioTrabajador trabajador =new UsuarioTrabajador();
 
@@ -64,8 +66,8 @@ public class perfiltrabajadorFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_perfiltrabajador, container, false);
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        networkInfo = connectivityManager.getActiveNetworkInfo();
+        //ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        //networkInfo = connectivityManager.getActiveNetworkInfo();
         Bundle args = getArguments();
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
@@ -90,39 +92,48 @@ public class perfiltrabajadorFragment extends Fragment {
         if(ruttrabajador.isEmpty()||rutusuario.isEmpty() ||contrasena.isEmpty()){
             //enviar mensaje de error y reenviar al usuario hacia alguna pantalla de comprovacion
         }else{
-            if (networkInfo != null && networkInfo.isConnected()) {
-                llenarperfiltrabajador(ruttrabajador);
-            }else{
-                //no hay conexion manejar excepcion
+            cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            activeNetwork = cm.getActiveNetworkInfo();
+            if (activeNetwork != null) {
+                if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
 
+                    llenarperfiltrabajador(ruttrabajador);
+
+
+                    btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Bundle bundle = new Bundle();
+                            //en el bundle se enviaran los siguientes datos para poder operar en el crear soliciutd
+                            bundle.putString("ruttrabajador", trabajador.getRUT());
+                            bundle.putString("nombretrabajador", trabajador.getNombre() + " " + trabajador.getApellido());
+                            bundle.putString("estadotrabajador", trabajador.getEstado());
+                            bundle.putString("calificaciontrabajador", trabajador.getCalificacion());
+                            bundle.putString("imgperfiltrabajador", (String) urlfoto);
+                            bundle.putInt("idrubro", idrubro);
+                            crearsolicitudFragment crearsolicitudFragment = new crearsolicitudFragment();
+                            crearsolicitudFragment.setArguments(bundle);
+                            getFragmentManager().beginTransaction().replace(R.id.container, crearsolicitudFragment)
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                    .commit();
+
+                        }
+                    });
+
+
+                } else {
+                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                            "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                    snackBar.show();
+                }
             }
+
+
         }
 
 
 
-        btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (networkInfo != null && networkInfo.isConnected()) {
-                Bundle bundle = new Bundle();
-                //en el bundle se enviaran los siguientes datos para poder operar en el crear soliciutd
-                bundle.putString("ruttrabajador", trabajador.getRUT());
-                bundle.putString("nombretrabajador", trabajador.getNombre()+" "+trabajador.getApellido());
-                bundle.putString("estadotrabajador", trabajador.getEstado());
-                bundle.putString("calificaciontrabajador", trabajador.getCalificacion());
-                bundle.putString("imgperfiltrabajador", (String) urlfoto);
-                bundle.putInt("idrubro", idrubro);
-                crearsolicitudFragment crearsolicitudFragment = new crearsolicitudFragment();
-                crearsolicitudFragment.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.container,crearsolicitudFragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .commit();
-                }else{
-                    //no hay conexion manejar excepcion
-
-                }
-            }
-        });
 
         return  v;
     }

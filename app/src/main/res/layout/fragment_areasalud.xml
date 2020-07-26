@@ -44,31 +44,30 @@
         </RelativeLayout>
 
 
-
         <GridLayout
 
-            android:columnCount="2"
-            android:rowCount="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
             android:alignmentMode="alignMargins"
+            android:columnCount="2"
             android:columnOrderPreserved="false"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:rowCount="3">
+
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardpeluquera"
+                android:id="@+id/cardpodologia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_rowWeight="1"
                 android:layout_columnWeight="1"
-                android:backgroundTint="@color/colorAccent"
                 android:layout_margin="12dp"
-                app:cardCornerRadius="30dp"
+                android:backgroundTint="@color/colorAccent"
                 android:clickable="true"
+                app:cardCornerRadius="30dp"
                 app:cardElevation="6dp">
 
                 <LinearLayout
-
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -84,167 +83,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Peluquera"
+                        android:text="Podología"
                         android:textColor="#593140"
                         android:textSize="16sp"></TextView>
-
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-
-            <androidx.cardview.widget.CardView
-
-                android:id="@+id/cardmanicurista"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:backgroundTint="@color/colorAccent"
-                android:clickable="true"
-                app:cardElevation="6dp"
-                app:cardCornerRadius="30dp"
-                android:layout_margin="12dp"
-                >
-
-                <LinearLayout
-
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:src="@drawable/contact"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"></ImageView>
-
-                    <TextView
-                        android:textAlignment="center"
-                        android:layout_marginTop="12dp"
-                        android:textColor="#593140"
-                        android:textSize="16sp"
-                        android:text="Manicurista"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"></TextView>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardpodologa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                android:backgroundTint="@color/colorAccent"
-                android:clickable="true"
-                app:cardCornerRadius="30dp"
-                android:layout_margin="12dp"
-                >
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:src="@drawable/contact"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"></ImageView>
-
-                    <TextView
-                        android:layout_marginTop="12dp"
-                        android:textColor="#593140"
-                        android:textSize="16sp"
-                        android:text="Podologa"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></TextView>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardbarbero"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                android:backgroundTint="@color/colorAccent"
-                android:clickable="true"
-                app:cardCornerRadius="30dp"
-                android:layout_margin="12dp"
-                >
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:src="@drawable/contact"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"></ImageView>
-
-                    <TextView
-                        android:layout_marginTop="12dp"
-                        android:textColor="#593140"
-                        android:textSize="16sp"
-                        android:text="Barbero"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></TextView>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardmaquilladora"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                android:backgroundTint="@color/colorAccent"
-                android:clickable="true"
-                app:cardCornerRadius="30dp"
-                android:layout_margin="12dp"
-                >
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:src="@drawable/contact"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"></ImageView>
-
-                    <TextView
-                        android:layout_marginTop="12dp"
-                        android:textColor="#593140"
-                        android:textSize="16sp"
-                        android:textAlignment="center"
-                        android:text="Maquilladora"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"></TextView>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -254,39 +95,115 @@
                 android:id="@+id/cardmasajista"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                app:cardElevation="6dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="12dp"
                 android:backgroundTint="@color/colorAccent"
                 android:clickable="true"
                 app:cardCornerRadius="30dp"
-                android:layout_margin="12dp"
-                >
+                app:cardElevation="6dp">
 
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <ImageView
-                        android:src="@drawable/contact"
                         android:layout_width="80dp"
-                        android:layout_height="80dp"></ImageView>
+                        android:layout_height="80dp"
+                        android:src="@drawable/contact"></ImageView>
 
                     <TextView
-                        android:layout_marginTop="12dp"
-                        android:textColor="#593140"
-                        android:textSize="16sp"
-                        android:textAlignment="center"
-                        android:text="Masajista"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"></TextView>
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_horizontal"
+                        android:text="Masoterapia"
+                        android:textAlignment="center"
+                        android:textColor="#593140"
+                        android:textSize="16sp"></TextView>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardpsicologia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="12dp"
+                android:backgroundTint="@color/colorAccent"
+                android:clickable="true"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/contact"></ImageView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_horizontal"
+                        android:text="Psicología"
+                        android:textAlignment="center"
+                        android:textColor="#593140"
+                        android:textSize="16sp"></TextView>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardgemoterapia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="12dp"
+                android:backgroundTint="@color/colorAccent"
+                android:clickable="true"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/contact"></ImageView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_horizontal"
+                        android:text="Gemoterapia"
+                        android:textAlignment="center"
+                        android:textColor="#593140"
+                        android:textSize="16sp"></TextView>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
         </GridLayout>
     </LinearLayout>
 </ScrollView>

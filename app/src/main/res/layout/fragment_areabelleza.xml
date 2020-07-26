@@ -64,7 +64,6 @@
                 android:layout_margin="12dp"
                 android:backgroundTint="@color/colorAccent"
                 android:clickable="true"
-                android:onClick="setpeluqueria"
                 app:cardCornerRadius="30dp"
                 app:cardElevation="6dp">
 
@@ -85,7 +84,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:text="Peluquera"
+                        android:text="Peluquería"
                         android:textColor="#593140"
                         android:textSize="16sp"></TextView>
 
@@ -127,7 +126,7 @@
                         android:layout_marginTop="12dp"
                         android:textColor="#593140"
                         android:textSize="16sp"
-                        android:text="Manicurista"
+                        android:text="Manicura"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"></TextView>
@@ -135,43 +134,6 @@
 
             </androidx.cardview.widget.CardView>
 
-
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardpodologa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                android:backgroundTint="@color/colorAccent"
-                android:clickable="true"
-                app:cardCornerRadius="30dp"
-                android:layout_margin="12dp"
-                >
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:src="@drawable/contact"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"></ImageView>
-
-                    <TextView
-                        android:layout_marginTop="12dp"
-                        android:textColor="#593140"
-                        android:textSize="16sp"
-                        android:text="Podologa"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></TextView>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
 
 
             <androidx.cardview.widget.CardView
@@ -203,7 +165,7 @@
                         android:layout_marginTop="12dp"
                         android:textColor="#593140"
                         android:textSize="16sp"
-                        android:text="Barbero"
+                        android:text="Barbería"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"></TextView>
                 </LinearLayout>
@@ -242,7 +204,7 @@
                         android:textColor="#593140"
                         android:textSize="16sp"
                         android:textAlignment="center"
-                        android:text="Maquilladora"
+                        android:text="Cosmetología"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"></TextView>
@@ -251,43 +213,7 @@
             </androidx.cardview.widget.CardView>
 
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardmasajista"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                android:backgroundTint="@color/colorAccent"
-                android:clickable="true"
-                app:cardCornerRadius="30dp"
-                android:layout_margin="12dp"
-                >
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:src="@drawable/contact"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"></ImageView>
-
-                    <TextView
-                        android:layout_marginTop="12dp"
-                        android:textColor="#593140"
-                        android:textSize="16sp"
-                        android:textAlignment="center"
-                        android:text="Masajista"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"></TextView>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
 
 
 

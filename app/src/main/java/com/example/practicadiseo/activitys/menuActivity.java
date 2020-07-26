@@ -27,7 +27,6 @@ import com.example.practicadiseo.R;
 import com.example.practicadiseo.clases.Solicitud;
 import com.example.practicadiseo.fragments.listanotificacionesFragment;
 import com.example.practicadiseo.fragments.mapaFragment;
-import com.example.practicadiseo.fragments.onepayFragment;
 import com.example.practicadiseo.fragments.perfilFragment;
 import com.example.practicadiseo.fragments.settingsFragment;
 import com.example.practicadiseo.fragments.solicitudeFragment;
@@ -147,7 +146,7 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                 public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                     //se muestra el fragment de peril
                     if(menuItem.getItemId()== R.id.menu_profile){
-                        showSelectedFragment(new onepayFragment());
+                        showSelectedFragment(new perfilFragment());
                     }
                     //se muestra el fragment de rubros
                     if(menuItem.getItemId()== R.id.menu_home){
@@ -346,6 +345,19 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
 
     private String getusercontraseñaprefs() {
         return prefs.getString("ContraseNa", "");
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        if (count == 0) {
+            super.onBackPressed();
+            //additional code
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 
 }

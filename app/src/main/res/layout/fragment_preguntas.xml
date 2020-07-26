@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:scrollbarThumbVertical="@drawable/colorsroll"
     android:background="@color/colorAccentllight"
-
     tools:context=".fragments.preguntasFragment">
 
     <LinearLayout

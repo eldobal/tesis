@@ -35,11 +35,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         //declaracion de cardview
         CardView belleza = (CardView) v.findViewById(R.id.belleza);
         CardView salud = (CardView) v.findViewById(R.id.salud);
-        CardView tecnologia = (CardView) v.findViewById(R.id.tecnologia);
+        //CardView tecnologia = (CardView) v.findViewById(R.id.tecnologia);
+
         //añadiendo click listener a las cards
         belleza.setOnClickListener(this);
         salud.setOnClickListener(this);
-        tecnologia.setOnClickListener(this);
+        //tecnologia.setOnClickListener(this);
 
         return v;
     }
@@ -51,7 +52,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.belleza : showSelectedFragment(new areabellezaFragment()); ;break ;
             case R.id.salud : showSelectedFragment(new areasaludFragment()); ; break ;
-            case R.id.tecnologia : showSelectedFragment(new areatecnologiaFragment()); ; break ;
+            //case R.id.tecnologia : showSelectedFragment(new areatecnologiaFragment()); ; break ;
             default:break;
         }
 

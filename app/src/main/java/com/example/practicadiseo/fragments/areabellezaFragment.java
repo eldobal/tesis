@@ -18,7 +18,7 @@ import com.example.practicadiseo.R;
  * A simple {@link Fragment} subclass.
  */
 public class areabellezaFragment extends Fragment {
-CardView cardpeluqueria,cardmanicurista,cardpodologa,cardbarbero,cardmaquilladora,cardmasajista;
+CardView cardpeluqueria,cardmanicurista,cardbarbero,cardmaquilladora;
     public areabellezaFragment() {
         // Required empty public constructor
     }
@@ -31,11 +31,8 @@ CardView cardpeluqueria,cardmanicurista,cardpodologa,cardbarbero,cardmaquillador
         View v = inflater.inflate(R.layout.fragment_areabelleza, container, false);
         cardpeluqueria =(CardView) v.findViewById(R.id.cardpeluquera);
         cardmanicurista =(CardView) v.findViewById(R.id.cardmanicurista);
-        cardpodologa =(CardView) v.findViewById(R.id.cardpodologa);
         cardbarbero=(CardView) v.findViewById(R.id.cardbarbero);
         cardmaquilladora =(CardView) v.findViewById(R.id.cardmaquilladora);
-        cardmasajista =(CardView) v.findViewById(R.id.cardmasajista);
-
 
 
         cardpeluqueria.setOnClickListener(new View.OnClickListener() {
@@ -74,25 +71,6 @@ CardView cardpeluqueria,cardmanicurista,cardpodologa,cardbarbero,cardmaquillador
             }
         });
 
-        cardpodologa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //metodo para que se envie el id del rubro el cual sera estatico para enviar a la lista de trabajadores
-                int idrubro = 3;
-                listabuscarrubroFragment listabuscarrubroFragment = new listabuscarrubroFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt("idRubro", idrubro);
-                listabuscarrubroFragment.setArguments(bundle);
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, listabuscarrubroFragment);
-                fragmentTransaction.addToBackStack(null);
-                // Terminar transición y nos vemos en el fragmento de destino
-                fragmentTransaction.commit();
-            }
-        });
-
         cardbarbero.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,25 +96,6 @@ CardView cardpeluqueria,cardmanicurista,cardpodologa,cardbarbero,cardmaquillador
 
                 //metodo para que se envie el id del rubro el cual sera estatico para enviar a la lista de trabajadores
                 int idrubro = 5;
-                listabuscarrubroFragment listabuscarrubroFragment = new listabuscarrubroFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt("idRubro", idrubro);
-                listabuscarrubroFragment.setArguments(bundle);
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.container, listabuscarrubroFragment);
-                fragmentTransaction.addToBackStack(null);
-                // Terminar transición y nos vemos en el fragmento de destino
-                fragmentTransaction.commit();
-            }
-        });
-
-        cardmasajista.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //metodo para que se envie el id del rubro el cual sera estatico para enviar a la lista de trabajadores
-                int idrubro = 6;
                 listabuscarrubroFragment listabuscarrubroFragment = new listabuscarrubroFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt("idRubro", idrubro);

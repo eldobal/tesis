@@ -33,6 +33,7 @@ import com.example.practicadiseo.activitys.login2Activity;
 import com.example.practicadiseo.clases.Adaptadornotificaciones;
 import com.example.practicadiseo.clases.Notificacion;
 import com.example.practicadiseo.interfaces.tesisAPI;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,8 @@ import static com.airbnb.lottie.L.TAG;
 public class listanotificacionesFragment extends Fragment {
 
     ListView listanotificaciones;
-    NetworkInfo NetworkInfo;
+    NetworkInfo activeNetwork;
+    ConnectivityManager cm ;
     SwipeRefreshLayout refreshnotificaciones;
     SharedPreferences prefs,asycprefs;
     LottieAnimationView animationnotification ;
@@ -74,10 +76,14 @@ public class listanotificacionesFragment extends Fragment {
         //arraylistanotificaciones = (ArrayList<Notificacion>) getArguments().getSerializable("arraynotificaciones");
 
         //refreshnotificaciones =(SwipeRefreshLayout) getActivity().findViewById(R.id.refreshnotificaciones);
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo = connectivityManager.getActiveNetworkInfo();
+        //ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        //NetworkInfo = connectivityManager.getActiveNetworkInfo();
+       // ConnectivityManager connectivityManager2 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        ConnectivityManager connectivityManager2 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+
+
+
 
         //prefs que contienen datos del usuario
         setcredentiasexist();
@@ -92,9 +98,22 @@ public class listanotificacionesFragment extends Fragment {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        if(test != null && test.isVisible() && NetworkInfo.isConnected() && NetworkInfo !=null) {
-                            //Ejecuta tu AsyncTask!
-                            reiniciarfragmentnotificacionesASYNC(rutusuario);
+                        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                        activeNetwork = cm.getActiveNetworkInfo();
+                        if (activeNetwork != null) {
+                            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                                // connected to wifi or cellphone data
+                                if (test != null && test.isVisible()) {
+                                    //Ejecuta tu AsyncTask!
+                                    // reiniciarfragment(rutusuario, contrasena);
+                                    reiniciarfragmentnotificacionesASYNC(rutusuario);
+                                }
+                            } else {
+                                //manejar excepccion
+                                Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                                snackBar.show();
+                            }
                         }
                     }
                 });
@@ -110,7 +129,6 @@ public class listanotificacionesFragment extends Fragment {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_listanotificaciones, container, false);
 
-
         listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
         animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
 
@@ -122,9 +140,18 @@ public class listanotificacionesFragment extends Fragment {
         }else{
             //if (Solicitudes.size() > 0) {
             final View vista = inflater.inflate(R.layout.elementonotificacion, null);
-
-
-            reiniciarfragmentnotificacionesASYNC(rutusuario);
+            cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            activeNetwork = cm.getActiveNetworkInfo();
+            if (activeNetwork != null) {
+                if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                    reiniciarfragmentnotificacionesASYNC(rutusuario);
+                } else {
+                    //dialog de aviso
+                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                            "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                    snackBar.show();
+                }
+            }
 
 
         }

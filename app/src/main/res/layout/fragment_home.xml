@@ -13,6 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+        <com.airbnb.lottie.LottieAnimationView
+
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            app:lottie_rawRes="@raw/pagoincorrecto"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="false"
+
+            ></com.airbnb.lottie.LottieAnimationView>
+
+
         <RelativeLayout
             android:layout_marginTop="40dp"
             android:layout_marginLeft="20dp"
@@ -133,44 +146,6 @@
 
 
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/tecnologia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                app:cardElevation="6dp"
-                android:backgroundTint="@color/colorAccent"
-                android:clickable="true"
-                app:cardCornerRadius="30dp"
-                android:layout_margin="12dp"
-                >
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="16dp"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:src="@drawable/contact"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"></ImageView>
-
-                    <TextView
-                        android:layout_marginTop="12dp"
-                        android:textColor="#593140"
-                        android:textSize="16sp"
-                        android:text="Tecnologia"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"></TextView>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-
-
 
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
@@ -181,8 +156,7 @@
                 android:backgroundTint="@color/colorAccentllight"
                 android:clickable="false"
                 app:cardCornerRadius="30dp"
-                android:layout_margin="12dp"
-                >
+                android:layout_margin="12dp">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -220,4 +194,8 @@
         </GridLayout>
 
     </LinearLayout>
+
+
+
+
 </ScrollView>

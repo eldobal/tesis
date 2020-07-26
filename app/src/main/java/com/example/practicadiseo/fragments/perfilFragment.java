@@ -41,6 +41,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,9 @@ public class perfilFragment extends Fragment {
     private ArrayList<Ciudad> listaciudades = new ArrayList<Ciudad>();
     private Button editardatos,editarpass;
     AwesomeValidation mAwesomeValidation = new AwesomeValidation(BASIC);
-    NetworkInfo networkInfo;
+    NetworkInfo activeNetwork;
+    ConnectivityManager cm ;
+
     public perfilFragment() {
         // Required empty public constructor
     }
@@ -86,8 +89,8 @@ public class perfilFragment extends Fragment {
         mAwesomeValidation.addValidation(getActivity(), R.id.nombre, "[a-zA-Z\\s]+", R.string.err_name);
         mAwesomeValidation.addValidation(getActivity(), R.id.apellido, "[a-zA-Z\\s]+", R.string.err_apellido);
         //realizar validacion
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        networkInfo = connectivityManager.getActiveNetworkInfo();
+     //  ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+      //  networkInfo = connectivityManager.getActiveNetworkInfo();
 
     }
 
@@ -107,7 +110,7 @@ public class perfilFragment extends Fragment {
        loadingdots2 =(LottieAnimationView) v.findViewById(R.id.loadindots2);
        prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
 
-        if (networkInfo != null && networkInfo.isConnected()) {
+
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
                     .build();
@@ -130,10 +133,7 @@ public class perfilFragment extends Fragment {
                 Glide.with(this).load(String.valueOf(personPhoto)).into(fotoperfil);
                 Toast.makeText(getContext(), "Nombre"+personFamilyName+" Correo: "+personEmail+ " id:" +personId+"", Toast.LENGTH_LONG).show();
             }
-        }else{
-            //no hay coneccion manejar excepcion
 
-        }
 
         ciudad.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -145,14 +145,27 @@ public class perfilFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-            //se comprueban que exista el rut y la contraseña
-            setcredentiasexist();
-            //se carga el spiner con las ciudades que hay en la base de datos
-            cargarspiner();
-            //se carga los datos del perfil para setearlos en los campos
-            cargardatosperfil();
-            //seccion de codigo en el cual se debera traer el json con los datos del usuario
-            //donde se setearan los datos a los edittext
+
+        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null) {
+            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                //se comprueban que exista el rut y la contraseña
+                setcredentiasexist();
+                //se carga el spiner con las ciudades que hay en la base de datos
+                cargarspiner();
+                //se carga los datos del perfil para setearlos en los campos
+                cargardatosperfil();
+                //seccion de codigo en el cual se debera traer el json con los datos del usuario
+                //donde se setearan los datos a los edittext
+            } else {
+                //manejar alert
+                Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                        "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                snackBar.show();
+            }
+        }
+
 
         ciudad.setEnabled(false);
         ciudad.setClickable(false);
@@ -182,8 +195,21 @@ public class perfilFragment extends Fragment {
                                 //metodo para hacer request de cambio de datos por parte del usuario
                                 if (mAwesomeValidation.validate()) {
 
-                                    if (networkInfo != null && networkInfo.isConnected()) {
-                                        actualizarperfil();
+                                        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                                        activeNetwork = cm.getActiveNetworkInfo();
+                                    if (activeNetwork != null) {
+                                        if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+
+                                            actualizarperfil();
+
+                                        } else {
+                                            //manejar alert
+                                            Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                                    "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                                            snackBar.show();
+                                        }
+                                    }
+
 
                                         {
                                             rut.setEnabled(false);
@@ -210,10 +236,6 @@ public class perfilFragment extends Fragment {
                                             ciudad.setFocusable(false);
                                             ciudad.setFocusableInTouchMode(false);
                                         }
-                                    }else{
-                                        //no hay coneccion manejar excepcion
-
-                                    }
 
 
                                 }

@@ -2,7 +2,10 @@ package com.example.practicadiseo.fragments;
 
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,15 +19,97 @@ import com.example.practicadiseo.R;
  */
 public class areasaludFragment extends Fragment {
 
+    CardView cardpodoliga,cardmasoterapia,cardpsicologia,cardgemoterapia;
+
     public areasaludFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_areasalud, container, false);
+        View v = inflater.inflate(R.layout.fragment_areasalud, container, false);
+        cardpodoliga =(CardView) v.findViewById(R.id.cardpodologia);
+        cardmasoterapia =(CardView) v.findViewById(R.id.cardmasajista);
+        cardpsicologia=(CardView) v.findViewById(R.id.cardpsicologia);
+        cardgemoterapia =(CardView) v.findViewById(R.id.cardgemoterapia);
+
+        cardpodoliga.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int idrubro = 3;
+                listabuscarrubroFragment listabuscarrubroFragment = new listabuscarrubroFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("idRubro", idrubro);
+                listabuscarrubroFragment.setArguments(bundle);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container, listabuscarrubroFragment);
+                fragmentTransaction.addToBackStack(null);
+                //Terminar transición y nos vemos en el fragmento de destino
+                fragmentTransaction.commit();
+            }
+        });
+
+        cardmasoterapia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //metodo para que se envie el id del rubro el cual sera estatico para enviar a la lista de trabajadores
+                int idrubro = 6;
+                listabuscarrubroFragment listabuscarrubroFragment = new listabuscarrubroFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("idRubro", idrubro);
+                listabuscarrubroFragment.setArguments(bundle);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container, listabuscarrubroFragment);
+                fragmentTransaction.addToBackStack(null);
+                // Terminar transición y nos vemos en el fragmento de destino
+                fragmentTransaction.commit();
+            }
+        });
+
+        cardpsicologia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //metodo para que se envie el id del rubro el cual sera estatico para enviar a la lista de trabajadores
+                int idrubro = 7;
+                listabuscarrubroFragment listabuscarrubroFragment = new listabuscarrubroFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("idRubro", idrubro);
+                listabuscarrubroFragment.setArguments(bundle);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container, listabuscarrubroFragment);
+                fragmentTransaction.addToBackStack(null);
+                // Terminar transición y nos vemos en el fragmento de destino
+                fragmentTransaction.commit();
+            }
+        });
+
+        cardgemoterapia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //metodo para que se envie el id del rubro el cual sera estatico para enviar a la lista de trabajadores
+                int idrubro = 8;
+                listabuscarrubroFragment listabuscarrubroFragment = new listabuscarrubroFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt("idRubro", idrubro);
+                listabuscarrubroFragment.setArguments(bundle);
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.container, listabuscarrubroFragment);
+                fragmentTransaction.addToBackStack(null);
+                // Terminar transición y nos vemos en el fragmento de destino
+                fragmentTransaction.commit();
+            }
+        });
+
+
+        return  v;
     }
 }

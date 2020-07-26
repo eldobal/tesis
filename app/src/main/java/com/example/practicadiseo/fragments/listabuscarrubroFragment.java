@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -31,6 +33,7 @@ import com.example.practicadiseo.activitys.menuActivity;
 import com.example.practicadiseo.clases.Adaptadortrabajadores;
 import com.example.practicadiseo.clases.UsuarioTrabajador;
 import com.example.practicadiseo.interfaces.tesisAPI;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +61,8 @@ public class listabuscarrubroFragment extends Fragment {
     ArrayList<UsuarioTrabajador> listatrabajadoresporrubo = new ArrayList<UsuarioTrabajador>();
     Spinner spinnerordenar ;
     String rutusuario="",contrasena="";
+    NetworkInfo activeNetwork;
+    ConnectivityManager cm ;
 
     public listabuscarrubroFragment() {
         // Required empty public constructor
@@ -97,10 +102,21 @@ public class listabuscarrubroFragment extends Fragment {
         }
         int idrubro = datosRecuperados.getInt("idRubro");
 
-        if(!rutusuario.isEmpty() || !contrasena.isEmpty()){
+        if(!rutusuario.isEmpty() || !contrasena.isEmpty() ){
 
-            //carga de los trabajdores por el rubro y por la ciudad en la cual se encuentra el usuario
-            cargartrabajadores(idrubro,idciudad);
+            cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            activeNetwork = cm.getActiveNetworkInfo();
+            if (activeNetwork != null) {
+                if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                    //carga de los trabajdores por el rubro y por la ciudad en la cual se encuentra el usuario
+                    cargartrabajadores(idrubro, idciudad);
+
+                } else {
+                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                            "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                    snackBar.show();
+                }
+            }
 
             //refresh para recargar la lista de los trabajadores
             refreshLayouttrabajadores.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -112,7 +128,19 @@ public class listabuscarrubroFragment extends Fragment {
                         }
                         @Override
                         public void onFinish() {
-                            cargartrabajadores(idrubro,idciudad);
+                            cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                            activeNetwork = cm.getActiveNetworkInfo();
+                            if (activeNetwork != null) {
+                                if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                                    //carga de los trabajdores por el rubro y por la ciudad en la cual se encuentra el usuario
+                                    cargartrabajadores(idrubro, idciudad);
+                                } else {
+                                    //manejar alert
+                                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                            "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                                    snackBar.show();
+                                }
+                            }
                         }
                     }.start();
                 }
@@ -154,6 +182,8 @@ public class listabuscarrubroFragment extends Fragment {
 
                 }
             });
+
+
 
         }else{updateDetail();}
 

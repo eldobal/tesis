@@ -71,12 +71,14 @@ public class solicitudeFragment extends Fragment  {
     ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudesterminadas = new ArrayList<Solicitud>();
-    SwipeRefreshLayout refreshLayout,refreshLayoutterminadas;
+
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     Adaptador ads,ads2;
-    NetworkInfo NetworkInfo;
     Spinner spinneractivas,spinnerterminadas;
     TextView notfound;
+    ConnectivityManager cm;
+    NetworkInfo activeNetwork;
+
     public solicitudeFragment() {
         // Required empty public constructor
     }
@@ -89,8 +91,8 @@ public class solicitudeFragment extends Fragment  {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo = connectivityManager.getActiveNetworkInfo();
+       // ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+       // NetworkInfo = connectivityManager.getActiveNetworkInfo();
 
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
@@ -103,26 +105,52 @@ public class solicitudeFragment extends Fragment  {
         listasolicitudactivasinterna = new ArrayList<Solicitud>();
 
 
+
+
+
+
         solicitudeFragment test = (solicitudeFragment) getActivity().getSupportFragmentManager().findFragmentByTag("solicitudtag");
 
         final Handler handler = new Handler();
         Timer timer = new Timer();
-
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        if(test != null && test.isVisible() && NetworkInfo.isConnected()) {
-                            //Ejecuta tu AsyncTask!
-                            // reiniciarfragment(rutusuario, contrasena);
-                            reiniciarfragmentterminadas(rutusuario, contrasena);
+                        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                        activeNetwork = cm.getActiveNetworkInfo();
+                        if (activeNetwork != null) {
+                            // connected to the internet
+                            if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE )  {
+                                // connected to wifi or cellphone data
+                                if(test != null && test.isVisible()) {
+                                    //Ejecuta tu AsyncTask!
+                                    // reiniciarfragment(rutusuario, contrasena);
+                                    reiniciarfragmentterminadas(rutusuario, contrasena);
+                                }
+
+                            }else{
+                                Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                        "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                                snackBar.show();
+                            }
+
+                        } else {
+                            // not connected to the internet manejar dialog
                         }
                     }
                 });
             }
         };
         timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
+
+
+
+
+
+
+
 
     }
 
@@ -163,7 +191,7 @@ public class solicitudeFragment extends Fragment  {
         spinneractivas.setAdapter(adapter);
         spinnerterminadas.setAdapter(adapter2);
 
-            if (rutusuario.isEmpty() || contrasena.isEmpty()){
+            if (rutusuario.isEmpty() || contrasena.isEmpty()  ){
                 //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
                 Intent intent = new Intent(getContext(), login2Activity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -172,74 +200,85 @@ public class solicitudeFragment extends Fragment  {
                 getActivity().finish();
                 Toast.makeText(getContext(), "el Usuario no es valido ", Toast.LENGTH_LONG).show();
             }else {
+                cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                activeNetwork = cm.getActiveNetworkInfo();
+                if (activeNetwork != null) {
+                    if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
 
-                notfound =(TextView) v.findViewById(R.id.txtnotfoundlistasolicitudes);
-                notfound.setText("");
+                        notfound = (TextView) v.findViewById(R.id.txtnotfoundlistasolicitudes);
+                        notfound.setText("");
 
-                //if (Solicitudes.size() > 0) {
-                final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
+                        //if (Solicitudes.size() > 0) {
+                        final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
 
-                reiniciarfragmentterminadas(rutusuario, contrasena);
+                        reiniciarfragmentterminadas(rutusuario, contrasena);
 
-                spinneractivas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        switch(position) {
-                            case 0:
-                                filtro=0;
-                                ordenarlista(0);
-                                break;
-                            case 1:
-                                filtro=1;
-                                ordenarlista(1);
-                                break;
-                            case 2:
-                                filtro=2;
-                                ordenarlista(2);
-                                break;
-                            case 3:
-                                filtro=3;
-                                ordenarlista(3);
-                                break;
-                            case 4:
-                                filtro=4;
-                                ordenarlista(4);
-                                break;
-                        }
+                        spinneractivas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                switch (position) {
+                                    case 0:
+                                        filtro = 0;
+                                        ordenarlista(0);
+                                        break;
+                                    case 1:
+                                        filtro = 1;
+                                        ordenarlista(1);
+                                        break;
+                                    case 2:
+                                        filtro = 2;
+                                        ordenarlista(2);
+                                        break;
+                                    case 3:
+                                        filtro = 3;
+                                        ordenarlista(3);
+                                        break;
+                                    case 4:
+                                        filtro = 4;
+                                        ordenarlista(4);
+                                        break;
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+                        spinnerterminadas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                switch (position) {
+                                    case 0:
+                                        filtroterminada = 0;
+                                        ordenarlistaterminadas(0);
+                                        break;
+                                    case 1:
+                                        filtroterminada = 1;
+                                        ordenarlistaterminadas(1);
+                                        break;
+                                    case 2:
+                                        filtroterminada = 2;
+                                        ordenarlistaterminadas(2);
+                                        break;
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
+
+                    } else {
+                        //manejar excepcion
+                        Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                        snackBar.show();
                     }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-
-                spinnerterminadas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        switch(position) {
-                            case 0:
-                                filtroterminada=0;
-                                ordenarlistaterminadas(0);
-                                break;
-                            case 1:
-                                filtroterminada=1;
-                                ordenarlistaterminadas(1);
-                                break;
-                            case 2:
-                                filtroterminada=2;
-                                ordenarlistaterminadas(2);
-                                break;
-                        }
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-
-
+                }
 
             }
 /*

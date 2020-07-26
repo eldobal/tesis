@@ -78,7 +78,8 @@ public interface tesisAPI {
                               @Query("Fono") String Fono,
                               @Query("id_idCiudad") int id_idCiudad,
                               @Query("id_EstadoUsuario") int id_EstadoUsuario,
-                              @Query("id_TipoUsuario") int id_TipoUsuario
+                              @Query("id_TipoUsuario") int id_TipoUsuario,
+                              @Body() String foto
     );
 
 

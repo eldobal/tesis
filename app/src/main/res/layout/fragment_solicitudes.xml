@@ -209,10 +209,6 @@
 
 
 
-                            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                                android:id="@+id/refreshterminadas"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
 
                                 <RelativeLayout
                                     android:layout_width="match_parent"
@@ -261,7 +257,7 @@
                                     </TextView>
 
                                     <ListView
-                                        android:layout_marginTop="25dp"
+
                                         android:layout_marginBottom="-20dp"
                                         android:id="@+id/listadosolicitudescliente"
                                         android:layout_width="match_parent"
@@ -274,7 +270,7 @@
                                 </RelativeLayout>
 
 
-                            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 
 

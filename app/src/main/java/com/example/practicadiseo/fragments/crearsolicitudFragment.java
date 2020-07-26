@@ -92,7 +92,8 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     private final static String CHANNEL_ID = "NOTIFICACION";
     private final static int NOTIFICACION_ID = 0;
     String latorigen="",longorigen="",contrasena="",rutusuario="";
-
+    NetworkInfo activeNetwork;
+    ConnectivityManager cm ;
     AlertDialog dialog;
     public crearsolicitudFragment() {
         // Required empty public constructor
@@ -101,8 +102,9 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+       // ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+       // NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
     }
 
     @Override
@@ -216,21 +218,31 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                             snackBar.show();
                         }else{
                             //se verifica que la descripcion tenga una extencion de 300 caracteres maximos
-                            if(descripcionfinal.length() < 300){
+                            if(descripcionfinal.length() < 300) {
 
                                 btncrearsolicitud.setClickable(false);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                                 LayoutInflater inflater = getLayoutInflater();
-                                View viewsync = inflater.inflate(R.layout.alerdialogloading,null);
+                                View viewsync = inflater.inflate(R.layout.alerdialogloading, null);
                                 builder.setView(viewsync);
                                 dialog = builder.create();
                                 dialog.setCancelable(false);
                                 dialog.show();
                                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                                 //metodo para crear la solicitud con los parametros
-                                crearsolicitud();
-
-                            }else{  Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                                activeNetwork = cm.getActiveNetworkInfo();
+                                if (activeNetwork != null) {
+                                if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
+                                    crearsolicitud();
+                                }else{
+                                    Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                            "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
+                                    snackBar.show();
+                                }
+                            }
+                            }else{
+                                Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
                                     "La descripcion no debe tener mas de 300 caracteristicas", Snackbar.LENGTH_LONG);
                                 snackBar.show();
                             }
