@@ -192,7 +192,7 @@ public class onepayFragment extends Fragment  {
                                     LottieAnimationView lottieAnimationView = (LottieAnimationView) viewsync.findViewById(R.id.idanimacionpagowebpay);
                                     lottieAnimationView.setAnimation(R.raw.pagoincorrecto);
                                     TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-                                    texto.setText("Lamentablemente el pago ha sido rechazado. por fabor intentelo nuevamente!. en caso de que el problema persista por fabor pagar en efectivo o comunicarse con la linea de atencion");
+                                    texto.setText("Lamentablemente el pago ha sido rechazado. por fabor intentelo nuevamente!. en caso de que el problema persista por favor pagar en efectivo o comunicarse con la linea de atencion");
                                     Button btncerrar = (Button) viewsync.findViewById(R.id.btnalertperfilexito);
                                     btncerrar.setOnClickListener(new View.OnClickListener() {
                                         @Override

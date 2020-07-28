@@ -1,5 +1,7 @@
 package com.example.practicadiseo.interfaces;
 
+import androidx.annotation.NonNull;
+
 import com.example.practicadiseo.clases.Ciudad;
 import com.example.practicadiseo.clases.Notificacion;
 import com.example.practicadiseo.clases.Solicitud;
@@ -11,6 +13,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -70,16 +73,17 @@ public interface tesisAPI {
 
     //api que se ocupa en registrar cliente
     @POST("api/UsuarioAPI")
-    Call<Usuario> PostUsuario(@Query("RUT") String RUT,
+    Call<String> PostUsuarioCliente(@Query("RUTU") String RUTU,
                               @Query("Nombre") String Nombre,
                               @Query("Apellido") String Apellido,
-                              @Query("Correo") String Correo,
-                              @Query("Contrasena") String Contrasena,
                               @Query("Fono") String Fono,
+                              @Query("Contrasena") String Contrasena,
+                              @Query("Correo") String Correo,
                               @Query("id_idCiudad") int id_idCiudad,
                               @Query("id_EstadoUsuario") int id_EstadoUsuario,
                               @Query("id_TipoUsuario") int id_TipoUsuario,
                               @Body() String foto
+
     );
 
 

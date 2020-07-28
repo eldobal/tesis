@@ -12,7 +12,7 @@ public class Usuario {
     private String Contrasena;
     private String Fono;
     private String Foto;
-
+    private int Por_Pagar;
 
     @SerializedName("id_idCiudad")
     private int idCiudad;
@@ -32,6 +32,7 @@ public class Usuario {
         this.idCiudad = idCiudad;
         this.idEstado = idEstado;
         this.idTipo = idTipo;
+        this.Por_Pagar = Por_Pagar;
         this.Foto=Foto;
     }
 
@@ -77,5 +78,13 @@ public class Usuario {
 
     public void setFoto(String foto) {
         Foto = foto;
+    }
+
+    public int getPor_Pagar() {
+        return Por_Pagar;
+    }
+
+    public void setPor_Pagar(int por_Pagar) {
+        Por_Pagar = por_Pagar;
     }
 }
