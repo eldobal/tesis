@@ -116,7 +116,7 @@
                 android:background="@drawable/bg_ripple"
                 android:fontFamily="sans-serif-condensed-medium"
                 android:text="Detalle"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="15dp">
 
             </Button>

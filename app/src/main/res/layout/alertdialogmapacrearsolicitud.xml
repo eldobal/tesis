@@ -65,7 +65,7 @@
             android:id="@+id/btnutilizarotra"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_ripple"
+            android:background="@drawable/bg_btnwebpay"
             android:text="Utilizar Otra">
         </Button>
 

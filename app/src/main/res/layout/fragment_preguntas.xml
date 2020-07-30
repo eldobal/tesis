@@ -38,19 +38,16 @@
 
 
         <GridLayout
-
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-           >
-
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:id="@+id/cardcontacto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/usericon"
-                android:layout_marginTop="40dp">
-
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_below="@id/usericon">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardtecnicoinformatico"
@@ -74,21 +71,21 @@
 
 
                         <LinearLayout
-                        android:id="@+id/contacto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:fontFamily="sans-serif-condensed-medium"
+                            android:id="@+id/contacto"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="Solicitudes "
-                            android:textAlignment="center"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="20dp"></TextView>
+                            android:layout_height="wrap_content">
 
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-condensed-medium"
+                                android:gravity="center_horizontal"
+                                android:text="Solicitudes "
+                                android:textAlignment="center"
+                                android:textColor="@color/colorPrimary"
+                                android:textSize="20dp"></TextView>
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/txtemailcontato"
@@ -120,15 +117,15 @@
                             android:layout_marginTop="5dp">
 
                             <TextView
-                                android:inputType="textMultiLine"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
+                                android:inputType="textMultiLine"
                                 android:text="Lo primero que tiene que hacer es dirijirse hacia la barra de navegacion que se encuantra en el parte inferior de la aplicacion y seleccionar el icono con forma
-                                de casa debe seleccionar un area de interes y luego selecionar el rubro especifico que quiera, despues de hacerlo se le desplegara una lista con los trabajadores a lo cual debera seleccionar el que usted quiera para poder empezar la solicitud"
+de casa debe seleccionar un area de interes y luego selecionar el rubro especifico que quiera, despues de hacerlo se le desplegara una lista con los trabajadores a lo cual debera seleccionar el que usted quiera para poder empezar la solicitud"
                                 android:textAlignment="center"
                                 android:textColor="@color/colordark"
-                                android:textSize="18dp"></TextView>
+                                android:textSize="16dp"></TextView>
 
 
                         </LinearLayout>
@@ -147,7 +144,7 @@
                                 android:gravity="center_horizontal"
                                 android:text="Como puedo cambiar mi contraseña?"
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
+                                android:textColor="@color/colorPrimary"
                                 android:textSize="16dp">
 
                             </TextView>
@@ -162,14 +159,14 @@
                             android:layout_height="wrap_content">
 
                             <TextView
-                                android:inputType="textMultiLine"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
+                                android:inputType="textMultiLine"
                                 android:text="tiene que dirigirse a el icono en la barra inferior con forma de persona y devera selecionar la opcion llamada CAMBIAR CONTRASEÑA lo cual lo llevara al apartado correspondiente "
                                 android:textAlignment="center"
                                 android:textColor="@color/colordark"
-                                android:textSize="18dp"></TextView>
+                                android:textSize="16dp"></TextView>
                         </LinearLayout>
 
                         <LinearLayout
@@ -184,9 +181,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Email Contacto"
+                                android:text="Que hacer si ocurre un error al pagar la solicitud?"
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
+                                android:textColor="@color/colorPrimary"
                                 android:textSize="16dp">
 
                             </TextView>
@@ -205,10 +202,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Empresa_Empresa@Empresa.cl"
+                                android:text="Si el error persiste al momento de pagar efectúe pago en efectivo. Y luego comuníquese con su banco para solucionar su problema"
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="18dp"></TextView>
+                                android:textColor="@color/colordark"
+                                android:textSize="16dp"></TextView>
 
 
                         </LinearLayout>
@@ -225,29 +222,31 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Telefono Contacto"
+                                android:text="Que debo hacer cuando tengo un problema con un trabajador?"
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
+                                android:textColor="@color/colorPrimary"
                                 android:textSize="16dp">
 
                             </TextView>
 
 
-                        </LinearLayout><LinearLayout
-                        android:id="@+id/contacto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        </LinearLayout>
 
-                        <TextView
+                        <LinearLayout
+                            android:id="@+id/contacto"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="Contacto"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="20dp"></TextView>
+                            android:layout_height="wrap_content">
 
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:text="Si ha tenido o tiene algun problemas con alguno de los trabajadores. Contactese inmediatamente con nuestro equipo para realizar un seguimiento del caso"
+                                android:textAlignment="center"
+                                android:textColor="@color/colordark"
+                                android:textSize="16dp"></TextView>
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/txtemailcontato"
@@ -261,9 +260,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Email Contacto"
+                                android:text="Que hacer si el precio de una solicitud no es el acordado entre ambas partes"
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
+                                android:textColor="@color/colorPrimary"
                                 android:textSize="16dp">
 
                             </TextView>
@@ -282,10 +281,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Empresa_Empresa@Empresa.cl"
+                                android:text="debera contactarse con nuestro equipo para realizar el seguimiento e investigacion para llegar a una resolucion justa del caso."
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="18dp"></TextView>
+                                android:textColor="@color/colordark"
+                                android:textSize="16dp"></TextView>
 
 
                         </LinearLayout>
@@ -302,122 +301,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Telefono Contacto"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16dp">
-
-                            </TextView>
-
-
-                        </LinearLayout><LinearLayout
-                        android:id="@+id/contacto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="Contacto"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="20dp"></TextView>
-
-                    </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/txtemailcontato"
-                            android:layout_width="match_parent"
-
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/contacto"
-                            android:layout_marginTop="20dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Email Contacto"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16dp">
-
-                            </TextView>
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/txtemailcontato2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/txtemailcontato"
-                            android:layout_marginTop="5dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Empresa_Empresa@Empresa.cl"
+                                android:text="Es obligacion dejar un comentario al trabajador al termino de la solicitud?"
                                 android:textAlignment="center"
                                 android:textColor="@color/colorPrimary"
-                                android:textSize="18dp"></TextView>
-
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:id="@+id/txttelefonocontacto"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/txtemailcontato2"
-                            android:layout_marginTop="15dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Telefono Contacto"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16dp">
-
-                            </TextView>
-
-
-                        </LinearLayout><LinearLayout
-                        android:id="@+id/contacto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="Contacto"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="20dp"></TextView>
-
-                    </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/txtemailcontato"
-                            android:layout_width="match_parent"
-
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/contacto"
-                            android:layout_marginTop="20dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Email Contacto"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
                                 android:textSize="16dp">
 
                             </TextView>
@@ -426,199 +312,24 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/txtemailcontato2"
+                            android:id="@+id/contacto"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/txtemailcontato"
-                            android:layout_marginTop="5dp">
+                            android:layout_height="wrap_content">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_horizontal"
-                                android:text="Empresa_Empresa@Empresa.cl"
+                                android:text="No es un requisito dejar un comentario al finalizar la solicitud, lo que si es necesario y que ayuda a mejorar nuestros registros es que califique la atencion de la solitud."
                                 android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="18dp"></TextView>
-
+                                android:textColor="@color/colordark"
+                                android:textSize="16dp"></TextView>
 
                         </LinearLayout>
 
 
-                        <LinearLayout
-                            android:id="@+id/txttelefonocontacto"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/txtemailcontato2"
-                            android:layout_marginTop="15dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Telefono Contacto"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16dp">
-
-                            </TextView>
 
 
-                        </LinearLayout><LinearLayout
-                        android:id="@+id/contacto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="Contacto"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="20dp"></TextView>
-
-                    </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/txtemailcontato"
-                            android:layout_width="match_parent"
-
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/contacto"
-                            android:layout_marginTop="20dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Email Contacto"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16dp">
-
-                            </TextView>
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/txtemailcontato2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/txtemailcontato"
-                            android:layout_marginTop="5dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Empresa_Empresa@Empresa.cl"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="18dp"></TextView>
-
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:id="@+id/txttelefonocontacto"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/txtemailcontato2"
-                            android:layout_marginTop="15dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Telefono Contacto"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16dp">
-
-                            </TextView>
-
-
-                        </LinearLayout><LinearLayout
-                        android:id="@+id/contacto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="Contacto"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="20dp"></TextView>
-
-                    </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/txtemailcontato"
-                            android:layout_width="match_parent"
-
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/contacto"
-                            android:layout_marginTop="20dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Email Contacto"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16dp">
-
-                            </TextView>
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/txtemailcontato2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/txtemailcontato"
-                            android:layout_marginTop="5dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Empresa_Empresa@Empresa.cl"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimary"
-                                android:textSize="18dp"></TextView>
-
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:id="@+id/txttelefonocontacto"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/txtemailcontato2"
-                            android:layout_marginTop="15dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:text="Telefono Contacto"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorPrimaryDark"
-                                android:textSize="16dp">
-
-                            </TextView>
-
-
-                        </LinearLayout>
 
                     </LinearLayout>
 

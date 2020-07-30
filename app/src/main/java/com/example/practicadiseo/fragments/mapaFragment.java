@@ -84,7 +84,9 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
                         addresslist = geocoder.getFromLocationName(location, 1);
 
                     } catch (IOException e) {
-                        Toast.makeText(getActivity(), "Revise su DIRECCION ", Toast.LENGTH_LONG).show();
+                        Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
+                                "Revise la direccion.", Snackbar.LENGTH_LONG);
+                        snackBar.show();
                     }
                 }
                 if (addresslist.size() != 0) {

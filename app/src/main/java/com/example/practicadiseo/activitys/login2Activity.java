@@ -51,10 +51,10 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     private GoogleSignInClient googleSignInClient;
     SweetAlertDialog dp;
     LottieAnimationView loading;
-    SharedPreferences prefs,asycprefs;
+    SharedPreferences prefs,asycprefs,googlepref;
     private EditText txtrut,txtpass;
     private Button btnlogin,btnregister;
-    private String usuarioconectado="",contraseñausuarioconectado="";
+    private String usuarioconectado="",contraseñausuarioconectado="",tokengoogle="";
     int idciudad=0,azynctiempo =0;
     private SignInButton signInButton;
 
@@ -74,7 +74,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         builderlogin.setView(viewlogin);
         AlertDialog dialog = builderlogin.create();
         dialog.show();
-
+        googlepref = getSharedPreferences("googlepref", Context.MODE_PRIVATE);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         asycprefs = getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -103,6 +103,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         txtpass = (EditText) findViewById(R.id.txtpassword);
         btnlogin = (Button) findViewById(R.id.btnlogin);
         btnregister = (Button) findViewById(R.id.btnregistrarse);
+
 
         if (networkInfo != null && networkInfo.isConnected()) {
             // Si hay conexión a Internet en este momento
@@ -294,6 +295,9 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             if(account!=null){
+
+
+
             // Signed in successfully, show authenticated UI.
             goMainScreen();}
         //sino muestra el error
@@ -315,9 +319,6 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
     }
 
-
-
-
     private void saveOnazyncPreferences(int tiempoasync) {
         SharedPreferences.Editor editor = asycprefs.edit();
         editor.putInt("tiempo", tiempoasync);
@@ -333,12 +334,33 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
         }
     }
 
-    private int gettiempoasync() {
-        return asycprefs.getInt("tiempo", 0);
+
+    private void savegoogleacount(String token) {
+        SharedPreferences.Editor editor = googlepref.edit();
+        editor.putString("Tokengoogle", token);
+        //linea la cual guarda todos los valores en la pref antes de continuar
+        editor.commit();
+        editor.apply();
+    }
+
+    private String gettokengoogle() {
+        return googlepref.getString("Tokengoogle", "");
     }
 
 
+    private void googleacountexist() {
+        String tokeng = gettokengoogle();
+        if(!tokeng.isEmpty()){
+            //si se encuentra el token wardado
+            tokengoogle = tokeng;
+        }
 
+    }
+
+
+    private int gettiempoasync() {
+        return asycprefs.getInt("tiempo", 0);
+    }
 
 
 }

@@ -28,7 +28,7 @@
         android:textColor="@color/colordark"
         android:gravity="center"
         android:textSize="20dp"
-        android:text="Esta a punto de dar por finalizada la solicitud. Tiene que colocar "
+        android:text="Esta a punto de dar por finalizada la solicitud. Tiene que colocar  "
         >
 
     </TextView>

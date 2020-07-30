@@ -50,7 +50,7 @@
             android:id="@+id/alertbtn15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_btnsync"
+            android:background="@drawable/bg_btnwebpay"
             android:text="15 Segundos">
         </Button>
 
@@ -60,7 +60,7 @@
             android:id="@+id/alertbtn30"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_btnsync"
+            android:background="@drawable/bg_btnwebpay"
             android:text="30 Segundos">
         </Button>
 
@@ -88,7 +88,7 @@
             android:id="@+id/alertbtn1m"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_btnsync"
+            android:background="@drawable/bg_btnwebpay"
             android:text="1 minuto">
         </Button>
 
@@ -102,7 +102,7 @@
             android:id="@+id/alertbtn5m"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_btnsync"
+            android:background="@drawable/bg_btnwebpay"
             android:text="5 minutos">
         </Button>
 
@@ -119,7 +119,7 @@
         android:id="@+id/alertbtnguardarcambios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_ripple"
+        android:background="@drawable/bg_btnsync"
         android:text="Guardar Cambios">
     </Button>
 
@@ -131,7 +131,7 @@
         android:id="@+id/alertbtncancelarcambios"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_ripplepass"
+        android:background="@drawable/bg_btnwebpay"
         android:text="Cancelar"/>
 
 </LinearLayout>

@@ -349,7 +349,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                             }
                         });
 
-                        Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                     //   Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                     } else {
                         dialog.dismiss();
                         SolicitudDb solicitud = response.body();
@@ -397,7 +397,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                         }
                     });
 
-                    Toast.makeText(getContext(), "EL ERROR ESTA ACA: "+t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(getContext(), "EL ERROR ESTA ACA: "+t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     dialog.dismiss();
                     updateDetail();
                 }

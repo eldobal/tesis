@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -113,61 +114,65 @@ public class register2Activity extends AppCompatActivity {
         });
 
 
-        //validaciones hechas con awesome validation
-     // mAwesomeValidation.addValidation(this, R.id.rut, , R.string.err_rut);
+        //validaciones hechas con awesome validationandroid.util.Patterns.EMAIL_ADDRESS
+     // mAwesomeValidation.addValidation(this, R.id.rut, , R.string.err_rut);"^[0-9]{9}$"
         //se valida como +569 y el numero de 8 digitos del usuario
-        mAwesomeValidation.addValidation(this, R.id.telefono, "^[0-9]{9}$", R.string.err_fono);
-       // mAwesomeValidation.addValidation(this, R.id.email, android.util.Patterns.EMAIL_ADDRESS, R.string.err_correo);
+        mAwesomeValidation.addValidation(this, R.id.telefono,"^[0-9]{9}$", R.string.err_fono);
+        mAwesomeValidation.addValidation(this, R.id.email, android.util.Patterns.EMAIL_ADDRESS, R.string.err_correo);
         mAwesomeValidation.addValidation(this, R.id.nombre, "[a-zA-Z\\s]+", R.string.err_name);
         mAwesomeValidation.addValidation(this, R.id.apellido, "[a-zA-Z\\s]+", R.string.err_apellido);
         //validacion contraseñas con alto nivel de dificultad
-       // String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
-       // mAwesomeValidation.addValidation(this, R.id.password, regexPassword, R.string.err_contraseña);
-       // mAwesomeValidation.addValidation(this, R.id.password2, regexPassword, R.string.err_contraseña);
+        String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}";
+        mAwesomeValidation.addValidation(this, R.id.password, regexPassword, R.string.err_contraseña);
+        mAwesomeValidation.addValidation(this, R.id.password2, regexPassword, R.string.err_contraseña);
 
 
         btnregistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAwesomeValidation.validate()) {
-                    if(validaRut(txtrut.getText().toString())) {
-                        if ((txtcontraseña.getText().toString().equals(txtcontraseña2.getText().toString()))) {
-                           if(!imagenstring.equals("")) {
-                                if (networkInfo != null && networkInfo.isConnected()) {
 
 
-                                    String RUT = txtrut.getText().toString();
-                                    String Correo = txtemail.getText().toString();
-                                    String Nombre = txtnombre.getText().toString();
-                                    String Apellido = txtapellidos.getText().toString();
-                                    String Fono = txttelefono.getText().toString();
-                                    String Contrasena = txtcontraseña2.getText().toString();
-                                    int id_idCiudad = idCiudad;
+                    if (mAwesomeValidation.validate()) {
+                        if(validaRut(txtrut.getText().toString())) {
+                            if ((txtcontraseña.getText().toString().equals(txtcontraseña2.getText().toString()))) {
+                                if(!imagenstring.equals("")) {
+                                    if (networkInfo != null && networkInfo.isConnected()) {
 
-                                    crearusuario(RUT,Nombre,Apellido,Fono,Contrasena,Correo,id_idCiudad);
 
-                                } else {
-                                    //manejar excepcion
+                                        String RUT = txtrut.getText().toString();
+                                        String Correo = txtemail.getText().toString();
+                                        String Nombre = txtnombre.getText().toString();
+                                        String Apellido = txtapellidos.getText().toString();
+                                        String Fono = txttelefono.getText().toString();
+                                        String Contrasena = txtcontraseña2.getText().toString();
+                                        int id_idCiudad = idCiudad;
 
+                                        crearusuario(RUT,Nombre,Apellido,Fono,Contrasena,Correo,id_idCiudad);
+
+                                    } else {
+                                        //manejar excepcion
+
+                                    }
+                                }else{
+                                    Toast.makeText(getApplicationContext(), "seleccione una imagen", Toast.LENGTH_LONG).show();
                                 }
-                           }else{
-                                Toast.makeText(getApplicationContext(), "seleccione una imagen", Toast.LENGTH_LONG).show();
-                           }
 
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Complete los campos Correctamente", Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Complete los campos Correctamente", Toast.LENGTH_LONG).show();
+                            }
+
+
+
+
+                        }else{
+                            Toast.makeText(getApplicationContext(), "El Rut No es valido ", Toast.LENGTH_LONG).show();
                         }
 
-
-
-
-                    }else{
-                        Toast.makeText(getApplicationContext(), "El Rut No es valido ", Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(getApplicationContext(), "error validate", Toast.LENGTH_LONG).show();
                     }
 
-           }else {
-                  Toast.makeText(getApplicationContext(), "error validate", Toast.LENGTH_LONG).show();
-               }
+
 
 
 
@@ -457,9 +462,6 @@ public class register2Activity extends AppCompatActivity {
             return null;
         }
     }
-
-
-
 
     private String getuserusuairoprefs(){
 

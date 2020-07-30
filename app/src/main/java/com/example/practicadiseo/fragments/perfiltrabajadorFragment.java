@@ -174,7 +174,7 @@ public class perfiltrabajadorFragment extends Fragment {
                         });
 
 
-                        Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                    //    Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {

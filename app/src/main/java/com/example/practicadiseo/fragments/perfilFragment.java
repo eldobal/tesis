@@ -84,13 +84,14 @@ public class perfilFragment extends Fragment {
 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mAwesomeValidation.addValidation(getActivity(), R.id.telefonoperfil, "^[+]?[0-9]{10,13}$", R.string.err_fono);
+
+
+        mAwesomeValidation.addValidation(getActivity(), R.id.telefonoperfil, "^[0-9]{9}$", R.string.err_fono);
         mAwesomeValidation.addValidation(getActivity(), R.id.email, android.util.Patterns.EMAIL_ADDRESS, R.string.err_correo);
         mAwesomeValidation.addValidation(getActivity(), R.id.nombre, "[a-zA-Z\\s]+", R.string.err_name);
         mAwesomeValidation.addValidation(getActivity(), R.id.apellido, "[a-zA-Z\\s]+", R.string.err_apellido);
         //realizar validacion
-     //  ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-      //  networkInfo = connectivityManager.getActiveNetworkInfo();
+
 
     }
 
@@ -110,6 +111,9 @@ public class perfilFragment extends Fragment {
        loadingdots2 =(LottieAnimationView) v.findViewById(R.id.loadindots2);
        prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
 
+
+        //  ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        //  networkInfo = connectivityManager.getActiveNetworkInfo();
 
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
@@ -356,7 +360,7 @@ public class perfilFragment extends Fragment {
                             }
                         });
 
-                        Toast.makeText(getContext(), "error cargardatos:"+response.code(), Toast.LENGTH_LONG).show();
+                      //  Toast.makeText(getContext(), "error cargardatos:"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {
@@ -406,7 +410,7 @@ public class perfilFragment extends Fragment {
                         }
                     });
 
-                    Toast.makeText(getContext(), "errorcargardatoscargardatos :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(getContext(), "errorcargardatoscargardatos :"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
     }
@@ -442,7 +446,7 @@ public class perfilFragment extends Fragment {
                                 dialog5.dismiss();
                             }
                         });
-                        Toast.makeText(getContext(), "errorspinner :"+response.code(), Toast.LENGTH_LONG).show();
+                    //    Toast.makeText(getContext(), "errorspinner :"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {
@@ -461,15 +465,13 @@ public class perfilFragment extends Fragment {
                         ArrayAdapter<Ciudad> a = new ArrayAdapter<Ciudad>(getContext(),android.R.layout.simple_spinner_item,listaciudades);
                         a.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         ciudad.setAdapter(a);
-
                     }
                 }
 
                 //si falla el request a la pagina mostrara este error
                 @Override
                 public void onFailure(Call<List<Ciudad>> call, Throwable t) {
-                    Toast.makeText(getContext(), "errorerrorspinner :"+t.getMessage(), Toast.LENGTH_LONG).show();
-
+                  //  Toast.makeText(getContext(), "errorerrorspinner :"+t.getMessage(), Toast.LENGTH_LONG).show();
                     //alert que hay un error con el servidor
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     LayoutInflater inflater = getLayoutInflater();
@@ -515,33 +517,33 @@ public class perfilFragment extends Fragment {
                     //si esta malo se ejecuta este trozo
                     if(!response.isSuccessful()){
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        View viewsync = getActivity().getLayoutInflater().inflate(R.layout.alertdialogusuarioexistente, null);
+                        LayoutInflater inflater = getLayoutInflater();
+                        View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
                         builder.setView(viewsync);
-                        AlertDialog dialog7 = builder.create();
-                        dialog7.setCancelable(false);
-                        dialog7.show();
-                        dialog7.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        TextView texto =(TextView) viewsync.findViewById(R.id.txtalertnotificacion);
-                        texto.setText("Ha ocurrido un error al actualizar su perfil.");
-                        Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
+                        AlertDialog dialog3 = builder.create();
+                        dialog3.setCancelable(false);
+                        dialog3.show();
+                        dialog3.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
+                        texto.setText("Ha ocurrido un error con la respuesta al tratar de actualizar tu perfil. intente en un momento nuevamente.");
+                        Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
 
-                        btncerraralert.setOnClickListener(new View.OnClickListener() {
+                        btncerrar.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(View view) {
+                            public void onClick(View v) {
                                 showSelectedFragment(new perfilFragment());
-                                dialog7.dismiss();
-                                //metodo para cambiar de activity
-
+                                dialog3.dismiss();
                             }
                         });
-                        Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {
                         //respuesta del request
                         Usuario usuarios = response.body();
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        View viewsync = getActivity().getLayoutInflater().inflate(R.layout.alertdialogperfilactualizado, null);
+                        LayoutInflater inflater = getLayoutInflater();
+                        View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
                         builder.setView(viewsync);
                         AlertDialog dialog8 = builder.create();
                         dialog8.setCancelable(false);
@@ -557,8 +559,6 @@ public class perfilFragment extends Fragment {
                                 //metodo para cambiar de activity
                             }
                         });
-
-
                     }
                 }
                 //si falla el request a la pagina mostrara este error

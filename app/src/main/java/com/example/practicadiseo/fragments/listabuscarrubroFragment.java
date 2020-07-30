@@ -406,7 +406,7 @@ public class listabuscarrubroFragment extends Fragment {
                         }
                     });
 
-                    Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                 //   Toast.makeText(getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     List<UsuarioTrabajador> trabajadores = response.body();
                     listatrabajadoresporrubo.clear();
@@ -451,6 +451,7 @@ public class listabuscarrubroFragment extends Fragment {
             @Override
             public void onFailure(Call<List<UsuarioTrabajador>> call, Throwable t) {
                 txtnotfound.setText("No Se Han Encontrado Trabajadores para este Rubro");
+                /*
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = getLayoutInflater();
                 View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
@@ -469,6 +470,8 @@ public class listabuscarrubroFragment extends Fragment {
                         dialog.dismiss();
                     }
                 });
+
+                 */
                 preloaderlista.setVisibility(View.INVISIBLE);
                 notfound.setVisibility(View.VISIBLE);
                 notfound.playAnimation();

@@ -110,7 +110,7 @@
                     android:layout_width="90dp"
                     android:layout_height="45dp"
                     android:fontFamily="sans-serif-condensed-medium"
-                    android:background="@drawable/bg_ripple"
+                    android:background="@drawable/bg_btnwebpay"
                     android:text="Perfil"
                     android:textColor="@color/colordark"
                     android:textSize="15dp">

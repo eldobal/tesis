@@ -135,7 +135,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         Button dismiss = viewsync.findViewById(R.id.btnocultaralert2);
                         textoalertnotificacion.setText("La notificacion con el id: " + notificacion.getId() + " ha sido cancelada por el cliente" +
                                 "lo cual significa que la solitud se ha eliminado ");
-
                         dismiss.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -168,7 +167,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                 }
                                             });
 
-                                            Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                                         //   Toast.makeText(v.getContext(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                                         } else {
                                             dialog.dismiss();
                                             listanotificaciones.remove(i);
@@ -196,10 +195,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                 dialog7.dismiss();
                                             }
                                         });
-
-
-
-                                        Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                                     //   Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
 
@@ -328,7 +324,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             }
                                         });
 
-                                        Toast.makeText(vista.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                                      //  Toast.makeText(vista.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }
@@ -443,9 +439,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                         TextView textoalertnotificacion = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                         Button dismiss = viewsync.findViewById(R.id.btnocultaralert2);
-                        textoalertnotificacion.setText("La notificacion con el id: " + notificacion.getId() + " ha sido completada por el trabajador" +
-                                "lo cual significa que la solitud ha sido completada en su totalidad");
-
+                        textoalertnotificacion.setText("La notificacion con el id: " + notificacion.getId() + " ha sido completada por el trabajador lo cual significa que la solitud ha sido completada en su totalidad");
                         dismiss.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -470,7 +464,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                                             texto.setText("Ha ocurrido un error con la respuesta al tratar de eliminar esta notificacion. intente en un momento nuevamente.");
                                             Button btncerrar =(Button) viewsync.findViewById(R.id.btnalertperfilexito);
-
                                             btncerrar.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View v) {
@@ -478,13 +471,10 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                     dialog8.dismiss();
                                                 }
                                             });
-
                                             Toast.makeText(v.getContext(), "error :" + response.code()+" "+idnotificacion, Toast.LENGTH_LONG).show();
                                         } else {
-
                                             listanotificaciones.remove(i);
                                             refresh(listanotificaciones);
-
                                             //alertdialog personalizado
                                             AlertDialog.Builder builder = new AlertDialog.Builder(vista.getContext());
                                             View viewsync = inflater.inflate(R.layout.alertdialogperfilactualizado,null);
@@ -496,25 +486,22 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                             TextView texto = (TextView) viewsync.findViewById(R.id.txtalertnotificacion);
                                             texto.setText("Felicitaciones Ha confirmado la Solicitud satisfactoriamente!");
                                             Button btncerraralert = viewsync.findViewById(R.id.btnalertperfilexito);
-
                                             btncerraralert.setOnClickListener(new View.OnClickListener() {
                                                 @Override
                                                 public void onClick(View view) {
                                                     listanotificaciones.remove(i);
                                                     refresh(listanotificaciones);
-                                                    listanotificacionesFragment lista = new listanotificacionesFragment();
+                                                    solicitudeFragment solicitudeFragment = new solicitudeFragment();
                                                     FragmentManager fm = ((AppCompatActivity) contexto).getSupportFragmentManager();
                                                     FragmentTransaction ft = fm.beginTransaction();
-                                                    ft.replace(R.id.container, lista,"notificacionestag");
+                                                    ft.replace(R.id.container, solicitudeFragment,"solicitudtag");
                                                     ft.commit();
                                                     dialog5.dismiss();
                                                     dialog2.dismiss();
-
                                                 }
                                             });
                                         }
                                     }
-
                                     @Override
                                     public void onFailure(Call<String> call, Throwable t) {
                                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
@@ -527,7 +514,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                         TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
                                         texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
                                         Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
-
                                         btncerrar.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {
@@ -535,8 +521,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                 dialog9.dismiss();
                                             }
                                         });
-
-                                        Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                                        //Toast.makeText(v.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
 

@@ -20,6 +20,7 @@ import android.view.animation.Animation;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,8 +46,8 @@ import java.util.TimerTask;
 public class onepayFragment extends Fragment  {
     WebView webView;
     NetworkInfo NetworkInfo;
-    String rutusuario="";
-    int monto=0,idsolicitud=0;
+    String rutusuario="",comentario="";
+    int monto=0,idsolicitud=0,calificacion=0;
     NetworkInfo activeNetwork;
     ConnectivityManager cm ;
     TimerTask task;
@@ -84,6 +85,8 @@ public class onepayFragment extends Fragment  {
             idsolicitud = datosRecuperados.getInt("idsolicitud");
             monto = datosRecuperados.getInt("monto");
             rutusuario = datosRecuperados.getString("rutusuario");
+            calificacion = datosRecuperados.getInt("calificacion");
+            comentario= datosRecuperados.getString("comentario");
         }else{
             //falta validacion sobre el id
             HomeFragment homeFragment  = new HomeFragment();
@@ -112,11 +115,14 @@ public class onepayFragment extends Fragment  {
         String postData= null;
         String idsoli = Integer.toString(idsolicitud);
         String montosoli = Integer.toString(monto);
+        String Calificacion= Integer.toString(calificacion);
 
         try {
             postData = "RUT="+ URLEncoder.encode(rutusuario,"UTF8")+
                             "&idSolicitud="+ URLEncoder.encode(idsoli, "UTF-8")+
-                            "&Monto=" +URLEncoder.encode(montosoli,"UTF-8")
+                            "&Monto=" +URLEncoder.encode(montosoli,"UTF-8")+
+                            "&Calificacion=" +URLEncoder.encode(Calificacion,"UTF-8")+
+                            "&Comentario=" +URLEncoder.encode(comentario,"UTF-8")
 
             ;
         } catch (UnsupportedEncodingException e) {
@@ -153,7 +159,7 @@ public class onepayFragment extends Fragment  {
                             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
                                 //se captura la url donde se encuentra el usuario en el webview
                                 String webUrlactual = webView.getUrl();
-                                Toast.makeText(getContext(), webUrlactual, Toast.LENGTH_SHORT).show();
+                             //   Toast.makeText(getContext(), webUrlactual, Toast.LENGTH_SHORT).show();
                                 if (urltrasaccionfinalizada.equals(webUrlactual)) {
                                     task.cancel();
                                     //alert dialog con el mensaje de que se ha pagado correctamente

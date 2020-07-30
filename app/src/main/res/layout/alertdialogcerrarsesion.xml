@@ -24,8 +24,8 @@
         android:fontFamily="sans-serif-condensed-medium"
         android:textColor="@color/colordark"
         android:gravity="center"
-        android:textSize="20dp"
-        android:text="Esta a punto de Salir de la sesion!">
+        android:textSize="24dp"
+        android:text="Esta a punto de Salir de la sesión!">
     </TextView>
 
     <TextView
@@ -36,13 +36,14 @@
         android:fontFamily="sans-serif-condensed-medium"
         android:textColor="@color/colordark"
         android:gravity="center"
-        android:textSize="18dp"
-        android:text="recuerde que si sale de la secion tendraque volver a iniciar sesion con su identificador y su contraseña.">
+        android:textSize="20dp"
+        android:text="¿Está seguro?">
 
     </TextView>
 
 
     <LinearLayout
+        android:layout_marginTop="15dp"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_alignParentBottom="true">
@@ -57,8 +58,8 @@
             android:id="@+id/btnconfirmarnotificacion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_ripple"
-            android:text="Continuar">
+            android:background="@drawable/bg_btnwebpay"
+            android:text="no">
         </Button>
 
 

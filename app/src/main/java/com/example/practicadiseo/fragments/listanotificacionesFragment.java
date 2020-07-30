@@ -73,18 +73,6 @@ public class listanotificacionesFragment extends Fragment {
         //lista de notificaciones en un array para recibirlas con el get arguments
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
-        //arraylistanotificaciones = (ArrayList<Notificacion>) getArguments().getSerializable("arraynotificaciones");
-
-        //refreshnotificaciones =(SwipeRefreshLayout) getActivity().findViewById(R.id.refreshnotificaciones);
-        //ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        //NetworkInfo = connectivityManager.getActiveNetworkInfo();
-       // ConnectivityManager connectivityManager2 = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-
-
-
-
-
-
         //prefs que contienen datos del usuario
         setcredentiasexist();
         settiempoasyncexist();
@@ -120,18 +108,14 @@ public class listanotificacionesFragment extends Fragment {
             }
         };
         timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_listanotificaciones, container, false);
-
         listanotificaciones = (ListView) v.findViewById(R.id.listanotificaciones);
         animationnotification = (LottieAnimationView) v.findViewById(R.id.animationotification);
-
 
         if (rutusuario.isEmpty() || contrasena.isEmpty()){
             //enviar al usuario hacia alguna pantalla de home y mostrar el error en forma de mensaje
@@ -156,21 +140,6 @@ public class listanotificacionesFragment extends Fragment {
 
         }
 
-       /* refreshnotificaciones.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new CountDownTimer(1500,1000){
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                    }
-                    @Override
-                    public void onFinish() {
-                        reiniciarfragmentnotificaciones(rutusuario);
-                    }
-                }.start();
-            }
-        });
-        */
         return v;
     }
 
@@ -186,7 +155,6 @@ public class listanotificacionesFragment extends Fragment {
             public void onResponse(Call<List<Notificacion>> call, Response<List<Notificacion>> response) {
                 if (!response.isSuccessful()) {
                     //alert de que la respuesta fue incorrecta
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     LayoutInflater inflater = getLayoutInflater();
                     View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
@@ -208,7 +176,7 @@ public class listanotificacionesFragment extends Fragment {
                     });
 
 
-                    Toast.makeText(getActivity(), "error :" + response.code(), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(getActivity(), "error :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
                     arraylistanotificaciones.clear();
                     List<Notificacion> notificaciones = response.body();
@@ -257,7 +225,7 @@ public class listanotificacionesFragment extends Fragment {
                     }
                 });
 
-                Toast.makeText(getActivity(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
+              //  Toast.makeText(getActivity(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }

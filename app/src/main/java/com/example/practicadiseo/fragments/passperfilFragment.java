@@ -143,8 +143,6 @@ public class passperfilFragment extends Fragment {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-            //metodo para llamar a la funcion que queramos
-            //llamar a la funcion de get usuario la cual se le envia los datos (rut y contraseña )
             Call<Usuario> call = tesisAPI.getUsuario(rutperfil,contrasenaperfil);
             call.enqueue(new Callback<Usuario>() {
                 @Override
@@ -171,7 +169,7 @@ public class passperfilFragment extends Fragment {
                             }
                         });
 
-                        Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
+                     //   Toast.makeText(getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                     }
                     //de lo contrario se ejecuta esta parte
                     else {
@@ -202,7 +200,7 @@ public class passperfilFragment extends Fragment {
                         }
                     });
 
-                    Toast.makeText(getContext(), "errorc :"+t.getMessage(), Toast.LENGTH_LONG).show();
+                 //   Toast.makeText(getContext(), "errorc :"+t.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
     }
@@ -241,7 +239,7 @@ public class passperfilFragment extends Fragment {
                                 }
                             });
 
-                            Toast.makeText(getContext(), "error on response passperfil :" + response.code(), Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getContext(), "error on response passperfil :" + response.code(), Toast.LENGTH_LONG).show();
                         }
                         //de lo contrario se ejecuta esta parte
                         else {
@@ -291,9 +289,7 @@ public class passperfilFragment extends Fragment {
                                 dialog3.dismiss();
                             }
                         });
-
-
-                        Toast.makeText(getContext(), "errorb :" + t.getMessage(), Toast.LENGTH_LONG).show();
+                      // Toast.makeText(getContext(), "errorb :" + t.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
 

@@ -9,12 +9,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Layout;
@@ -31,7 +29,6 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.practicadiseo.R;
 import com.example.practicadiseo.activitys.login2Activity;
@@ -41,12 +38,10 @@ import com.example.practicadiseo.clases.Solicitud;
 import com.example.practicadiseo.clases.UsuarioTrabajador;
 import com.example.practicadiseo.interfaces.tesisAPI;
 import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -55,9 +50,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class solicitudeFragment extends Fragment  {
     SweetAlertDialog dp;
     private static LayoutInflater inflater = null;
@@ -71,7 +63,6 @@ public class solicitudeFragment extends Fragment  {
     ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudesterminadas = new ArrayList<Solicitud>();
-
     final static String rutaservidor= "http://proyectotesis.ddns.net";
     Adaptador ads,ads2;
     Spinner spinneractivas,spinnerterminadas;
@@ -91,9 +82,6 @@ public class solicitudeFragment extends Fragment  {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-       // NetworkInfo = connectivityManager.getActiveNetworkInfo();
-
         asycprefs = this.getActivity().getSharedPreferences("asycpreferences", Context.MODE_PRIVATE);
         prefs = this.getActivity().getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
@@ -103,11 +91,6 @@ public class solicitudeFragment extends Fragment  {
         listasolicitudactivas = new ArrayList<Solicitud>();
         listasolicitudterminadasinterna = new ArrayList<Solicitud>();
         listasolicitudactivasinterna = new ArrayList<Solicitud>();
-
-
-
-
-
 
         solicitudeFragment test = (solicitudeFragment) getActivity().getSupportFragmentManager().findFragmentByTag("solicitudtag");
 
@@ -144,14 +127,6 @@ public class solicitudeFragment extends Fragment  {
             }
         };
         timer.schedule(task, 0, azynctiempo);  //ejecutar en intervalo definido por el programador
-
-
-
-
-
-
-
-
     }
 
     @Override
@@ -204,15 +179,11 @@ public class solicitudeFragment extends Fragment  {
                 activeNetwork = cm.getActiveNetworkInfo();
                 if (activeNetwork != null) {
                     if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-
                         notfound = (TextView) v.findViewById(R.id.txtnotfoundlistasolicitudes);
                         notfound.setText("");
-
                         //if (Solicitudes.size() > 0) {
                         final View vista = inflater.inflate(R.layout.elemento_solicitud, null);
-
                         reiniciarfragmentterminadas(rutusuario, contrasena);
-
                         spinneractivas.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                             @Override
                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -313,9 +284,6 @@ public class solicitudeFragment extends Fragment  {
                 }
             });
 */
-
-
-
 
 
         return v;
@@ -822,7 +790,7 @@ public class solicitudeFragment extends Fragment  {
                         }
                     });
 
-                    Toast.makeText(getContext(), "error/soli/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(getContext(), "error/soli/onresponse :" + response.code(), Toast.LENGTH_LONG).show();
                 } else {
 
                     List<Solicitud> solicituds = response.body();
@@ -899,6 +867,8 @@ public class solicitudeFragment extends Fragment  {
             }
             @Override
             public void onFailure(Call<List<Solicitud>> call, Throwable t) {
+
+                /*
                 Toast.makeText(getContext(), "error/soli/onfailure :" + t.getMessage(), Toast.LENGTH_LONG).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 LayoutInflater inflater = getLayoutInflater();
@@ -918,6 +888,9 @@ public class solicitudeFragment extends Fragment  {
                         dialog4.dismiss();
                     }
                 });
+
+
+                 */
             }
         });
 

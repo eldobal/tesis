@@ -14,16 +14,6 @@
         android:layout_height="match_parent">
 
 
-        <com.airbnb.lottie.LottieAnimationView
-
-            android:layout_centerHorizontal="true"
-            android:layout_width="match_parent"
-            android:layout_height="600dp"
-            app:lottie_rawRes="@raw/pagoincorrecto"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="false"
-
-            ></com.airbnb.lottie.LottieAnimationView>
 
 
         <RelativeLayout
@@ -48,7 +38,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/mydashboard"
                 android:padding="8dp"
-                android:text="3 items"
+                android:text="2 items"
                 android:textSize="14sp"
                 android:layout_marginLeft="62dp"
                 android:layout_width="wrap_content"
