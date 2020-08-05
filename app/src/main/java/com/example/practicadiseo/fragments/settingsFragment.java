@@ -246,7 +246,7 @@ public class settingsFragment extends Fragment {
     private void signOut() {
         googleSignInClient.signOut()
                 .addOnCompleteListener(getActivity(), task -> {
-                    Toast.makeText(getContext(), "Salido", Toast.LENGTH_LONG).show();
+                  //  Toast.makeText(getContext(), "Salido", Toast.LENGTH_LONG).show();
                     revokeAccess();
                 });
     }

@@ -165,11 +165,11 @@ public class register2Activity extends AppCompatActivity {
 
 
                         }else{
-                            Toast.makeText(getApplicationContext(), "El Rut No es valido ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "El Rut ingresado No es valido.", Toast.LENGTH_LONG).show();
                         }
 
                     }else {
-                        Toast.makeText(getApplicationContext(), "error validate", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Error al validar los datos ingresados", Toast.LENGTH_LONG).show();
                     }
 
 
@@ -293,7 +293,7 @@ public class register2Activity extends AppCompatActivity {
                                 }
                             });
                         }
-                        Toast.makeText(register2Activity.this,"ta weno ", Toast.LENGTH_LONG).show();
+                     //   Toast.makeText(register2Activity.this,"ta weno ", Toast.LENGTH_LONG).show();
                     }
                 }
                 @Override

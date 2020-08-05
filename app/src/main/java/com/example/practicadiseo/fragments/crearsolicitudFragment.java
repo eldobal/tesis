@@ -306,7 +306,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         builder.setVibrate(new long[]{1000,1000,1000,1000,1000});
         builder.setDefaults(Notification.DEFAULT_SOUND);
         //texto para mostrar de forma exancible
-        builder.setStyle(new NotificationCompat.BigTextStyle().bigText("La solicitud se ha creado exitosamente, el " +nombretrabajador+
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText("La solicitud se ha creado exitosamente, el trabajador" +nombretrabajador+
                 ". sera notificado de inmediato, porfavor este atento a la respuesta" +
                 " podra confirmar la solicitud desde el apartado mis solicitudes"));
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getActivity());
