@@ -78,7 +78,7 @@
                     <ImageView
                         android:layout_width="80dp"
                         android:layout_height="80dp"
-                        android:src="@drawable/contact"></ImageView>
+                    ></ImageView>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -116,7 +116,7 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:src="@drawable/contact"
+
                         android:layout_width="80dp"
                         android:layout_height="80dp"></ImageView>
 

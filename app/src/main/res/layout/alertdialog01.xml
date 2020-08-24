@@ -54,6 +54,7 @@
             android:id="@+id/alertbtncancelar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_btnwebpay"
             android:text="Cancelar"/>
 
 

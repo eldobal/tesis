@@ -302,7 +302,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="12dp"
-                android:background="@drawable/botonripple"
+                android:background="@drawable/bg_btnwebpay"
                 android:text="Registrarse"
                 android:textColor="@drawable/botonpressed" />
         </RelativeLayout>
