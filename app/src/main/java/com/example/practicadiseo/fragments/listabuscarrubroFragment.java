@@ -31,6 +31,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.practicadiseo.R;
 import com.example.practicadiseo.activitys.menuActivity;
 import com.example.practicadiseo.clases.Adaptadortrabajadores;
+import com.example.practicadiseo.clases.GlobalInfo;
 import com.example.practicadiseo.clases.UsuarioTrabajador;
 import com.example.practicadiseo.interfaces.tesisAPI;
 import com.google.android.material.snackbar.Snackbar;
@@ -184,7 +185,6 @@ public class listabuscarrubroFragment extends Fragment {
             });
 
 
-
         }else{updateDetail();}
 
         return  v;
@@ -199,7 +199,6 @@ public class listabuscarrubroFragment extends Fragment {
         if(orden ==1){
             listaordenada.clear();
             for (int i = 0; i <listatrabajadoresporrubo.size() ; i++) {
-
                 if(listatrabajadoresporrubo.get(i).getCalificacion().equals("1")){
                     listaordenada.add(listatrabajadoresporrubo.get(i));
                 }
@@ -375,13 +374,14 @@ public class listabuscarrubroFragment extends Fragment {
 
     }
 
-    private void cargartrabajadores(int idrubro, int idciudad) {
+   private void cargartrabajadores(int idrubro, int idciudad) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
         Call<List<UsuarioTrabajador>> call = tesisAPI.getRubroTrabajador(idrubro,idciudad,rutusuario,contrasena);
+
         call.enqueue(new Callback<List<UsuarioTrabajador>>() {
             @Override
             public void onResponse(Call<List<UsuarioTrabajador>> call, Response<List<UsuarioTrabajador>> response) {

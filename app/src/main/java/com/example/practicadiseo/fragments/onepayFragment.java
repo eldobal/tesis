@@ -31,6 +31,7 @@ import com.airbnb.lottie.L;
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.practicadiseo.R;
 import com.example.practicadiseo.activitys.menuActivity;
+import com.example.practicadiseo.clases.GlobalInfo;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.UnsupportedEncodingException;
@@ -111,7 +112,7 @@ public class onepayFragment extends Fragment  {
 
 
         //url del backend webpay
-        String url="http://proyectotesis.ddns.net/datos/WebPay";
+        String url= GlobalInfo.Rutaservidorwebpay;
         String postData= null;
         String idsoli = Integer.toString(idsolicitud);
         String montosoli = Integer.toString(monto);
@@ -142,8 +143,8 @@ public class onepayFragment extends Fragment  {
         }
 
         //url la cual estara alojado el backend con la implementacion de transbank
-        String urltrasaccionfinalizada ="http://proyectotesis.ddns.net/Datos/Final";
-        String urltransaccionerror  ="http://proyectotesis.ddns.net/Datos/Error";
+        String urltrasaccionfinalizada = GlobalInfo.Rutaservidorwebpayfinalizada;
+        String urltransaccionerror  = GlobalInfo.Rutaservidorwebpayerror;
 
         //metodo en el cual el timer pregunta frecuentemente si la urlactual es igual a la urffinalizada
         final Handler handler = new Handler();

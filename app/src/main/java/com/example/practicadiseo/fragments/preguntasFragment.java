@@ -10,10 +10,6 @@ import android.view.ViewGroup;
 
 import com.example.practicadiseo.R;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class preguntasFragment extends Fragment {
 
     public preguntasFragment() {

@@ -130,25 +130,14 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
-
-
         int permisolocation = ActivityCompat.checkSelfPermission(getActivity().getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-
         if(permisolocation != PackageManager.PERMISSION_GRANTED){
-
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUESTCODE);
-
         }
 
-
         map = googleMap;
-
-
         map.getUiSettings().setZoomControlsEnabled(true);
-
         map.setMyLocationEnabled(true);
-
 
         btnconfirmarubicacion.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,14 +204,12 @@ public class mapaFragment extends Fragment implements OnMapReadyCallback {
                             MarkerOptions markerOptions = new MarkerOptions();
                             //se setea la posicion al marcador
                             markerOptions.position(latLng);
-
                             latitudorigen=latLng.latitude;
                             longitudorigen=latLng.longitude;
                             //descripcion del titulo
                             markerOptions.title(latLng.latitude+" ; "+latLng.longitude);
                             //borrar los click anteriors
                             map.clear();
-
                             //zoom al marcador
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,17));
                             //añadir el marcador al mapa

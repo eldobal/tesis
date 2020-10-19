@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.example.practicadiseo.R;
 import com.example.practicadiseo.activitys.menuActivity;
 import com.example.practicadiseo.activitys.register2Activity;
+import com.example.practicadiseo.clases.GlobalInfo;
 import com.example.practicadiseo.clases.UsuarioTrabajador;
 import com.example.practicadiseo.fragments.crearsolicitudFragment;
 import com.example.practicadiseo.interfaces.tesisAPI;
@@ -49,7 +50,7 @@ public class perfiltrabajadorFragment extends Fragment {
     LottieAnimationView loadingdots2 ;
     private Button btncrearsolicitud;
     private ImageView foto;
-    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    final static String rutaservidor=GlobalInfo.Rutaservidor;
     String urlfoto="";
     NetworkInfo activeNetwork;
     ConnectivityManager cm ;
@@ -77,7 +78,6 @@ public class perfiltrabajadorFragment extends Fragment {
              ruttrabajador= args.getString("ruttrabajador");
              idrubro = args.getInt("idrubro");
         }
-
         rut= (TextView) v.findViewById(R.id.txtrutperfiltrabajador);
         nombre = (TextView) v.findViewById(R.id.txtnombreperfiltrabajador);
         telefono = (TextView) v.findViewById(R.id.txttelefonoperfiltrabajador);
@@ -88,7 +88,6 @@ public class perfiltrabajadorFragment extends Fragment {
         foto = (ImageView) v.findViewById(R.id.imgperfiltrabajadordetalle);
         loadingdots2 =(LottieAnimationView) v.findViewById(R.id.loadindots2);
 
-
         if(ruttrabajador.isEmpty()||rutusuario.isEmpty() ||contrasena.isEmpty()){
             //enviar mensaje de error y reenviar al usuario hacia alguna pantalla de comprovacion
         }else{
@@ -96,14 +95,10 @@ public class perfiltrabajadorFragment extends Fragment {
             activeNetwork = cm.getActiveNetworkInfo();
             if (activeNetwork != null) {
                 if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-
                     llenarperfiltrabajador(ruttrabajador);
-
-
                     btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
                             Bundle bundle = new Bundle();
                             //en el bundle se enviaran los siguientes datos para poder operar en el crear soliciutd
                             bundle.putString("ruttrabajador", trabajador.getRUT());
@@ -120,27 +115,20 @@ public class perfiltrabajadorFragment extends Fragment {
 
                         }
                     });
-
-
                 } else {
                     Snackbar snackBar = Snackbar.make(getActivity().findViewById(android.R.id.content),
                             "No se ha encontrado una coneccion a Internet.", Snackbar.LENGTH_LONG);
                     snackBar.show();
                 }
             }
-
-
         }
-
-
-
 
         return  v;
     }
 
   private void llenarperfiltrabajador(String ruttrabajador) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .baseUrl(GlobalInfo.Rutaservidor)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);

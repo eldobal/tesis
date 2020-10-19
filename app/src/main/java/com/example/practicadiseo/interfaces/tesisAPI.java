@@ -41,7 +41,6 @@ public interface tesisAPI {
                                                      @Query("Contrasena") String contrasena
     );
 
-
     //api para el perfiltrabajador
     @GET("api/UsuarioAPI")
     Call<UsuarioTrabajador> getUsuarioTrabajador(@Query("RUT") String rut,
@@ -164,7 +163,6 @@ public interface tesisAPI {
     Call<String> borrarNotificacion(@Query("RUT") String rutusuario,
                                         @Query("Contrasena") String contrasena,
                                     @Query("Notificacion") int idnotificacion
-
     );
 
 

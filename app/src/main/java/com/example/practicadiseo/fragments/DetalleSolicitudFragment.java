@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.practicadiseo.R;
+import com.example.practicadiseo.clases.GlobalInfo;
 import com.example.practicadiseo.clases.Solicitud;
 import com.example.practicadiseo.interfaces.tesisAPI;
 import com.google.android.material.snackbar.Snackbar;
@@ -167,7 +168,7 @@ public class DetalleSolicitudFragment extends Fragment {
 
                                                 //se llama al metodo que confirma el pago por parte del cliente
                                                 Retrofit retrofit = new Retrofit.Builder()
-                                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                                        .baseUrl(GlobalInfo.Rutaservidor)
                                                         .addConverterFactory(GsonConverterFactory.create())
                                                         .build();
                                                 tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
@@ -308,7 +309,7 @@ public class DetalleSolicitudFragment extends Fragment {
 
     private void cargardetallesolicitud() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);

@@ -31,6 +31,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.practicadiseo.R;
 import com.example.practicadiseo.activitys.login2Activity;
 import com.example.practicadiseo.clases.Adaptadornotificaciones;
+import com.example.practicadiseo.clases.GlobalInfo;
 import com.example.practicadiseo.clases.Notificacion;
 import com.example.practicadiseo.interfaces.tesisAPI;
 import com.google.android.material.snackbar.Snackbar;
@@ -145,7 +146,7 @@ public class listanotificacionesFragment extends Fragment {
 
     private void reiniciarfragmentnotificacionesASYNC(String rutusuario) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);

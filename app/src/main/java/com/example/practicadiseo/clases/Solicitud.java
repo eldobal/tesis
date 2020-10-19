@@ -20,9 +20,6 @@ public class Solicitud{
     private String idFoto;
     private String FotoT;
 
-
-
-
     private ArrayList<Solicitud> lista = new ArrayList<Solicitud>();
 
 

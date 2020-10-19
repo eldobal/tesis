@@ -50,9 +50,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
     ArrayList<Solicitud> lista;
     SharedPreferences prefs;
     String rutusuario="",contrasena="";
-
     Solicitud soli = new Solicitud();
-
 
     public Adaptador(Context contexto, ArrayList<Solicitud> listasolicitudes) {
         this.contexto = contexto;
@@ -230,7 +228,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                             final String Fechasolicitud = sdf.format(calendar.getTime());
                             Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl("http://proyectotesis.ddns.net/")
+                                    .baseUrl(GlobalInfo.Rutaservidor)
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
@@ -322,7 +320,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                         @Override
                         public void onClick(View view) {
                             Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl("http://proyectotesis.ddns.net/")
+                                    .baseUrl(GlobalInfo.Rutaservidor)
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
@@ -349,8 +347,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                                 dialog8.dismiss();
                                             }
                                         });
-
-
                                         Toast.makeText(vista.getContext(), "error :"+response.code(), Toast.LENGTH_LONG).show();
                                     }
                                     else {
@@ -374,7 +370,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                                 dialog3.dismiss();
                                             }
                                         });
-
                                     }
                                 }
                                 @Override
@@ -389,7 +384,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
                                     texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo.");
                                     Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
-
                                     btncerrar.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -397,7 +391,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                             dialog9.dismiss();
                                         }
                                     });
-
                                     Toast.makeText(vista.getContext(), "error :"+t.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -411,7 +404,6 @@ public class Adaptador extends BaseAdapter implements Serializable {
                             dialog3.dismiss();
                         }
                     });
-
             }
             });
 
@@ -442,7 +434,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                         @Override
                         public void onClick(View view) {
                             Retrofit retrofit = new Retrofit.Builder()
-                                    .baseUrl("http://proyectotesis.ddns.net/")
+                                    .baseUrl(GlobalInfo.Rutaservidor)
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
@@ -554,14 +546,8 @@ public class Adaptador extends BaseAdapter implements Serializable {
                 }
             });
         }
-
-
-
         return vista;
     }
-
-
-
     //metodo para traer el rut del usuario hacia la variable local
     private void setcredentiasexist() {
         String rut = getuserrutprefs();

@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.example.practicadiseo.R;
 import com.example.practicadiseo.activitys.menuActivity;
+import com.example.practicadiseo.clases.GlobalInfo;
 import com.example.practicadiseo.clases.Usuario;
 import com.example.practicadiseo.interfaces.tesisAPI;
 import com.google.android.material.snackbar.Snackbar;
@@ -139,7 +140,7 @@ public class passperfilFragment extends Fragment {
 
     private void cargardatosperfil() {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .baseUrl(GlobalInfo.Rutaservidor)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
@@ -209,7 +210,7 @@ public class passperfilFragment extends Fragment {
             String RUT = rutperfil;
             String Contrasena = contraseña2.getText().toString();
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .baseUrl(GlobalInfo.Rutaservidor)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);

@@ -47,10 +47,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
     ArrayList<Notificacion> listanotificaciones;
     SharedPreferences prefs;
     String rutusuario="",contrasena="";
-
-
     Notificacion notificacion = new Notificacion();
-
 
     public Adaptadornotificaciones(Context contexto, ArrayList<Notificacion> listanotificaciones) {
         this.contexto = contexto;
@@ -139,7 +136,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                             @Override
                             public void onClick(View v) {
                                 Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .baseUrl(GlobalInfo.Rutaservidor)
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
@@ -242,7 +239,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                                 final String Fechasolicitud = sdf.format(calendar.getTime());
                                 Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .baseUrl(GlobalInfo.Rutaservidor)
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
@@ -323,7 +320,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                                                 dialog7.dismiss();
                                             }
                                         });
-
                                       //  Toast.makeText(vista.getContext(), "error :" + t.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -335,7 +331,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                             @Override
                             public void onClick(View view) {
                                 Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .baseUrl(GlobalInfo.Rutaservidor)
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
@@ -445,7 +441,7 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                             public void onClick(View v) {
                                 int idnotificacion = listanotificaciones.get(i).getId();
                                 Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl("http://proyectotesis.ddns.net/")
+                                        .baseUrl(GlobalInfo.Rutaservidor)
                                         .addConverterFactory(GsonConverterFactory.create())
                                         .build();
                                 tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
@@ -529,7 +525,6 @@ public class Adaptadornotificaciones  extends BaseAdapter implements Serializabl
                         });
 
                     }
-
 
                     /*    if (listanotificaciones.get(i).getMensaje().equals(textosolicitudfinalizada)) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());

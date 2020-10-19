@@ -41,6 +41,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.practicadiseo.R;
 import com.example.practicadiseo.activitys.menuActivity;
+import com.example.practicadiseo.clases.GlobalInfo;
 import com.example.practicadiseo.clases.SolicitudDb;
 import com.example.practicadiseo.interfaces.tesisAPI;
 import com.google.android.material.snackbar.Snackbar;
@@ -316,7 +317,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
 
     private void crearsolicitud(){
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .baseUrl(GlobalInfo.Rutaservidor)
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();

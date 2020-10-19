@@ -12,8 +12,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
         <TextView
             android:layout_marginTop="13dp"
             android:layout_width="match_parent"
@@ -119,19 +117,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
-                                <com.airbnb.lottie.LottieAnimationView
-                                    android:layout_centerInParent="true"
-                                    android:id="@+id/notfoundtrabajador"
-                                    android:layout_width="350dp"
-                                    app:lottie_rawRes="@raw/location"
-                                    app:lottie_autoPlay="false"
-                                    app:lottie_loop="false"
-                                    android:layout_height="350dp">
-                                </com.airbnb.lottie.LottieAnimationView>
 
-
-
-                                <TextView
+                            <TextView
                                     android:id="@+id/txtnotfound"
                                     android:layout_centerInParent="true"
                                     android:layout_width="wrap_content"
@@ -151,6 +138,17 @@
 
 
                 </RelativeLayout>
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/notfoundtrabajador"
+                    android:layout_width="350dp"
+                    android:layout_height="350dp"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:layout_centerInParent="true"
+                    app:lottie_autoPlay="false"
+                    app:lottie_loop="false"
+                    app:lottie_rawRes="@raw/location"></com.airbnb.lottie.LottieAnimationView>
 
 
             </GridLayout>

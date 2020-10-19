@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide;
 import com.example.practicadiseo.R;
 import com.example.practicadiseo.activitys.menuActivity;
 import com.example.practicadiseo.clases.Ciudad;
+import com.example.practicadiseo.clases.GlobalInfo;
 import com.example.practicadiseo.clases.Usuario;
 import com.example.practicadiseo.fragments.passperfilFragment;
 import com.example.practicadiseo.interfaces.tesisAPI;
@@ -84,15 +85,11 @@ public class perfilFragment extends Fragment {
 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
         mAwesomeValidation.addValidation(getActivity(), R.id.telefonoperfil, "^[0-9]{9}$", R.string.err_fono);
         mAwesomeValidation.addValidation(getActivity(), R.id.email, android.util.Patterns.EMAIL_ADDRESS, R.string.err_correo);
         mAwesomeValidation.addValidation(getActivity(), R.id.nombre, "[a-zA-Z\\s]+", R.string.err_name);
         mAwesomeValidation.addValidation(getActivity(), R.id.apellido, "[a-zA-Z\\s]+", R.string.err_apellido);
         //realizar validacion
-
-
     }
 
     @Override
@@ -110,12 +107,7 @@ public class perfilFragment extends Fragment {
        editarpass = (Button) v.findViewById(R.id.actualizarcontraseña);
        loadingdots2 =(LottieAnimationView) v.findViewById(R.id.loadindots2);
        prefs = this.getActivity().getSharedPreferences("Preferences",Context.MODE_PRIVATE);
-
-
-        //  ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        //  networkInfo = connectivityManager.getActiveNetworkInfo();
-
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+       GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
                     .build();
 
@@ -198,12 +190,10 @@ public class perfilFragment extends Fragment {
                             public void onClick(View v) {
                                 //metodo para hacer request de cambio de datos por parte del usuario
                                 if (mAwesomeValidation.validate()) {
-
                                         cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                                         activeNetwork = cm.getActiveNetworkInfo();
                                     if (activeNetwork != null) {
                                         if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-
                                             actualizarperfil();
 
                                         } else {
@@ -331,7 +321,7 @@ public class perfilFragment extends Fragment {
 
     private void cargardatosperfil() {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .baseUrl(GlobalInfo.Rutaservidor)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
@@ -418,7 +408,7 @@ public class perfilFragment extends Fragment {
     private void cargarspiner(){
             ArrayList<String> listanombres = new ArrayList<String>();
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .baseUrl(GlobalInfo.Rutaservidor)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
@@ -504,7 +494,7 @@ public class perfilFragment extends Fragment {
             String Apellido = apellido.getText().toString();
             String Fono = telefono.getText().toString();
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .baseUrl(GlobalInfo.Rutaservidor)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
