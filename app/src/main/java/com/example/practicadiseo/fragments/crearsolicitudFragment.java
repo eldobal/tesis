@@ -87,7 +87,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
     private String ruttrabajador="",rutcliente="",nombretrabajador="",estadotrabajador="",calificaciontrabajador="",descripcionfinal="",rutafoto="",imagenstring="",Fechasolicitud="";
     private TextView rut,nombre,estado,calificacion,textomapaseleccionado;
     //declaracion de la ruta estatica del servidor
-    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    final static String rutaservidor= GlobalInfo.Rutaservidor;
     int idestadosolicitud=0;
     private PendingIntent pendingIntent;
     private final static String CHANNEL_ID = "NOTIFICACION";

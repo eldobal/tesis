@@ -37,7 +37,7 @@
 
         <Button
             android:id="@+id/btnconfirmarubicacion"
-            android:background="@drawable/botonripple"
+            android:background="@drawable/bg_btnwebpay"
             android:textColor="@color/colordark"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="70dp"

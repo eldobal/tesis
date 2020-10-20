@@ -57,7 +57,7 @@ public class solicitudeFragment extends Fragment  {
     ArrayList<Solicitud> listasolicitudesterminadas,listasolicitudactivas,listasolicitudactivasinterna,listasolicitudterminadasinterna,Solicitudescomparar;
     ArrayList<Solicitud> Solicitudes = new ArrayList<Solicitud>();
     ArrayList<Solicitud> Solicitudesterminadas = new ArrayList<Solicitud>();
-    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    final static String rutaservidor= GlobalInfo.Rutaservidor;
     Adaptador ads,ads2;
     Spinner spinneractivas,spinnerterminadas;
     TextView notfound;
@@ -95,7 +95,6 @@ public class solicitudeFragment extends Fragment  {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                         activeNetwork = cm.getActiveNetworkInfo();
                         if (activeNetwork != null) {
                             // connected to the internet

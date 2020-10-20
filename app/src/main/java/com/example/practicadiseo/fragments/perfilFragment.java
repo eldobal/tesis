@@ -68,7 +68,7 @@ public class perfilFragment extends Fragment {
     LottieAnimationView loadingdots2;
     private GoogleSignInClient googleSignInClient;
     private String rutperfil ="",contrasenaperfil="",rutaurl="";
-    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    final static String rutaservidor= GlobalInfo.Rutaservidor;
     private EditText rut,nombre,apellido,correo,telefono;
     private Spinner ciudad;
     private int idCiudad =0;

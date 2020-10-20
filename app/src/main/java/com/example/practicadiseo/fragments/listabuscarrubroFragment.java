@@ -57,7 +57,7 @@ public class listabuscarrubroFragment extends Fragment {
     private SharedPreferences prefs;
     LottieAnimationView preloaderlista,notfound;
     int idciudad =0,numeroultimo=0,filtro=0;
-    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    final static String rutaservidor= GlobalInfo.Rutaservidor;
     SwipeRefreshLayout refreshLayouttrabajadores;
     ArrayList<UsuarioTrabajador> listatrabajadoresporrubo = new ArrayList<UsuarioTrabajador>();
     Spinner spinnerordenar ;

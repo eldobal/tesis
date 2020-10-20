@@ -8,7 +8,6 @@ public class UsuarioCustomLogin {
     private String Contrasena;
     private int idCiudad;
 
-
     public UsuarioCustomLogin() {
         this.RUT = RUT;
         this.Contrasena = Contrasena;

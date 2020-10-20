@@ -87,7 +87,6 @@ public class listanotificacionesFragment extends Fragment {
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-                        cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
                         activeNetwork = cm.getActiveNetworkInfo();
                         if (activeNetwork != null) {
                             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {

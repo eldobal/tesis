@@ -79,10 +79,16 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <ImageView
-                        android:layout_width="80dp"
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/iconobelleza"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="match_parent"
                         android:layout_height="80dp"
-                      ></ImageView>
+                        app:lottie_rawRes="@raw/iconobelleza"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="false"
+                        ></com.airbnb.lottie.LottieAnimationView>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -108,8 +114,7 @@
                 android:clickable="true"
                 app:cardElevation="6dp"
                 app:cardCornerRadius="30dp"
-                android:layout_margin="12dp"
-                >
+                android:layout_margin="12dp">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -118,10 +123,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <ImageView
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/iconosalud"
+                        android:layout_centerHorizontal="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        app:lottie_rawRes="@raw/iconosalud"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="false"
 
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"></ImageView>
+                        ></com.airbnb.lottie.LottieAnimationView>
 
                     <TextView
                         android:layout_marginTop="12dp"

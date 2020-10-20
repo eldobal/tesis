@@ -58,7 +58,7 @@ public class DetalleSolicitudFragment extends Fragment {
     private Button btnpagarsolicitud;
     private int idsolicitud=0,montosolicitud=0;
     private CardView carddiagnostico,cardsolucion;
-    final static String rutaservidor= "http://proyectotesis.ddns.net";
+    final static String rutaservidor= GlobalInfo.Rutaservidor;
     private String rutperfil ="",contrasenaperfil="", metodopago="";
     NetworkInfo activeNetwork;
     ConnectivityManager cm ;

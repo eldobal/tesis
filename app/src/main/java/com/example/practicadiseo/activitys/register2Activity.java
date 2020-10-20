@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.example.practicadiseo.clases.Ciudad;
 import com.example.practicadiseo.R;
+import com.example.practicadiseo.clases.GlobalInfo;
 import com.example.practicadiseo.clases.SolicitudDb;
 import com.example.practicadiseo.clases.Usuario;
 import com.example.practicadiseo.interfaces.tesisAPI;
@@ -197,10 +198,8 @@ public class register2Activity extends AppCompatActivity {
 
         int idestadousuario = 2;
         int tipousuario =3;
-
-
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://proyectotesis.ddns.net/")
+                .baseUrl(GlobalInfo.Rutaservidor)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
