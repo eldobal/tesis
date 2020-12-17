@@ -419,7 +419,7 @@ public class listabuscarrubroFragment extends Fragment {
                         trabajador1.setCiudad(trabajador.getCiudad());
                         trabajador1.setIdRubro(trabajador.getIdRubro());
                         //declaracion de la ruta de la imagen del trabajador
-                        trabajador1.setFoto(rutaservidor+trabajador.getFoto());
+                        trabajador1.setFoto(rutaservidor+trabajador.getFoto().toString());
                         //llamada hacia getususario para instanciar el usuario
                         listatrabajadoresporrubo.add(trabajador1);
                     }

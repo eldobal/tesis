@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="QROnepayView"><attr format="string" name="ott"/></declare-styleable>
+    <string name="app_name">tbk_ewallet_sdk_android</string>
+    <string name="one_pay_connection_error">Error de conexión</string>
+    <string name="one_pay_invalid_occ">Occ inválida</string>
+    <string name="one_pay_not_installed">Applicación OnePay no instalada</string>
+</resources>

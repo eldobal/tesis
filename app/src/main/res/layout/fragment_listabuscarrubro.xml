@@ -68,7 +68,7 @@
                         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                             android:id="@+id/refreshtrabajadores"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="match_parent">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -105,10 +105,7 @@
                                 app:lottie_loop="true"
                                 ></com.airbnb.lottie.LottieAnimationView>
 
-
-
                         </LinearLayout>
-
 
                         <LinearLayout
                             android:gravity="center"
@@ -117,6 +114,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
+                            <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/notfoundtrabajador"
+                                android:layout_width="match_parent"
+                                android:layout_height="350dp"
+                                android:layout_row="0"
+                                android:layout_column="0"
+                                android:layout_centerInParent="true"
+                                app:lottie_autoPlay="false"
+                                app:lottie_loop="false"
+                                app:lottie_rawRes="@raw/location"></com.airbnb.lottie.LottieAnimationView>
 
                             <TextView
                                     android:id="@+id/txtnotfound"
@@ -129,35 +136,23 @@
                                     android:text="">
                                 </TextView>
 
-
                         </LinearLayout>
+
+
+
 
 
 
                     </androidx.cardview.widget.CardView>
 
 
+
                 </RelativeLayout>
 
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/notfoundtrabajador"
-                    android:layout_width="350dp"
-                    android:layout_height="350dp"
-                    android:layout_row="0"
-                    android:layout_column="0"
-                    android:layout_centerInParent="true"
-                    app:lottie_autoPlay="false"
-                    app:lottie_loop="false"
-                    app:lottie_rawRes="@raw/location"></com.airbnb.lottie.LottieAnimationView>
-
-
             </GridLayout>
-
 
         </RelativeLayout>
 
     </RelativeLayout>
-
-
 
 </RelativeLayout>

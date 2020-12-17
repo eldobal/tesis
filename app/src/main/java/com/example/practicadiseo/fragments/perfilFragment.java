@@ -203,8 +203,6 @@ public class perfilFragment extends Fragment {
                                             snackBar.show();
                                         }
                                     }
-
-
                                         {
                                             rut.setEnabled(false);
                                             rut.setFocusable(false);
@@ -363,8 +361,8 @@ public class perfilFragment extends Fragment {
                        telefono.setText(usuarios.getFono().toString());
                        idCiudad = usuarios.getIdCiudad();
                        rutaurl = usuarios.getFoto();
-                        loadingdots2.setVisibility(View.INVISIBLE);
-                        loadingdots2.cancelAnimation();
+                       loadingdots2.setVisibility(View.INVISIBLE);
+                       loadingdots2.cancelAnimation();
                        Glide.with(getContext()).load(String.valueOf(rutaservidor+rutaurl)).into(fotoperfil);
 
                       boolean encontrado = false;
