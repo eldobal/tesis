@@ -19,6 +19,7 @@
     </item>
 
     <item android:id="@+id/menu_notificaciones"
+        android:visible="false"
         android:title="Notificaciones"
         android:icon="@drawable/ic_notification"
         >

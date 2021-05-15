@@ -72,41 +72,23 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
         setContentView(R.layout.activity_menu);
         prefs = getSharedPreferences("Preferences", Context.MODE_PRIVATE);
         setcredentiasexist();
-        //al momento de crear el home en el onCreate cargar con el metodo sin backtostack
-       // iniciarfragmentsolitudes();
-      //  iniciarfragmentnotificaciones();
-
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
             } else {
                 // No explanation needed; request the permission
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         1);
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
-
-
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
             } else {
                 // No explanation needed; request the permission
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         1);
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
 
         }
@@ -168,13 +150,11 @@ public class menuActivity extends AppCompatActivity implements mapaFragment.OnFr
                     }
                     if(menuItem.getItemId()== R.id.menu_notificaciones){
                       //  showSelectedFragment(new listanotificacionesFragment());
-
                         getSupportFragmentManager().beginTransaction().replace(R.id.container, listanotificacionesFragment, "notificacionestag")
                                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                                 //permite regresar hacia atras entre los fragments
                                 .addToBackStack(null)
                                 .commit();
-
 
                     }
 

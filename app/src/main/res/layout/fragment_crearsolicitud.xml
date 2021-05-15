@@ -263,6 +263,7 @@
 
 
                     <RelativeLayout
+                        android:visibility="gone"
                         android:layout_marginTop="15dp"
                         android:id="@+id/fotolayout"
                         android:layout_below="@id/relativetextomapa"
