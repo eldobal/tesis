@@ -91,10 +91,11 @@ public interface tesisAPI {
 
 
     //api que se ocupa en el adptador cuando esta confirmada
-    @POST("api/SolicitudAPI")
-    Call<String> EstadoAtendiendo(@Query("idSolicitud") int idsolicitud,
-                                  @Query("RUTU") String rutusuario,
-                                  @Query("Contrasena") String contrasena
+    @FormUrlEncoded
+    @POST("/atendiendo")
+    Call<Object> EstadoAtendiendo(@Field("idSolicitud") int idsolicitud,
+                                  @Field("RUT") String rutusuario,
+                                  @Field("Contrasena") String contrasena
 
     );
 

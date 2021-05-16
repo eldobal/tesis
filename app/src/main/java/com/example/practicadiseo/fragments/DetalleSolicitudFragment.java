@@ -379,9 +379,17 @@ public class DetalleSolicitudFragment extends Fragment {
                     descripciondetallesolicitud.setText(solicituds.getDescripcionP());
                     diagnosticodetallesolicitud.setText(solicituds.getDiagnostico());
                     //carga de la foto del trabajor
-                    Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getFotoT())).into(imgperfiltrabajador);
+                    Glide.with(getContext()).load(String.valueOf(solicituds.getFotoT())).into(imgperfiltrabajador);
                     //carga de foto cargada por el usuario
-                    Glide.with(getContext()).load(String.valueOf(rutaservidor+solicituds.getIdFoto())).into(imgclientesacada);
+
+                    if(solicituds.getIdFoto() == null){
+                        imgclientesacada.setVisibility(View.GONE);
+
+
+                    }else {
+
+                        Glide.with(getContext()).load(String.valueOf(solicituds.getIdFoto())).into(imgclientesacada);
+                    }
                 }
             }
             @Override
