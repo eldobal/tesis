@@ -489,7 +489,7 @@ public class register2Activity extends AppCompatActivity {
             ArrayList<Ciudad> listaciudades = new ArrayList<Ciudad>();
             ArrayList<String> listanombres = new ArrayList<String>();
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://proyectotesis.ddns.net/")
+                    .baseUrl(GlobalInfo.Rutaservidor)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);

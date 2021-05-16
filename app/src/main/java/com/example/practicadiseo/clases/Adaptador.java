@@ -324,10 +324,10 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                            Call<String> call2 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud(),rutusuario,contrasena);
-                            call2.enqueue(new Callback<String>() {
+                            Call<Object> call2 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud(),rutusuario,contrasena);
+                            call2.enqueue(new Callback<Object>() {
                                 @Override
-                                public void onResponse(Call<String> call2, Response<String> response) {
+                                public void onResponse(Call<Object> call2, Response<Object> response) {
                                     if(!response.isSuccessful()){
                                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                                         View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
@@ -373,7 +373,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     }
                                 }
                                 @Override
-                                public void onFailure(Call<String> call2, Throwable t) {
+                                public void onFailure(Call<Object> call2, Throwable t) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                                     View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
                                     builder.setView(viewsync);
@@ -438,10 +438,10 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build();
                             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
-                            Call<String> call3 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud(),rutusuario,contrasena);
-                            call3.enqueue(new Callback<String>() {
+                            Call<Object> call3 = tesisAPI.CancelarSolicitud(listasolicitudes.get(i).getIdSolicitud(),rutusuario,contrasena);
+                            call3.enqueue(new Callback<Object>() {
                                 @Override
-                                public void onResponse(Call<String> call3, Response<String> response) {
+                                public void onResponse(Call<Object> call3, Response<Object> response) {
                                     if(!response.isSuccessful()){
                                         AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                                         View viewsync = inflater.inflate(R.layout.alerdialogerrorresponce,null);
@@ -484,7 +484,7 @@ public class Adaptador extends BaseAdapter implements Serializable {
                                     }
                                 }
                                 @Override
-                                public void onFailure(Call<String> call3, Throwable t) {
+                                public void onFailure(Call<Object> call3, Throwable t) {
                                     AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
                                     View viewsync = inflater.inflate(R.layout.alerdialogerrorservidor,null);
                                     builder.setView(viewsync);

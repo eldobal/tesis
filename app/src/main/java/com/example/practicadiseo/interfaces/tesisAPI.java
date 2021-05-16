@@ -13,6 +13,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -22,9 +23,10 @@ public interface tesisAPI {
 
     //metodo el cual llama a la api la cual entrega un usario /usando actualemente para login
 
-    @GET("api/UsuarioAPI")
-    Call<Usuario> getLogin(@Query("id") String id,
-                           @Query("pass") String pass
+    @FormUrlEncoded
+    @POST("/login")
+    Call<Usuario> getLogin(@Field("RUT") String id,
+                           @Field("Contrasena") String pass
     );
 
     //llamada que se utiliza en el perfilfragment del usuario
@@ -34,18 +36,19 @@ public interface tesisAPI {
     );
 
     //api que se ocupa en la listabuscarrubro
-    @GET("api/RubroTrabajadorAPI")
+    @GET("/trabajadores")
     Call<List<UsuarioTrabajador>> getRubroTrabajador(@Query("idRubro") int id_Rubro,
-                                                     @Query("idciudad") int idCiudad,
+                                                     @Query("idCiudad") int idCiudad,
                                                      @Query("RUT") String rut,
                                                      @Query("Contrasena") String contrasena
     );
 
     //api para el perfiltrabajador
-    @GET("api/UsuarioAPI")
-    Call<UsuarioTrabajador> getUsuarioTrabajador(@Query("RUT") String rut,
-                                                 @Query("RUTU") String rutusuario,
-                                                 @Query("Contrasena") String contrasena
+    @FormUrlEncoded
+    @POST("/trabajador")
+    Call<UsuarioTrabajador> getUsuarioTrabajador(@Field("RUT") String rut,
+                                                 @Field("RUTU") String rutusuario,
+                                                 @Field("Contrasena") String contrasena
     );
 
 
@@ -57,16 +60,17 @@ public interface tesisAPI {
 
 
     //metodo llamada para hacer el insert de la solicitud del cliente
-    @POST("api/SolicitudAPI")
-    Call<SolicitudDb> PostSolicitud(@Query("Fecha") String Fecha,
-                                    @Query("Descripcion") String Descripcion,
-                                    @Query("RUT_Cliente") String RUT_Cliente,
-                                    @Query("RUT_Trabajador") String RUT_Trabajador,
-                                    @Query("Rubro") int Rubro,
-                                    @Query("latitud") String latitud,
-                                    @Query("longitud") String longitud,
-                                    @Query("Contrasena") String contrasenacliente,
-                                    @Body() String foto
+    @FormUrlEncoded
+    @POST("/postSolicitud")
+    Call<SolicitudDb> PostSolicitud(@Field("Fecha") String Fecha,
+                                    @Field("Descripcion") String Descripcion,
+                                    @Field("RUT_Cliente") String RUT_Cliente,
+                                    @Field("RUT_Trabajador") String RUT_Trabajador,
+                                    @Field("Rubro") int Rubro,
+                                    @Field("latitud") String latitud,
+                                    @Field("longitud") String longitud,
+                                    @Field("Contrasena") String contrasenacliente
+                                   // @Body() String foto
     );
 
 
@@ -116,30 +120,30 @@ public interface tesisAPI {
     );
 
     //metodo el cual trae el listado de ciudades / usando acutalmente para cargar el spiner de ciudades en el registrar usaurio
-    @GET("api/CiudadAPI/")
+    @GET("/ciudades")
     Call<List<Ciudad>> getCiudades();
 
 
     //metodo para cancelar la solicitud del cliente
-    @POST("api/SolicitudAPI")
-    Call<String> CancelarSolicitud(@Query("idcancelarC") int idSolicitud,
-                                   @Query("RUTU") String rutusuario,
-                                   @Query("Contrasena") String contrasena
+    @FormUrlEncoded
+    @POST("/cancelarsolicitud")
+    Call<Object> CancelarSolicitud(@Field("idSolicitud") int idSolicitud,
+                                   @Field("RUT") String rutusuario,
+                                   @Field("Contrasena") String contrasena
     );
 
 
     //api que se ocuapa en listar las solicitudes
-    @GET("api/SolicitudAPI")
+    @GET("/clientesolicitudes")
     Call<List<Solicitud>> getSolicitudes(@Query("RUT") String rut,
                                          @Query("Contrasena") String contrasena
     );
 
     //api que se ocupa en detalle
-    @GET("api/SolicitudAPI")
-    Call<Solicitud> getSolicitudCliente(@Query("id") int id,
-                                        @Query("RUTU") String rutusuario,
-                                        @Query("Contrasena") String contrasena
-                                        );
+    @GET("/clientesolicitud")
+    Call<Solicitud> getSolicitudCliente(@Query("idSolicitud") int id,
+                                        @Query("RUT") String rutusuario,
+                                        @Query("Contrasena") String contrasena);
 
     //metodo para cancelar la solicitud del cliente
     @POST("api/SolicitudAPI")

@@ -187,6 +187,7 @@ public class login2Activity extends AppCompatActivity implements GoogleApiClient
                             TextView texto = (TextView) viewsync.findViewById(R.id.txterrorservidor);
                             texto.setText("Ha ocurrido un error con la coneccion del servidor, Estamos trabajando para solucionarlo. Muchas gracias!");
                             Button btncerrar =(Button) viewsync.findViewById(R.id.btncerraralert);
+                            dialog2.cancel();
 
                             btncerrar.setOnClickListener(new View.OnClickListener() {
                                 @Override

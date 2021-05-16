@@ -159,12 +159,12 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
             estado.setText("Estado: "+estadotrabajador);
             //se setean las estrellas dependiendo de la calificacion
             setestrellas(calificaciontrabajador);
-            Glide.with(getContext()).load(String.valueOf(rutaservidor+rutafoto)).into(imgperfil);
+            Glide.with(getContext()).load(String.valueOf(rutafoto)).into(imgperfil);
 
             descripcionfinal= descripcion.getText().toString();
             //formato del calendario el cual toma la fecha actual.
             Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Fechasolicitud = sdf.format(calendar.getTime());
             setlatlongexist();
 
@@ -307,7 +307,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
         builder.setVibrate(new long[]{1000,1000,1000,1000,1000});
         builder.setDefaults(Notification.DEFAULT_SOUND);
         //texto para mostrar de forma exancible
-        builder.setStyle(new NotificationCompat.BigTextStyle().bigText("La solicitud se ha creado exitosamente, el trabajador" +nombretrabajador+
+        builder.setStyle(new NotificationCompat.BigTextStyle().bigText("La solicitud se ha creado exitosamente, el trabajador " +nombretrabajador+
                 ". sera notificado de inmediato, porfavor este atento a la respuesta" +
                 " podra confirmar la solicitud desde el apartado mis solicitudes"));
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getActivity());
@@ -323,7 +323,7 @@ public class crearsolicitudFragment extends Fragment implements Serializable {
                     .build();
             tesisAPI tesisAPI = retrofit.create(com.example.practicadiseo.interfaces.tesisAPI.class);
             //falta pasar el bitmap de la imagen sacada en el post hacia el web api
-            Call<SolicitudDb> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,latorigen,longorigen,contrasena,imagenstring);
+            Call<SolicitudDb> call1 = tesisAPI.PostSolicitud(Fechasolicitud,descripcionfinal,rutcliente,ruttrabajador,idrubro,latorigen,longorigen,contrasena);
             call1.enqueue(new Callback<SolicitudDb>() {
                 @Override
                 public void onResponse(Call<SolicitudDb> call1, Response<SolicitudDb> response) {

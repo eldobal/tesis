@@ -88,6 +88,8 @@ public class perfiltrabajadorFragment extends Fragment {
         foto = (ImageView) v.findViewById(R.id.imgperfiltrabajadordetalle);
         loadingdots2 =(LottieAnimationView) v.findViewById(R.id.loadindots2);
 
+        llenarperfiltrabajador(ruttrabajador);
+
         if(ruttrabajador.isEmpty()||rutusuario.isEmpty() ||contrasena.isEmpty()){
             //enviar mensaje de error y reenviar al usuario hacia alguna pantalla de comprovacion
         }else{
@@ -95,7 +97,7 @@ public class perfiltrabajadorFragment extends Fragment {
             activeNetwork = cm.getActiveNetworkInfo();
             if (activeNetwork != null) {
                 if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI || activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                    llenarperfiltrabajador(ruttrabajador);
+
                     btncrearsolicitud.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -178,7 +180,7 @@ public class perfiltrabajadorFragment extends Fragment {
                         urlfoto =usuarios.getFoto();
                         loadingdots2.setVisibility(View.INVISIBLE);
                         loadingdots2.cancelAnimation();
-                        Glide.with(getContext()).load(String.valueOf(rutaservidor+usuarios.getFoto())).into(foto);
+                        Glide.with(getContext()).load(String.valueOf(usuarios.getFoto())).into(foto);
 
                         btncrearsolicitud.setVisibility(View.VISIBLE);
                     }

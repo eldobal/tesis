@@ -56,7 +56,7 @@ public class listabuscarrubroFragment extends Fragment {
     private TextView txtnotfound;
     private SharedPreferences prefs;
     LottieAnimationView preloaderlista,notfound;
-    int idciudad =0,numeroultimo=0,filtro=0;
+    int idciudad =1,numeroultimo=0,filtro=0;
     final static String rutaservidor= GlobalInfo.Rutaservidor;
     SwipeRefreshLayout refreshLayouttrabajadores;
     ArrayList<UsuarioTrabajador> listatrabajadoresporrubo = new ArrayList<UsuarioTrabajador>();
@@ -413,13 +413,17 @@ public class listabuscarrubroFragment extends Fragment {
                     for (UsuarioTrabajador trabajador : trabajadores) {
                         UsuarioTrabajador trabajador1 = new UsuarioTrabajador();
                         //se setean los valores del trabajador
-                        trabajador1.setRUT(trabajador.getRUT().toString());
+                        trabajador1.setRUT(trabajador.getRUT());
                         trabajador1.setNombre(trabajador.getNombre()+" "+trabajador.getApellido());
                         trabajador1.setCalificacion(trabajador.getCalificacion());
                         trabajador1.setCiudad(trabajador.getCiudad());
                         trabajador1.setIdRubro(trabajador.getIdRubro());
                         //declaracion de la ruta de la imagen del trabajador
-                        trabajador1.setFoto(rutaservidor+trabajador.getFoto().toString());
+
+                        if(trabajador.getFoto() != null){
+                            trabajador1.setFoto(trabajador.getFoto());
+                        }
+
                         //llamada hacia getususario para instanciar el usuario
                         listatrabajadoresporrubo.add(trabajador1);
                     }

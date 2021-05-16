@@ -501,7 +501,7 @@ public class solicitudeFragment extends Fragment  {
                         Solicitud1.setApellido(solicitud.getApellido());
                         Solicitud1.setEstado(solicitud.getEstado());
                         Solicitud1.setPrecio(solicitud.getPrecio());
-                        Solicitud1.setFotoT(rutaservidor+solicitud.getFotoT());
+                        Solicitud1.setFotoT(solicitud.getFotoT());
                         Solicitudesterminadas.add(Solicitud1);
                     }
 
